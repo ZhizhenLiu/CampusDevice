@@ -6,6 +6,7 @@ import java.util.Date;
 
 public interface ReservationDao {
 
+
     /*
      * @Description: 用户预约设备
      * @Param deviceNo  wechatId  startDate  endDate
@@ -26,4 +27,19 @@ public interface ReservationDao {
      * @Return: com.alibaba.fastjson.JSONObject
      */
     JSONObject getReservationDetail(String deviceNo);
+
+    /*
+     * @Description: 获取某个用户预约设备的开始日期
+     * @Param u_no  d_no
+     * @Return: java.lang.String
+     */
+    String getBorrowDate(String u_no, int d_no);
+
+    /*
+     * @Description: 获取某个用户预约设备的归还日期
+     * @Param u_no  d_no
+     * @Return: java.lang.String
+     */
+    String getReturnDate(String u_no, int d_no);
+
 }

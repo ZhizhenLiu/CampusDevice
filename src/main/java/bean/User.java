@@ -33,6 +33,10 @@ public class User {
         this.u_major_class = u_major_class;
     }
 
+    public User() {
+
+    }
+
     public String getU_no() {
         return u_no;
     }

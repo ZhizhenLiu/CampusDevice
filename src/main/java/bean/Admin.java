@@ -24,6 +24,9 @@ public class Admin {
         this.a_emial = a_emial;
     }
 
+    public Admin() {
+    }
+
     public String getA_no() {
         return a_no;
     }

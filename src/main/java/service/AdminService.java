@@ -18,4 +18,12 @@ public interface AdminService {
      * @Return: com.alibaba.fastjson.JSONObject
      */
     JSONObject getReservationDetail(String deviceNo);
+
+    /*
+     * @Description: 管理员确认设备租借给某个用户
+     * @Param u_no  d_no  borrowDate  returnDate
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject confirmBorrow(String u_no, int d_no);
+
 }

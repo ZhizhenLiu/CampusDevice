@@ -12,6 +12,7 @@ public class Device {
     String d_important_param;
     String d_main_use;
     String d_save_site;
+    int r_sum; //预约人数
 
     public Device(int d_no, String a_no, String d_state, int d_borrowed_times, String d_name, String d_important_param, String d_main_use, String d_save_site) {
         this.d_no = d_no;
@@ -22,6 +23,9 @@ public class Device {
         this.d_important_param = d_important_param;
         this.d_main_use = d_main_use;
         this.d_save_site = d_save_site;
+    }
+
+    public Device() {
     }
 
     public int getD_no() {
@@ -86,6 +90,14 @@ public class Device {
 
     public void setD_save_site(String d_save_site) {
         this.d_save_site = d_save_site;
+    }
+
+    public int getR_sum() {
+        return r_sum;
+    }
+
+    public void setR_sum(int r_sum) {
+        this.r_sum = r_sum;
     }
 
     @Override

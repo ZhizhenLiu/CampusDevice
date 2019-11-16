@@ -6,8 +6,10 @@ import bean.User;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import dao.DeviceDao;
 import dao.ReservationDao;
 import dao.UserDao;
+import dao.impl.DeviceDaoImpl;
 import dao.impl.ReservationDaoImpl;
 import dao.impl.UserDaoImpl;
 import service.UserService;
@@ -18,6 +20,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private UserDao userDao = new UserDaoImpl();
     private ReservationDao reservationDao = new ReservationDaoImpl();
+    private DeviceDao deviceDao = new DeviceDaoImpl();
 
     /*
      * @Description: 通过用户编号获取用户对象
@@ -56,7 +59,7 @@ public class UserServiceImpl implements UserService {
      */
     public JSONObject getHotDeviceByPage(int page, int count)
     {
-        return  userDao.getHotDeviceByPage(page, count);
+        return  deviceDao.getHotDeviceByPage(page, count);
     }
 
     /*
@@ -66,7 +69,7 @@ public class UserServiceImpl implements UserService {
      */
     public JSONObject getDeviceDetails(int deviceNo)
     {
-        return userDao.getDeviceDetails(deviceNo);
+        return deviceDao.getDeviceDetails(deviceNo);
     }
 
     /*

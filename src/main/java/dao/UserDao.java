@@ -14,6 +14,7 @@ public interface UserDao {
      */
     User getUserByUserNo(String userNo);
 
+
     /*
      * @Description: 通过微信唯一标识获取用户
      * @Param wechatId
@@ -27,21 +28,5 @@ public interface UserDao {
      * @Return: void
      */
     void registerUser(User user);
-
-    /*
-     * @Description: 分页查询首页热门设备
-     * @Param page  count
-     * @Return: java.util.List<bean.Device>
-     */
-    JSONObject getHotDeviceByPage(int page, int count);
-
-    /*
-     * @Description: 用户浏览获取设备具体信息
-     * @Param deviceNo
-     * @Return: com.alibaba.fastjson.JSONObject
-     */
-    JSONObject getDeviceDetails(int deviceNo);
-
-
 
 }

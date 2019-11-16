@@ -1,6 +1,7 @@
 package dao.impl;
 
-import com.alibaba.fastjson.JSON;
+import bean.Device;
+import bean.Reservation;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import dao.ReservationDao;
@@ -107,10 +108,19 @@ public class ReservationDaoImpl implements ReservationDao {
                 //有的话记录查询状态为1：成功
                 result.put("state",1);
                 do {
+                    /*String 转 fastjsonL: 难懂不直观，容易出错
                     reservations.add(
                             JSON.parse("{\"d_no\":"+rs.getInt("d_no")+",\"d_name\":\""+rs.getString("d_name")+
                                     "\",\"d_main_use\":\""+rs.getString("d_main_use")+"\",\"r_sum\":"+rs.getInt("r_sum")+"}")
-                    );
+                    );*/
+
+                    //JavaBean 转 fastjson
+                    Device device = new Device();
+                    device.setD_no(rs.getInt("d_no"));
+                    device.setD_name(rs.getString("d_name"));
+                    device.setD_main_use(rs.getString("d_main_use"));
+                    device.setR_sum(rs.getInt("r_sum"));
+                    reservations.add(device);
                 }
                 while (rs.next());
                 result.put("reservations",reservations);
@@ -160,12 +170,22 @@ public class ReservationDaoImpl implements ReservationDao {
                 //有的话记录查询状态为1：成功
                 result.put("state",1);
                 do {
+                    /*String 转 fastjson：难懂不直观，容易出错
                     reservations.add(
                             JSON.parse("{\"u_name\":\""+rs.getString("u_name")+"\",\"u_type\":\""+rs.getString("u_type")+
                                     "\",\"r_reservation_date\":\""+rs.getString("r_reservation_date")+"\",\"r_borrow_date\":\""+rs.getString("r_borrow_date")+
                                     "\",\"r_return_date\":\""+rs.getString("r_return_date")+"\",\"r_return_date\":\""+rs.getString("r_return_date")+
                                     "\",\"u_credit_grade\":\""+rs.getString("u_credit_grade")+"\"}")
-                    );
+                    );*/
+
+                    //JavaBean 转 fastjson
+                    Reservation reservation = new Reservation();
+                    reservation.setU_name(rs.getString("u_name"));
+                    reservation.setU_type(rs.getString("u_type"));
+                    reservation.setR_borrow_date(rs.getString("r_borrow_date"));
+                    reservation.setR_return_date(rs.getString("r_return_date"));
+                    reservation.setU_credit_grade(rs.getInt("u_credit_grade"));
+                    reservations.add(reservation);
                 }
                 while (rs.next());
                 result.put("reservations",reservations);
@@ -184,5 +204,79 @@ public class ReservationDaoImpl implements ReservationDao {
             JDBCUtils.closeAll(rs, pStmt, con);
         }
         return result;
+    }
+
+    public String getBorrowDate(String u_no, int d_no)
+    {
+        //初始化
+        JDBCUtils.init(rs, pStmt, con);
+        String borrowDate = "";
+        try {
+            con = JDBCUtils.getConnection();
+            sql = "SELECT r_borrow_date " +
+                  "FROM reservation " +
+                  "WHERE u_no = ? " +
+                  "AND d_no = ? ";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            pStmt.setString(1, u_no);
+            pStmt.setInt(2, d_no);
+            rs = pStmt.executeQuery();
+
+            //判断是否存在记录
+            if (rs.next())
+            {
+                borrowDate = rs.getString("r_borrow_date");
+            }
+            else
+            {
+                borrowDate = "not found";
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return borrowDate;
+    }
+
+    public String getReturnDate(String u_no, int d_no)
+    {
+        //初始化
+        JDBCUtils.init(rs, pStmt, con);
+        String returnDate = "";
+        try {
+            con = JDBCUtils.getConnection();
+            sql = "SELECT r_return_date " +
+                  "FROM reservation " +
+                  "WHERE u_no = ? " +
+                  "AND d_no = ? ";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            pStmt.setString(1, u_no);
+            pStmt.setInt(2, d_no);
+            rs = pStmt.executeQuery();
+
+            //判断是否存在记录
+            if (rs.next())
+            {
+                returnDate = rs.getString("r_return_date");
+            }
+            else
+            {
+                returnDate = "not found";
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return returnDate;
     }
 }
