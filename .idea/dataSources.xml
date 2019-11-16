@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="腾讯云" uuid="7e24530b-dd36-42a5-8f7e-521fbf996c9b">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://49.235.73.29:3306/testsql</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="testdb@49.235.73.29" uuid="d03688ed-0abc-4f3c-8902-8b89818f471f">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://49.235.73.29:3306/testdb</jdbc-url>
+    </data-source>
+  </component>
+</project>
