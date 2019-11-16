@@ -38,7 +38,7 @@ public class UserDaoImpl implements UserDao {
             {
                return new User(rs.getString("u_userno"),rs.getString("u_name"),rs.getString("u_wechatid"),rs.getString("u_email"),
                        rs.getString("u_phone"),rs.getInt("u_credit_grade"),rs.getString("u_type"),rs.getString("u_mentor_name"),
-                       rs.getString("u_mentor_phone"),rs.getString("u_major_class"));
+                       rs.getString("u_mentor_phone"),rs.getString("u_major_class"), null, null);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -73,7 +73,7 @@ public class UserDaoImpl implements UserDao {
                 result.put("flag","1");
                 result.put("user",new User(rs.getString("u_userno"),rs.getString("u_name"),rs.getString("u_wechatid"),rs.getString("u_email"),
                         rs.getString("u_phone"),rs.getInt("u_credit_grade"),rs.getString("u_type"),rs.getString("u_mentor_name"),
-                        rs.getString("u_mentor_phone"),rs.getString("u_major_class")));
+                        rs.getString("u_mentor_phone"),rs.getString("u_major_class"), null, null));
             }
             else
             {

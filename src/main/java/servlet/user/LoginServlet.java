@@ -36,6 +36,11 @@ public class LoginServlet extends HttpServlet {
         if (result.get("errcode").equals("0"))
         {
             wechatId = (String) result.get("openid");
+
+            //查询对应openid的用户是否存在
+            //返回查询：flag为0：不存在用户。
+            // flag为1：存在该用户
+            printWriter.write(userService.getUserBywechatId(wechatId).toJSONString());
         }
         //请求失败，返回错误信息
         else
@@ -45,15 +50,11 @@ public class LoginServlet extends HttpServlet {
             printWriter.write(result.get("errmsg").toString());
         }
 
-        //清空
-        result.clear();
 
-        //查询对应openid的用户是否存在
-        result = userService.getUserBywechatId(wechatId);
 
-        //返回查询：flag为0：不存在用户。
-        // flag为1：存在该用户
-        printWriter.write(result.toJSONString());
+
+
+
         
     }
 

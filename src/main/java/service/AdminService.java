@@ -26,4 +26,11 @@ public interface AdminService {
      */
     JSONObject confirmBorrow(String u_no, int d_no);
 
+    /*
+     * @Description: 通过微信唯一标识获得对应管理范围设备外借预期信息
+     * @Param wechatId
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject getOverDue(String wechatId);
+
 }

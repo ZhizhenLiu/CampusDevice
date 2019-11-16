@@ -3,7 +3,7 @@ package bean;
  * @Description: 管理员信息
  */
 public class Admin {
-    String a_no;
+    int a_no;
     String a_name;
     String a_wechatId;
     String a_type;
@@ -15,7 +15,7 @@ public class Admin {
      * @Param a_no  a_name  a_wechatId  a_type  a_phone  a_emial
      * @Return: null
      */
-    public Admin(String a_no, String a_name, String a_wechatId, String a_type, String a_phone, String a_emial) {
+    public Admin(int a_no, String a_name, String a_wechatId, String a_type, String a_phone, String a_emial) {
         this.a_no = a_no;
         this.a_name = a_name;
         this.a_wechatId = a_wechatId;
@@ -27,11 +27,11 @@ public class Admin {
     public Admin() {
     }
 
-    public String getA_no() {
+    public int getA_no() {
         return a_no;
     }
 
-    public void setA_no(String a_no) {
+    public void setA_no(int a_no) {
         this.a_no = a_no;
     }
 

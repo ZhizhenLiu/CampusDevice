@@ -10,4 +10,11 @@ public interface BorrowDao {
      * @Return: com.alibaba.fastjson.JSONObject
      */
     JSONObject confirmBorrow(String u_no, int d_no, String borrowDate, String returnDate);
+
+    /*
+     * @Description: 管理员获取预期未还用户
+     * @Param a_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject getOverDue(int a_no);
 }

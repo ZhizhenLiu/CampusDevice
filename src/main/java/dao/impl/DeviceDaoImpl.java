@@ -87,7 +87,7 @@ public class DeviceDaoImpl implements DeviceDao {
                     "FROM" +
                     "device d " +
                     "WHERE" +
-                    "d_no = ?;";
+                    "d_no = ?";
             pStmt = con.prepareStatement(sql);
             pStmt.setInt(1, deviceNo);
             rs = pStmt.executeQuery();
@@ -107,6 +107,34 @@ public class DeviceDaoImpl implements DeviceDao {
                 result.put("flag",0);
                 result.put("errmsg","查询不到对应的设备");
             }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return result;
+    }
+
+    /*
+     * @Description: 改变设备状态
+     * @Param status  d_no
+     * @Return: int
+     */
+    public int changeDeviceStatus(String status, int d_no)
+    {
+        JDBCUtils.init(rs, pStmt, con);
+        int result = 0;
+        try {
+            con = JDBCUtils.getConnection();
+            String sql = "UPDATE device SET d_state = ? WHERE d_no = ?";
+            pStmt = con.prepareStatement(sql);
+            pStmt.setString(1, status);
+            pStmt.setInt(2, d_no);
+
+            //更新状态
+            result = pStmt.executeUpdate();
         }
         catch (SQLException e) {
             e.printStackTrace();

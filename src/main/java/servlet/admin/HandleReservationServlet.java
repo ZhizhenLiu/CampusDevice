@@ -23,10 +23,10 @@ public class HandleReservationServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         //获取参数
-        AdminService adminService = new AdminServiceImpl();
         String code = request.getParameter("code");
 
         //向微信服务器接口发送code，获取用户唯一标识openid, 返回参数
+        AdminService adminService = new AdminServiceImpl();
         JSONObject result = JSONObject.parseObject(HttpUtils.sendGet(code));
         JSONObject returnData = null;
         PrintWriter printWriter = response.getWriter();

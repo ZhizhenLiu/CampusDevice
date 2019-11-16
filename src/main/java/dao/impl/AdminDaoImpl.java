@@ -36,7 +36,7 @@ public class AdminDaoImpl implements AdminDao {
 
             if (rs.next())
             {
-                return new Admin(rs.getString("a_no"),rs.getString("a_name"),rs.getString("a_wechatid"),
+                return new Admin(rs.getInt("a_no"),rs.getString("a_name"),rs.getString("a_wechatid"),
                     rs.getString("a_type"),rs.getString("a_phone"),rs.getString("a_emial"));
             }
         } catch (SQLException e) {
