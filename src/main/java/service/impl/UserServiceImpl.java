@@ -27,9 +27,9 @@ public class UserServiceImpl implements UserService {
      * @Param userNo
      * @Return: bean.User
      */
-    public User getUserByUserNo(String userNo)
+    public User getUserByWechatId(String wechatId)
     {
-        return userDao.getUserByUserNo(userNo);
+        return userDao.getUserByWechatId(wechatId);
     }
 
     /*
@@ -79,6 +79,8 @@ public class UserServiceImpl implements UserService {
      */
     public JSONObject reserveDevice(int deviceNo, String wechatId, Date startDate, Date endDate)
     {
-        return reservationDao.reserveDevice(deviceNo, wechatId, startDate, endDate);
+        String u_no = userDao.getUserByWechatId(wechatId).getU_no();
+        System.out.println(u_no);
+        return reservationDao.reserveDevice(deviceNo, u_no, startDate, endDate);
     }
 }

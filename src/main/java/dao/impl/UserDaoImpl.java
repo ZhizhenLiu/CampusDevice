@@ -20,23 +20,23 @@ public class UserDaoImpl implements UserDao {
      * @Param userNo
      * @Return: bean.User
      */
-    public User getUserByUserNo(String userNo)
+    public User getUserByWechatId(String wechatId)
     {
         //初始化
         JDBCUtils.init(rs, pStmt, con);
-
+        User user = new User();
         try {
             con = JDBCUtils.getConnection();
-            sql = "select * from user where u_userno = ?";
+            sql = "select * from user where u_wechatid = ?";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
-            pStmt.setString(1, userNo);
+            pStmt.setString(1, wechatId);
             rs = pStmt.executeQuery();
 
             if (rs.next())
             {
-               return new User(rs.getString("u_userno"),rs.getString("u_name"),rs.getString("u_wechatid"),rs.getString("u_email"),
+                user = new User(rs.getString("u_no"),rs.getString("u_name"),rs.getString("u_wechatid"),rs.getString("u_email"),
                        rs.getString("u_phone"),rs.getInt("u_credit_grade"),rs.getString("u_type"),rs.getString("u_mentor_name"),
                        rs.getString("u_mentor_phone"),rs.getString("u_major_class"), null, null);
             }
@@ -46,7 +46,7 @@ public class UserDaoImpl implements UserDao {
         finally {
             JDBCUtils.closeAll(rs, pStmt, con);
         }
-        return  null;
+        return  user;
     }
 
     /*

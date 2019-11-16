@@ -22,6 +22,6 @@ public interface DeviceDao {
      * @Param status  d_no
      * @Return: int
      */
-    public int changeDeviceStatus(String status, int d_no);
+    int changeDeviceStatus(String status, int d_no);
 
 }

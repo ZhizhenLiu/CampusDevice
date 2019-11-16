@@ -1,6 +1,5 @@
 package service.impl;
 
-import bean.Admin;
 import com.alibaba.fastjson.JSONObject;
 import dao.AdminDao;
 import dao.BorrowDao;
@@ -27,18 +26,28 @@ public class AdminServiceImpl implements AdminService {
         return  reservationDao.getReservation(wechatId);
     }
 
+    /*
+     * @Description: 获取某一个设备的预约队列
+     * @Param deviceNo
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
     public JSONObject getReservationDetail(String deviceNo)
     {
         return  reservationDao.getReservationDetail(deviceNo);
     }
 
+    /*
+     * @Description: 管理员确认设备租借给某个用户
+     * @Param u_no  d_no  borrowDate  returnDate
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
     public JSONObject confirmBorrow(String u_no, int d_no)
     {
         String borrowDate = reservationDao.getBorrowDate(u_no, d_no);
         String returnDate = reservationDao.getReturnDate(u_no, d_no);
         System.out.println(borrowDate+" "+returnDate);
         System.out.println(deviceDao.changeDeviceStatus("外借", d_no));
-        System.out.println(reservationDao.removeReservation(u_no, d_no));
+        System.out.println(reservationDao.reserveSucceed(u_no, d_no));
         return borrowDao.confirmBorrow(u_no, d_no, borrowDate, returnDate);
     }
 

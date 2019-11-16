@@ -8,11 +8,11 @@ import java.util.Date;
 public interface UserDao {
 
     /*
-     * @Description: 通过用户编号获取用户对象
-     * @Param userNo
+     * @Description: 通过用户wechatId获取用户对象
+     * @Param wechatId
      * @Return: bean.User
      */
-    User getUserByUserNo(String userNo);
+    User getUserByWechatId(String wechatId);
 
 
     /*

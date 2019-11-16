@@ -115,4 +115,37 @@ public class BorrowDaoImpl implements BorrowDao {
         }
         return result;
     }
+
+    /*
+     * @Description: 借用中设备归还 （0：借用中，1：归还）
+     * @Param u_no  d_no
+     * @Return: int
+     */
+    public int returnBorrow(String u_no, int d_no)
+    {
+        //初始化
+        JDBCUtils.init(rs, pStmt, con);
+        int result = 0;
+        try {
+            con = JDBCUtils.getConnection();
+            sql = "UPDATE borrow SET b_state = 1 " +
+                    "WHERE u_no = ? "+
+                    "AND d_no = ? " +
+                    "AND b_state = 0";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            pStmt.setString(1, u_no);
+            pStmt.setInt(2, d_no);
+
+            result = pStmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return result;
+    }
 }

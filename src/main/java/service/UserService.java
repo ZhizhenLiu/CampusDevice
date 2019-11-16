@@ -12,7 +12,7 @@ public interface UserService {
      * @Param userNo
      * @Return: bean.User
      */
-    User getUserByUserNo(String userNo);
+    User getUserByWechatId(String wechatId);
 
     /*
      * @Description: 通过微信唯一标识获取用户

@@ -24,33 +24,11 @@ public class ReservationDaoImpl implements ReservationDao {
      * @Param deviceNo  wechatId  startDate  endDate
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject reserveDevice(int deviceNo, String wechatId, Date startDate, Date endDate)
+    public JSONObject reserveDevice(int deviceNo, String u_no, Date startDate, Date endDate)
     {
         JDBCUtils.init(rs, pStmt, con);
-        String u_no = "user0";
         JSONObject result = new JSONObject();
         con = JDBCUtils.getConnection();
-        try {
-            String sql = "select u_no from user where u_wechatid = ?";
-            pStmt = con.prepareStatement(sql);
-            pStmt.setString(1,wechatId);
-            rs = pStmt.executeQuery();
-            if (rs.next())
-            {
-                u_no = rs.getString("u_no");
-            }
-            else
-            {
-                //没有找到对应的用户,添加错误信息
-                result.put("msg","未找到对应的用户");
-            }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-        finally {
-            JDBCUtils.closeAll(rs, pStmt, con);
-        }
 
         JDBCUtils.init(rs, pStmt, con);
         try {
@@ -281,20 +259,20 @@ public class ReservationDaoImpl implements ReservationDao {
     }
 
     /*
-     * @Description: 移除预约队列：1、预约成功 2、预约被管理员拒绝
+     * @Description: 预约中设备预约成功：（0:预约中 -1：预约被拒绝 1：预约成功）
      * @Param u_no  d_no
      * @Return: int
      */
-    public int removeReservation(String u_no, int d_no)
+    public int reserveSucceed(String u_no, int d_no)
     {
         //初始化
         JDBCUtils.init(rs, pStmt, con);
         int result = 0;
         try {
             con = JDBCUtils.getConnection();
-            sql = "DELETE FROM reservation " +
-                    "WHERE u_no = ? "+
-                    "AND d_no = ?";
+            sql = "UPDATE reservation SET r_state = 1  " +
+                    "WHERE u_no = ? AND d_no = ? " +
+                    "AND r_state = 0";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始

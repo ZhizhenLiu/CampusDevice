@@ -4,6 +4,10 @@ import dao.BorrowDao;
 import dao.ReservationDao;
 import dao.impl.BorrowDaoImpl;
 import dao.impl.ReservationDaoImpl;
+import service.UserService;
+import service.impl.UserServiceImpl;
+
+import java.util.Date;
 
 public class Test {
     @org.junit.jupiter.api.Test
@@ -45,6 +49,7 @@ public class Test {
    @org.junit.jupiter.api.Test
    void Test3()
    {
-        BorrowDao borrowDao = new BorrowDaoImpl();
+       UserService userService = new UserServiceImpl();
+       System.out.println(userService.reserveDevice(1,"finethankyou001",new Date(2019-11-16),new Date(2019-11-30)));
    }
 }
