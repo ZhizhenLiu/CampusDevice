@@ -53,11 +53,6 @@ public interface UserService {
      */
     JSONObject reserveDevice(int deviceNo, String wechatId, Date startDate, Date endDate);
 
-    /*
-     * @Description: 管理员
-     * @Param u_no  d_no
-     * @Return: com.alibaba.fastjson.JSONObject
-     */
-    JSONObject confirmBorrow(String u_no, int d_no);
+
 
 }
