@@ -18,7 +18,7 @@ public class HttpUtils {
      * @Param code
      * @Return: java.lang.String
      */
-    public static String sendGet(String code) {
+    public static String  sendGet(String code) {
         String param = "appid=" + appid + "&secret=" + secret +"&grant_type=" +grant_type;
         String result = "";
         BufferedReader in = null;

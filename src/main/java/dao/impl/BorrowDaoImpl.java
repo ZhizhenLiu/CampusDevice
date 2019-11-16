@@ -34,8 +34,8 @@ public class BorrowDaoImpl implements BorrowDao {
               "VALUES (?, ?, ?, ?)";
         try {
             pStmt = con.prepareStatement(sql);
-            pStmt.setString(1, u_no);
-            pStmt.setInt(2, d_no);
+            pStmt.setInt(1, d_no);
+            pStmt.setString(2, u_no);
             pStmt.setString(3, borrowDate);
             pStmt.setString(4, returnDate);
 
@@ -74,7 +74,8 @@ public class BorrowDaoImpl implements BorrowDao {
             sql = "SELECT u.u_name,u.u_type, u.u_credit_grade, b.b_borrow_date, b.b_return_date,u.u_phone, u.u_email FROM borrow b, device d, `user` u " +
                   "WHERE b.d_no = d.d_no " +
                   "AND u.u_no = b.u_no " +
-                  "AND d.a_no = ? ";
+                  "AND d.a_no = ? " +
+                  "AND b_return_date > CURRENT_DATE ";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始

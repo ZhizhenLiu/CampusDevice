@@ -279,4 +279,36 @@ public class ReservationDaoImpl implements ReservationDao {
         }
         return returnDate;
     }
+
+    /*
+     * @Description: 移除预约队列：1、预约成功 2、预约被管理员拒绝
+     * @Param u_no  d_no
+     * @Return: int
+     */
+    public int removeReservation(String u_no, int d_no)
+    {
+        //初始化
+        JDBCUtils.init(rs, pStmt, con);
+        int result = 0;
+        try {
+            con = JDBCUtils.getConnection();
+            sql = "DELETE FROM reservation " +
+                    "WHERE u_no = ? "+
+                    "AND d_no = ?";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            pStmt.setString(1, u_no);
+            pStmt.setInt(2, d_no);
+
+            result = pStmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return result;
+    }
 }

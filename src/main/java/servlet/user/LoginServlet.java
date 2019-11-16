@@ -22,40 +22,34 @@ public class LoginServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         //获取参数
-        UserService userService1 = new UserServiceImpl();
         String code = request.getParameter("code");
 
         //向微信服务器接口发送code，获取用户唯一标识openid, 返回参数
         JSONObject result = JSONObject.parseObject(HttpUtils.sendGet(code));
-        JSONObject returnData = null;
+        JSONObject returnData = new JSONObject();
         PrintWriter printWriter = response.getWriter();
         UserService userService = new UserServiceImpl();
-        String wechatId = "";
+        String wechatId;
 
         //请求成功,获取用户openiid
         if (result.get("errcode").equals("0"))
         {
             wechatId = (String) result.get("openid");
-
             //查询对应openid的用户是否存在
             //返回查询：flag为0：不存在用户。
             // flag为1：存在该用户
-            printWriter.write(userService.getUserBywechatId(wechatId).toJSONString());
+            returnData = userService.getUserBywechatId(wechatId);
+            printWriter.write(returnData.toJSONString());
         }
         //请求失败，返回错误信息
         else
         {
             returnData.put("errmsg",result.get("errmsg"));
             returnData.put("flag","0");
-            printWriter.write(result.get("errmsg").toString());
+            System.out.println(returnData);
+            printWriter.write(returnData.toJSONString());
         }
 
-
-
-
-
-
-        
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

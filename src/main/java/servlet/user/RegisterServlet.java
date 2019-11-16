@@ -28,7 +28,7 @@ public class RegisterServlet extends HttpServlet {
         String code = request.getParameter("code");
         String u_wechatid = code;
         User user = new User(u_no, u_name, u_wechatid, u_email, u_phone, 100, u_type,
-                u_mentor_name, u_mentor_phone, u_class_major);
+                u_mentor_name, u_mentor_phone, u_class_major, null, null);
 
         System.out.println(user);
 

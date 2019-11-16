@@ -1,12 +1,9 @@
 package service;
 
-import bean.Device;
 import bean.User;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.Date;
-import java.util.List;
 
 public interface UserService {
 

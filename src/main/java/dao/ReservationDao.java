@@ -42,4 +42,11 @@ public interface ReservationDao {
      */
     String getReturnDate(String u_no, int d_no);
 
+    /*
+     * @Description: 移除预约队列：1、预约成功 2、预约被管理员拒绝
+     * @Param u_no  d_no
+     * @Return: int
+     */
+    int removeReservation(String u_no, int d_no);
+
 }
