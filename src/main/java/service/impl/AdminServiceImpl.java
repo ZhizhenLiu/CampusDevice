@@ -58,6 +58,9 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject getOverDue(String wechatId)
     {
         int a_no = adminDao.getAdminByWechatId(wechatId).getA_no();
+
+        //设置所有逾期设备状态为 -1 表示逾期未还
+        borrowDao.setAllStateOverDue();
         return borrowDao.getOverDue(a_no);
     }
 }

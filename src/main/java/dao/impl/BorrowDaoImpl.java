@@ -57,9 +57,36 @@ public class BorrowDaoImpl implements BorrowDao {
         }
         return result;
     }
+    /*
+     * @Description: 设置所有逾期设备状态为 -1 表示逾期未还
+     * @Param
+     * @Return: int
+     */
+    public int setAllStateOverDue()
+    {
+        //初始化
+        JDBCUtils.init(rs, pStmt, con);
+        int result = 0;
+        try {
+            con = JDBCUtils.getConnection();
+            sql = "UPDATE borrow SET b_state = -1 " +
+                    "WHERE b_return_date < CURRENT_DATE "+
+                    "AND b_state = 0";
+            pStmt = con.prepareStatement(sql);
+
+            result = pStmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return result;
+    }
 
     /*
-     * @Description: 管理员获取预期未还用户
+     * @Description: 管理员获取管辖范围内预期未还用户
      * @Param a_no
      * @Return: com.alibaba.fastjson.JSONObject
      */
@@ -75,7 +102,7 @@ public class BorrowDaoImpl implements BorrowDao {
                   "WHERE b.d_no = d.d_no " +
                   "AND u.u_no = b.u_no " +
                   "AND d.a_no = ? " +
-                  "AND b_return_date > CURRENT_DATE ";
+                  "AND b_state = -1 ";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始

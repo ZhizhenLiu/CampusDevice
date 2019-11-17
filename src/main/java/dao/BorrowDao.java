@@ -12,6 +12,13 @@ public interface BorrowDao {
     JSONObject confirmBorrow(String u_no, int d_no, String borrowDate, String returnDate);
 
     /*
+     * @Description: 设置所有逾期设备状态为 -1 表示逾期未还
+     * @Param
+     * @Return: int
+     */
+    int setAllStateOverDue();
+
+    /*
      * @Description: 管理员获取预期未还用户
      * @Param a_no
      * @Return: com.alibaba.fastjson.JSONObject
