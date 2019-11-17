@@ -19,11 +19,12 @@ public class HttpUtils {
      * @Return: java.lang.String
      */
     public static String  sendGet(String code) {
-        String param = "appid=" + appid + "&secret=" + secret +"&grant_type=" +grant_type;
+        String param = "appid=" + appid + "&secret=" + secret + "&js_code="+ code +"&grant_type="  +grant_type;
         String result = "";
         BufferedReader in = null;
         try {
             String urlNameString = url + "?" + param;
+            System.out.println(urlNameString);
             URL realUrl = new URL(urlNameString);
             // 打开和URL之间的连接
             URLConnection connection = realUrl.openConnection();

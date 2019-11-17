@@ -136,7 +136,8 @@ public class ReservationDaoImpl implements ReservationDao {
             sql = "SELECT u_name, u_type, r_reservation_date, r_borrow_date, r_return_date, u_credit_grade " +
                   "FROM user, reservation " +
                   "WHERE user.u_no = reservation.u_no " +
-                  "AND d_no = ?";
+                  "AND d_no = ? " +
+                  "AND r_state = 0 ";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始

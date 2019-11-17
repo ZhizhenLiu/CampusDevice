@@ -175,4 +175,40 @@ public class BorrowDaoImpl implements BorrowDao {
         }
         return result;
     }
+
+    /*
+     * @Description: 获取借用记录编号
+     * @Param u_no  d_no
+     * @Return: int
+     */
+    public int getBorrowNo(String u_no, int d_no)
+    {
+        //初始化
+        JDBCUtils.init(rs, pStmt, con);
+        int b_no = 0;
+        try {
+            con = JDBCUtils.getConnection();
+            sql = "SELECT b_no FROM borrow " +
+                    "WHERE u_no = ? " +
+                    "AND d_no = ? ";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            pStmt.setString(1, u_no);
+            pStmt.setInt(2, d_no);
+
+            rs = pStmt.executeQuery();
+            if (rs.next())
+            {
+                b_no = rs.getInt("b_no");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return b_no;
+    }
 }

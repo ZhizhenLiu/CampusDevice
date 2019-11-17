@@ -25,8 +25,8 @@ public interface UserDao {
     /*
      * @Description: 用户首次登陆添加到user表中
      * @Param user
-     * @Return: void
+     * @Return: JSONObject
      */
-    void registerUser(User user);
+    JSONObject registerUser(User user);
 
 }

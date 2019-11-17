@@ -1,11 +1,12 @@
-package servlet.user;
+package servlet.admin;
 
 import bean.User;
 import com.alibaba.fastjson.JSONObject;
+import service.AdminService;
 import service.UserService;
+import service.impl.AdminServiceImpl;
 import service.impl.UserServiceImpl;
 import utils.HttpUtils;
-import utils.MessageUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,42 +16,29 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "RegisterServlet",urlPatterns = "/user/register")
-public class RegisterServlet extends HttpServlet {
-    private UserService userService;
-
+@WebServlet(name = "ConfirmReturnServlet", urlPatterns = "/admin/confirmReturn")
+public class ConfirmReturnServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //设置编码
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
+
         //获取参数
-        String u_no = request.getParameter("u_no");
-        String u_name = request.getParameter("u_name");
-        String u_email = request.getParameter("u_email");
-        String u_phone = request.getParameter("u_phone");
-        String u_type = request.getParameter("u_type");
-        String u_class_major = request.getParameter("u_class_major");
-        String u_mentor_name = request.getParameter("u_mentor_name");
-        String u_mentor_phone = request.getParameter("u_mentor_phone");
         String code = request.getParameter("code");
+        int d_no = Integer.parseInt(request.getParameter("d_no"));
 
         //向微信服务器接口发送code，获取用户唯一标识openid, 返回参数
-        System.out.println( "code: " +  code);
-        System.out.println( "u_email: " +  u_email);
         JSONObject result = JSONObject.parseObject(HttpUtils.sendGet(code));
         System.out.println(result);
         JSONObject returnData = null;
         PrintWriter printWriter = response.getWriter();
-        UserService userService = new UserServiceImpl();
+        AdminService adminService = new AdminServiceImpl();
         String wechatId = "";
         //请求成功
         if (result.containsKey("openid"))
         {
             wechatId = (String) result.get("openid");
-            System.out.println(result);
-            User user = new User(u_no, u_name, wechatId, u_email, u_phone, 100, u_type, u_mentor_name, u_mentor_phone,u_class_major, null, null);
-            System.out.println(user);
-            returnData = userService.registerUser(user);
+            adminService.confirmReturn(wechatId, d_no);
             printWriter.write(returnData.toJSONString());
         }
         //请求失败，返回错误信息
@@ -60,11 +48,9 @@ public class RegisterServlet extends HttpServlet {
             returnData.put("flag","0");
             printWriter.write(returnData.toJSONString());
         }
-
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        doPost(request, response);
     }
 }

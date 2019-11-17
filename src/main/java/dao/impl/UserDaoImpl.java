@@ -93,12 +93,13 @@ public class UserDaoImpl implements UserDao {
     /*
      * @Description: 用户首次登陆添加到user表中
      * @Param user
-     * @Return: void
+     * @Return: JSONObject
      */
-    public void registerUser(User user)
+    public JSONObject registerUser(User user)
     {
         //初始化
         JDBCUtils.init(rs, pStmt, con);
+        JSONObject result = new JSONObject();
 
         try {
             con = JDBCUtils.getConnection();
@@ -116,7 +117,12 @@ public class UserDaoImpl implements UserDao {
             pStmt.setString(9,user.getU_mentor_phone());
             pStmt.setString(10,user.getU_major_class());
 
-            pStmt.executeUpdate();
+            int flag = pStmt.executeUpdate();
+            result.put("flag",flag);
+            if (flag == 0)
+            {
+                result.put("errmsg","注册用户失败");
+            }
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -124,9 +130,6 @@ public class UserDaoImpl implements UserDao {
         finally {
             JDBCUtils.closeAll(null, pStmt, con);
         }
+        return result;
     }
-
-
-
-
 }

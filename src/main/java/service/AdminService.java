@@ -33,4 +33,11 @@ public interface AdminService {
      */
     JSONObject getOverDue(String wechatId);
 
+    /*
+     * @Description: 管理员确认用户归还设备
+     * @Param wechatId  d_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject confirmReturn(String wechatId, int d_no);
+
 }

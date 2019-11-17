@@ -47,9 +47,9 @@ public class UserServiceImpl implements UserService {
      * @Param user
      * @Return: void
      */
-    public void registerUser(User user)
+    public JSONObject registerUser(User user)
     {
-        userDao.registerUser(user);
+        return userDao.registerUser(user);
     }
 
     /*

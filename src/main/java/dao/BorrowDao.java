@@ -31,4 +31,12 @@ public interface BorrowDao {
      * @Return: int
      */
     int returnBorrow(String u_no, int d_no);
+
+    /*
+     * @Description: 获取借用记录编号
+     * @Param u_no  d_no
+     * @Return: int
+     */
+    int getBorrowNo(String u_no, int d_no);
+
 }

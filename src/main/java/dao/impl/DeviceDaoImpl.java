@@ -76,18 +76,10 @@ public class DeviceDaoImpl implements DeviceDao {
         JSONObject result = new JSONObject();
         try {
             con = JDBCUtils.getConnection();
-            String sql = "SELECT" +
-                    "d_no," +
-                    "d_name," +
-                    "d_main_use," +
-                    "d_important_param," +
-                    "d_save_site," +
-                    "( SELECT a_name FROM administrator a1 WHERE a1.a_no = d.a_no ) a_name," +
-                    "( SELECT a_phone FROM administrator a2 WHERE a2.a_no = d.a_no ) a_phone " +
-                    "FROM" +
-                    "device d " +
-                    "WHERE" +
-                    "d_no = ?";
+            String sql = "SELECT d_no,d_name,d_main_use,d_important_param,d_save_site, " +
+                    "(SELECT a_name FROM administrator a1 WHERE a1.a_no = d.a_no ) a_name, " +
+                    "(SELECT a_phone FROM administrator a2 WHERE a2.a_no = d.a_no ) a_phone  " +
+                    "FROM device d WHERE d_no = ? ";
             pStmt = con.prepareStatement(sql);
             pStmt.setInt(1, deviceNo);
             rs = pStmt.executeQuery();
