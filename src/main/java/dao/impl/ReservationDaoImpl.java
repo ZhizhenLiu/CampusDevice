@@ -33,7 +33,8 @@ public class ReservationDaoImpl implements ReservationDao {
         JDBCUtils.init(rs, pStmt, con);
         try {
             con = JDBCUtils.getConnection();
-            sql = "insert into reservation(d_no,u_no,r_reservation_date,r_start_date,r_return_date) values(?,?,CURRENT_DATE,?,?)";
+            sql = "INSERT INTO reservation(d_no,u_no,r_reservation_date,r_start_date,r_return_date) " +
+                    "VALUES(?, ?, CURRENT_DATE, ?, ?)";
             pStmt = con.prepareStatement(sql);
             pStmt.setInt(1, deviceNo);
             pStmt.setString(2, u_no);
@@ -84,7 +85,7 @@ public class ReservationDaoImpl implements ReservationDao {
             if (rs.next())
             {
                 //有的话记录查询状态为1：成功
-                result.put("state",1);
+                result.put("flag",1);
                 do {
                     /*String 转 fastjsonL: 难懂不直观，容易出错
                     reservations.add(
@@ -146,7 +147,7 @@ public class ReservationDaoImpl implements ReservationDao {
             if (rs.next())
             {
                 //有的话记录查询状态为1：成功
-                result.put("state",1);
+                result.put("flag",1);
                 do {
                     /*String 转 fastjson：难懂不直观，容易出错
                     reservations.add(
@@ -172,7 +173,7 @@ public class ReservationDaoImpl implements ReservationDao {
             {
                 //不存在记录，查询状态为0：失败
                 result.put("flag", 0);
-                result.put("errMsg","未能获取到预约信息");
+                result.put("errmsg","未能获取到预约信息");
             }
         }
         catch (SQLException e) {

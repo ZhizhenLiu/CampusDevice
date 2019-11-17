@@ -22,6 +22,13 @@ public interface DeviceDao {
      * @Param status  d_no
      * @Return: int
      */
-    int changeDeviceStatus(String status, int d_no);
+    int setDeviceState(String status, int d_no);
+
+    /*
+     * @Description: 获取设备状态
+     * @Param d_no
+     * @Return: java.lang.String
+     */
+    String getDeviceState(int d_no);
 
 }

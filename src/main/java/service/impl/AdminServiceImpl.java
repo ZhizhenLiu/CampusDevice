@@ -45,8 +45,7 @@ public class AdminServiceImpl implements AdminService {
     {
         String borrowDate = reservationDao.getBorrowDate(u_no, d_no);
         String returnDate = reservationDao.getReturnDate(u_no, d_no);
-        System.out.println(borrowDate+" "+returnDate);
-        System.out.println(deviceDao.changeDeviceStatus("外借", d_no));
+        System.out.println(d_no+"设备状态更改"+u_no+": "+deviceDao.setDeviceState("外借", d_no));
         System.out.println(reservationDao.reserveSucceed(u_no, d_no));
         return borrowDao.confirmBorrow(u_no, d_no, borrowDate, returnDate);
     }

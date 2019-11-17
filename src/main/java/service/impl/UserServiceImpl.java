@@ -80,7 +80,20 @@ public class UserServiceImpl implements UserService {
     public JSONObject reserveDevice(int deviceNo, String wechatId, Date startDate, Date endDate)
     {
         String u_no = userDao.getUserByWechatId(wechatId).getU_no();
-        System.out.println(u_no);
-        return reservationDao.reserveDevice(deviceNo, u_no, startDate, endDate);
+        JSONObject result = new JSONObject();
+
+        //获取设备但前状态
+        String state = deviceDao.getDeviceState(deviceNo);
+        if (state.equals("在库"))
+        {
+            result = reservationDao.reserveDevice(deviceNo, u_no, startDate, endDate);
+        }
+        else
+        {
+            //设备当前不在库，返回错误信息
+            result.put("flag",0);
+            result.put("errmsg","设备当前不可借用");
+        }
+        return result;
     }
 }

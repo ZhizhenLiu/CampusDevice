@@ -122,7 +122,7 @@ public class DeviceDaoImpl implements DeviceDao {
      * @Param status  d_no
      * @Return: int
      */
-    public int changeDeviceStatus(String status, int d_no)
+    public int setDeviceState(String status, int d_no)
     {
         JDBCUtils.init(rs, pStmt, con);
         int result = 0;
@@ -135,6 +135,41 @@ public class DeviceDaoImpl implements DeviceDao {
 
             //更新状态
             result = pStmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return result;
+    }
+
+    /*
+     * @Description: 获取设备状态
+     * @Param d_no
+     * @Return: java.lang.String
+     */
+    public String getDeviceState(int d_no)
+    {
+        JDBCUtils.init(rs, pStmt, con);
+        String result = "";
+        try {
+            con = JDBCUtils.getConnection();
+            String sql = "SELECT d_state FROM device WHERE d_no= ?";
+            pStmt = con.prepareStatement(sql);
+            pStmt.setInt(1, d_no);
+
+            //查询
+            rs = pStmt.executeQuery();
+            if (rs.next())
+            {
+                result = rs.getString("d_state");
+            }
+            else
+            {
+                result = "不存在该设备";
+            }
         }
         catch (SQLException e) {
             e.printStackTrace();
