@@ -12,21 +12,21 @@ public interface UserDao {
      * @Param wechatId
      * @Return: bean.User
      */
-    User getUserByWechatId(String wechatId);
+    User getUserByWechatID(String wechatId);
 
 
     /*
-     * @Description: 通过微信唯一标识获取用户
-     * @Param wechatId
-     * @Return: com.alibaba.fastjson.JSONObject
-     */
-    JSONObject getUserBywechatId(String wechatId);
-
-    /*
-     * @Description: 用户首次登陆添加到user表中
+     * @Description: 用户首次登陆进行注册添加到user表中
      * @Param user
      * @Return: JSONObject
      */
-    JSONObject registerUser(User user);
+    int registerUser(User user);
+
+    /*
+     * @Description: 用户修改个人信息
+     * @Param user
+     * @Return: int
+     */
+    int changeUserInfo(User user);
 
 }

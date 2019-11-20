@@ -14,8 +14,7 @@ public class User {
     private String u_mentor_name;
     private String u_mentor_phone;
     private String u_major_class;
-    private String r_borrow_date;
-    private String r_return_date;
+
 
     public User(String u_no, String u_name, String u_wechatId, String u_email, String u_phone, int u_credit_grade, String u_type, String u_mentor_name, String u_mentor_phone, String u_major_class, String r_borrow_date, String r_return_date) {
         this.u_no = u_no;
@@ -28,8 +27,6 @@ public class User {
         this.u_mentor_name = u_mentor_name;
         this.u_mentor_phone = u_mentor_phone;
         this.u_major_class = u_major_class;
-        this.r_borrow_date = r_borrow_date;
-        this.r_return_date = r_return_date;
     }
 
     public User() {
@@ -115,22 +112,6 @@ public class User {
         this.u_major_class = u_major_class;
     }
 
-    public String getR_borrow_date() {
-        return r_borrow_date;
-    }
-
-    public void setR_borrow_date(String r_borrow_date) {
-        this.r_borrow_date = r_borrow_date;
-    }
-
-    public String getR_return_date() {
-        return r_return_date;
-    }
-
-    public void setR_return_date(String r_return_date) {
-        this.r_return_date = r_return_date;
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -144,8 +125,6 @@ public class User {
                 ", u_mentor_name='" + u_mentor_name + '\'' +
                 ", u_mentor_phone='" + u_mentor_phone + '\'' +
                 ", u_major_class='" + u_major_class + '\'' +
-                ", r_borrow_date='" + r_borrow_date + '\'' +
-                ", r_return_date='" + r_return_date + '\'' +
                 '}';
     }
 }

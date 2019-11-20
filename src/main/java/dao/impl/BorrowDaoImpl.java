@@ -1,5 +1,6 @@
 package dao.impl;
 
+import bean.Borrow;
 import bean.Device;
 import bean.Reservation;
 import bean.User;
@@ -12,6 +13,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BorrowDaoImpl implements BorrowDao {
     private Connection con;
@@ -21,14 +24,17 @@ public class BorrowDaoImpl implements BorrowDao {
 
     /*
      * @Description: 管理员确认设备租借给某个用户
-     * @Param u_no  d_no
-     * @Return: com.alibaba.fastjson.JSONObject
+     * @Param u_no  d_no  borrowDate  returnDate
+     * @Return: int
      */
-    public JSONObject confirmBorrow(String u_no, int d_no, String borrowDate, String returnDate)
+    public int confirmBorrow(String u_no, int d_no, String borrowDate, String returnDate)
     {
-        JSONObject result = new JSONObject();
-        JDBCUtils.init(rs, pStmt, con);
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
 
+        int flag = 0;
         con = JDBCUtils.getConnection();
         sql = "INSERT INTO borrow(d_no, u_no, b_borrow_date, b_return_date) " +
               "VALUES (?, ?, ?, ?)";
@@ -40,13 +46,7 @@ public class BorrowDaoImpl implements BorrowDao {
             pStmt.setString(4, returnDate);
 
             //返回执行状态
-            int flag = pStmt.executeUpdate();
-            result.put("flag",flag);
-
-            if (flag == 0)
-            {
-                result.put("errmsg", "确认租借失败");
-            }
+            flag = pStmt.executeUpdate();
 
         }
         catch (SQLException e) {
@@ -55,7 +55,7 @@ public class BorrowDaoImpl implements BorrowDao {
         finally {
             JDBCUtils.closeAll(null, pStmt, con);
         }
-        return result;
+        return flag;
     }
     /*
      * @Description: 设置所有逾期设备状态为 -1 表示逾期未还
@@ -65,7 +65,10 @@ public class BorrowDaoImpl implements BorrowDao {
     public int setAllStateOverDue()
     {
         //初始化
-        JDBCUtils.init(rs, pStmt, con);
+        con = null;
+        pStmt = null;
+        rs = null;
+
         int result = 0;
         try {
             con = JDBCUtils.getConnection();
@@ -88,14 +91,16 @@ public class BorrowDaoImpl implements BorrowDao {
     /*
      * @Description: 管理员获取管辖范围内预期未还用户
      * @Param a_no
-     * @Return: com.alibaba.fastjson.JSONObject
+     * @Return: java.util.List<bean.Borrow>
      */
-    public JSONObject getOverDue(int a_no)
+    public List<Borrow> getOverDueList(int a_no)
     {
         //初始化
-        JDBCUtils.init(rs, pStmt, con);
-        JSONObject result = new JSONObject();
-        JSONArray users = new JSONArray();
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        List<Borrow> borrowList = new ArrayList<>();
         try {
             con = JDBCUtils.getConnection();
             sql = "SELECT u.u_name,u.u_type, u.u_credit_grade, b.b_borrow_date, b.b_return_date,u.u_phone, u.u_email FROM borrow b, device d, `user` u " +
@@ -110,37 +115,25 @@ public class BorrowDaoImpl implements BorrowDao {
             rs = pStmt.executeQuery();
 
             //判断是否存在记录
-            if (rs.next())
+            while (rs.next())
             {
-                //有的话记录查询状态为1：成功
-                result.put("state",1);
-                do {
-                    //JavaBean 转 fastjson
-                    User user = new User();
-                    user.setU_name(rs.getString("u_name"));
-                    user.setU_type(rs.getString("u_type"));
-                    user.setU_credit_grade(rs.getInt("u_credit_grade"));
-                    user.setR_borrow_date(rs.getString("b_borrow_date"));
-                    user.setR_return_date(rs.getString("b_return_date"));
-                    users.add(user);
-                }
-                while (rs.next());
-                result.put("users",users);
-            }
-            else
-            {
-                //不存在记录，查询状态为0：失败
-                result.put("flag", 0);
-                result.put("errMsg","不存在外借设备信息");
+                Borrow borrow = new Borrow();
+                borrow.setU_name(rs.getString("u_name"));
+                borrow.setU_type(rs.getString("u_type"));
+                borrow.setU_credit_grade(rs.getInt("u_credit_grade"));
+                borrow.setB_borrow_date(rs.getString("b_borrow_date"));
+                borrow.setB_return_date(rs.getString("b_return_date"));
+                borrowList.add(borrow);
             }
         }
-        catch (SQLException e) {
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
         finally {
             JDBCUtils.closeAll(rs, pStmt, con);
         }
-        return result;
+        return borrowList;
     }
 
     /*
@@ -151,8 +144,11 @@ public class BorrowDaoImpl implements BorrowDao {
     public int returnBorrow(String u_no, int d_no)
     {
         //初始化
-        JDBCUtils.init(rs, pStmt, con);
-        int result = 0;
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        int flag = 0;
         try {
             con = JDBCUtils.getConnection();
             sql = "UPDATE borrow SET b_state = 1 " +
@@ -165,7 +161,7 @@ public class BorrowDaoImpl implements BorrowDao {
             pStmt.setString(1, u_no);
             pStmt.setInt(2, d_no);
 
-            result = pStmt.executeUpdate();
+            flag = pStmt.executeUpdate();
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -173,7 +169,7 @@ public class BorrowDaoImpl implements BorrowDao {
         finally {
             JDBCUtils.closeAll(rs, pStmt, con);
         }
-        return result;
+        return flag;
     }
 
     /*
@@ -184,7 +180,10 @@ public class BorrowDaoImpl implements BorrowDao {
     public int getBorrowNo(String u_no, int d_no)
     {
         //初始化
-        JDBCUtils.init(rs, pStmt, con);
+        con = null;
+        pStmt = null;
+        rs = null;
+
         int b_no = 0;
         try {
             con = JDBCUtils.getConnection();

@@ -11,7 +11,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ReservationDaoImpl implements ReservationDao {
     private Connection con;
@@ -24,26 +26,26 @@ public class ReservationDaoImpl implements ReservationDao {
      * @Param deviceNo  wechatId  startDate  endDate
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject reserveDevice(int deviceNo, String u_no, Date startDate, Date endDate)
+    public int reserveDevice(int deviceNo, String u_no, Date startDate, Date endDate)
     {
-        JDBCUtils.init(rs, pStmt, con);
-        JSONObject result = new JSONObject();
-        con = JDBCUtils.getConnection();
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
 
-        JDBCUtils.init(rs, pStmt, con);
+        int flag = 0;
         try {
             con = JDBCUtils.getConnection();
             sql = "INSERT INTO reservation(d_no,u_no,r_reservation_date,r_start_date,r_return_date) " +
-                    "VALUES(?, ?, CURRENT_DATE, ?, ?)";
+                  "VALUES(?, ?, CURRENT_DATE, ?, ?)";
             pStmt = con.prepareStatement(sql);
             pStmt.setInt(1, deviceNo);
             pStmt.setString(2, u_no);
             pStmt.setDate(3, new java.sql.Date(startDate.getTime()));
             pStmt.setDate(4, new java.sql.Date(endDate.getTime()));
-            int flag = pStmt.executeUpdate();
 
-            //找到对应的用户,记录执行状态
-            result.put("flag",flag);
+            //记录执行状态
+            flag = pStmt.executeUpdate();
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -52,7 +54,7 @@ public class ReservationDaoImpl implements ReservationDao {
             JDBCUtils.closeAll(null,pStmt,con);
         }
 
-        return result;
+        return flag;
     }
 
     /*
@@ -60,55 +62,38 @@ public class ReservationDaoImpl implements ReservationDao {
      * @Param wechatId
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject getReservation(String wechatId)
+    public List<Device> getReservedDevice(int a_no)
     {
         //初始化
-        JDBCUtils.init(rs, pStmt, con);
-        JSONObject result = new JSONObject();
-        JSONArray reservations = new JSONArray();
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        List<Device> deviceList = new ArrayList<>();
         try {
             con = JDBCUtils.getConnection();
             sql = "SELECT d.d_no, d.d_name, d.d_main_use, COUNT(*) r_sum " +
-                    "FROM reservation r, device d " +
-                    "WHERE " +
-                    "r.d_no = d.d_no " +
-                    "AND d.a_no = ? " +
-                    "GROUP BY d.d_no, d.d_name, d.d_main_use " +
-                    "ORDER BY r_sum DESC";
+                  "FROM reservation r, device d " +
+                  "WHERE " +
+                  "r.d_no = d.d_no " +
+                  "AND d.a_no = ? " +
+                  "GROUP BY d.d_no, d.d_name, d.d_main_use " +
+                  "ORDER BY r_sum DESC";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
-            pStmt.setString(1, wechatId);
+            pStmt.setInt(1, a_no);
             rs = pStmt.executeQuery();
 
             //判断是否存在记录
-            if (rs.next())
+            while (rs.next())
             {
-                //有的话记录查询状态为1：成功
-                result.put("flag",1);
-                do {
-                    /*String 转 fastjsonL: 难懂不直观，容易出错
-                    reservations.add(
-                            JSON.parse("{\"d_no\":"+rs.getInt("d_no")+",\"d_name\":\""+rs.getString("d_name")+
-                                    "\",\"d_main_use\":\""+rs.getString("d_main_use")+"\",\"r_sum\":"+rs.getInt("r_sum")+"}")
-                    );*/
-
-                    //JavaBean 转 fastjson
-                    Device device = new Device();
-                    device.setD_no(rs.getInt("d_no"));
-                    device.setD_name(rs.getString("d_name"));
-                    device.setD_main_use(rs.getString("d_main_use"));
-                    device.setR_sum(rs.getInt("r_sum"));
-                    reservations.add(device);
-                }
-                while (rs.next());
-                result.put("reservations",reservations);
-            }
-            else
-            {
-                //不存在记录，查询状态为0：失败
-                result.put("flag", 0);
-                result.put("errMsg","未能获取到设备信息");
+                Device device = new Device();
+                device.setD_no(rs.getInt("d_no"));
+                device.setD_name(rs.getString("d_name"));
+                device.setD_main_use(rs.getString("d_main_use"));
+                device.setR_sum(rs.getInt("r_sum"));
+                deviceList.add(device);
             }
         }
         catch (SQLException e) {
@@ -117,20 +102,22 @@ public class ReservationDaoImpl implements ReservationDao {
         finally {
             JDBCUtils.closeAll(rs, pStmt, con);
         }
-        return result;
+        return deviceList;
     }
 
     /*
      * @Description: 获取某一个设备的预约队列
      * @Param deviceNo
-     * @Return: com.alibaba.fastjson.JSONObject
+     * @Return: java.util.List<bean.Reservation>
      */
-    public JSONObject getReservationDetail(String deviceNo)
+    public List<Reservation> getReservationDetail(String deviceNo)
     {
         //初始化
-        JDBCUtils.init(rs, pStmt, con);
-        JSONObject result = new JSONObject();
-        JSONArray reservations = new JSONArray();
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        List<Reservation> reservationList = new ArrayList<>();
         try {
             con = JDBCUtils.getConnection();
             sql = "SELECT u_name, u_type, r_reservation_date, r_borrow_date, r_return_date, u_credit_grade " +
@@ -144,37 +131,15 @@ public class ReservationDaoImpl implements ReservationDao {
             pStmt.setString(1, deviceNo);
             rs = pStmt.executeQuery();
 
-            //判断是否存在记录
-            if (rs.next())
+            while (rs.next())
             {
-                //有的话记录查询状态为1：成功
-                result.put("flag",1);
-                do {
-                    /*String 转 fastjson：难懂不直观，容易出错
-                    reservations.add(
-                            JSON.parse("{\"u_name\":\""+rs.getString("u_name")+"\",\"u_type\":\""+rs.getString("u_type")+
-                                    "\",\"r_reservation_date\":\""+rs.getString("r_reservation_date")+"\",\"r_borrow_date\":\""+rs.getString("r_borrow_date")+
-                                    "\",\"r_return_date\":\""+rs.getString("r_return_date")+"\",\"r_return_date\":\""+rs.getString("r_return_date")+
-                                    "\",\"u_credit_grade\":\""+rs.getString("u_credit_grade")+"\"}")
-                    );*/
-
-                    //JavaBean 转 fastjson
-                    Reservation reservation = new Reservation();
-                    reservation.setU_name(rs.getString("u_name"));
-                    reservation.setU_type(rs.getString("u_type"));
-                    reservation.setR_borrow_date(rs.getString("r_borrow_date"));
-                    reservation.setR_return_date(rs.getString("r_return_date"));
-                    reservation.setU_credit_grade(rs.getInt("u_credit_grade"));
-                    reservations.add(reservation);
-                }
-                while (rs.next());
-                result.put("reservations",reservations);
-            }
-            else
-            {
-                //不存在记录，查询状态为0：失败
-                result.put("flag", 0);
-                result.put("errmsg","未能获取到预约信息");
+                Reservation reservation = new Reservation();
+                reservation.setU_name(rs.getString("u_name"));
+                reservation.setU_type(rs.getString("u_type"));
+                reservation.setR_borrow_date(rs.getString("r_borrow_date"));
+                reservation.setR_return_date(rs.getString("r_return_date"));
+                reservation.setU_credit_grade(rs.getInt("u_credit_grade"));
+                reservationList.add(reservation);
             }
         }
         catch (SQLException e) {
@@ -183,13 +148,16 @@ public class ReservationDaoImpl implements ReservationDao {
         finally {
             JDBCUtils.closeAll(rs, pStmt, con);
         }
-        return result;
+        return reservationList;
     }
 
     public String getBorrowDate(String u_no, int d_no)
     {
         //初始化
-        JDBCUtils.init(rs, pStmt, con);
+        con = null;
+        pStmt = null;
+        rs = null;
+
         String borrowDate = "";
         try {
             con = JDBCUtils.getConnection();
@@ -226,7 +194,10 @@ public class ReservationDaoImpl implements ReservationDao {
     public String getReturnDate(String u_no, int d_no)
     {
         //初始化
-        JDBCUtils.init(rs, pStmt, con);
+        con = null;
+        pStmt = null;
+        rs = null;
+
         String returnDate = "";
         try {
             con = JDBCUtils.getConnection();
@@ -268,8 +239,11 @@ public class ReservationDaoImpl implements ReservationDao {
     public int reserveSucceed(String u_no, int d_no)
     {
         //初始化
-        JDBCUtils.init(rs, pStmt, con);
-        int result = 0;
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        int flag = 0;
         try {
             con = JDBCUtils.getConnection();
             sql = "UPDATE reservation SET r_state = 1  " +
@@ -281,7 +255,7 @@ public class ReservationDaoImpl implements ReservationDao {
             pStmt.setString(1, u_no);
             pStmt.setInt(2, d_no);
 
-            result = pStmt.executeUpdate();
+            flag = pStmt.executeUpdate();
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -289,6 +263,6 @@ public class ReservationDaoImpl implements ReservationDao {
         finally {
             JDBCUtils.closeAll(rs, pStmt, con);
         }
-        return result;
+        return flag;
     }
 }

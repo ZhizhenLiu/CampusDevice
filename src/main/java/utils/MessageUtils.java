@@ -6,7 +6,11 @@ import java.util.Random;
 
 public class MessageUtils {
 
-    //返回验证码
+    /*
+     * @Description: 返回验证码工具类
+     * @Param number  name
+     * @Return: java.lang.String
+     */
     public static String SendTextMessage(String number,String name)
     {
         String apiUrl = "https://sms_developer.zhenzikj.com";

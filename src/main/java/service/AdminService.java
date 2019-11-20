@@ -10,7 +10,7 @@ public interface AdminService {
      * @Param wechatId
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject getReservation(String wechatId);
+    JSONObject getReservedDevice(String wechatId);
 
     /*
      * @Description: 获取某一个设备的预约队列

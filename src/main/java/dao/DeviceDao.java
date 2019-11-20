@@ -1,21 +1,24 @@
 package dao;
 
+import bean.Device;
 import com.alibaba.fastjson.JSONObject;
+
+import java.util.List;
 
 public interface DeviceDao {
     /*
      * @Description: 分页查询首页热门设备
-     * @Param page  count
+     * @Param  page: 页数，第几页  count：每页设备数量
      * @Return: java.util.List<bean.Device>
      */
-    JSONObject getHotDeviceByPage(int page, int count);
+    List<Device> getHotDeviceByPage(int page, int count);
 
     /*
      * @Description: 用户浏览获取设备具体信息
      * @Param deviceNo
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject getDeviceDetails(int deviceNo);
+    Device getDeviceDetails(int deviceNo);
 
     /*
      * @Description: 改变设备状态

@@ -1,7 +1,6 @@
 package dao.impl;
 
 import bean.User;
-import com.alibaba.fastjson.JSONObject;
 import dao.UserDao;
 import utils.JDBCUtils;
 
@@ -20,10 +19,13 @@ public class UserDaoImpl implements UserDao {
      * @Param userNo
      * @Return: bean.User
      */
-    public User getUserByWechatId(String wechatId)
+    public User getUserByWechatID(String wechatId)
     {
         //初始化
-        JDBCUtils.init(rs, pStmt, con);
+        con = null;
+        pStmt = null;
+        rs = null;
+
         User user = new User();
         try {
             con = JDBCUtils.getConnection();
@@ -49,58 +51,20 @@ public class UserDaoImpl implements UserDao {
         return  user;
     }
 
-    /*
-     * @Description: 通过微信唯一标识获取用户
-     * @Param wechatId
-     * @Return: com.alibaba.fastjson.JSONObject
-     */
-    public JSONObject getUserBywechatId(String wechatId)
-    {
-        //初始化
-        JDBCUtils.init(rs, pStmt, con);
-        JSONObject result = null;
-        try {
-            con = JDBCUtils.getConnection();
-            sql = "select * from user where u_wechatid = ?";
-            pStmt = con.prepareStatement(sql);
-
-            //替换参数，从1开始
-            pStmt.setString(1, wechatId);
-            rs = pStmt.executeQuery();
-
-            if (rs.next())
-            {
-                result.put("flag","1");
-                result.put("user",new User(rs.getString("u_userno"),rs.getString("u_name"),rs.getString("u_wechatid"),rs.getString("u_email"),
-                        rs.getString("u_phone"),rs.getInt("u_credit_grade"),rs.getString("u_type"),rs.getString("u_mentor_name"),
-                        rs.getString("u_mentor_phone"),rs.getString("u_major_class"), null, null));
-            }
-            else
-            {
-                result.put("flag","0");
-                result.put("errmsg","未查询到对应的用户");
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        finally {
-            JDBCUtils.closeAll(rs, pStmt, con);
-        }
-        return result;
-    }
 
     /*
      * @Description: 用户首次登陆添加到user表中
      * @Param user
-     * @Return: JSONObject
+     * @Return: int
      */
-    public JSONObject registerUser(User user)
+    public int registerUser(User user)
     {
         //初始化
-        JDBCUtils.init(rs, pStmt, con);
-        JSONObject result = new JSONObject();
+        con = null;
+        pStmt = null;
+        rs = null;
 
+        int flag = 0;
         try {
             con = JDBCUtils.getConnection();
             sql = "insert into user values (?,?,?,?,?,?,?,?,?,?)";
@@ -117,12 +81,8 @@ public class UserDaoImpl implements UserDao {
             pStmt.setString(9,user.getU_mentor_phone());
             pStmt.setString(10,user.getU_major_class());
 
-            int flag = pStmt.executeUpdate();
-            result.put("flag",flag);
-            if (flag == 0)
-            {
-                result.put("errmsg","注册用户失败");
-            }
+            flag = pStmt.executeUpdate();
+
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -130,6 +90,46 @@ public class UserDaoImpl implements UserDao {
         finally {
             JDBCUtils.closeAll(null, pStmt, con);
         }
-        return result;
+        return flag;
+    }
+
+    /*
+     * @Description: 用户修改个人信息
+     * @Param user
+     * @Return: void
+     */
+    public int changeUserInfo( User user) {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        int flag = 0;
+        try {
+            con = JDBCUtils.getConnection();
+            String sql = "UPDATE user SET u_name=?, u_email=?, u_phone=?, u_credit_grade=?, u_mentor_name=?, u_mentor_phone=?, u_major_class=? " +
+                         "WHERE u_no = ?";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            pStmt.setString(1,user.getU_name());
+            pStmt.setString(2,user.getU_email());
+            pStmt.setString(3,user.getU_phone());
+            pStmt.setInt(4,user.getU_credit_grade());
+            pStmt.setString(5,user.getU_mentor_name());
+            pStmt.setString(6,user.getU_phone());
+            pStmt.setString(7,user.getU_major_class());
+            pStmt.setString(8,user.getU_no());
+
+            flag = pStmt.executeUpdate();
+
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            JDBCUtils.closeAll(null, pStmt, con);
+        }
+        return flag;
     }
 }

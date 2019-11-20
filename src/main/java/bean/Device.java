@@ -3,7 +3,6 @@ package bean;
  * @Description: 设备信息
  */
 public class Device {
-
     int d_no;
     String a_no;
     String d_state;
@@ -12,7 +11,11 @@ public class Device {
     String d_important_param;
     String d_main_use;
     String d_save_site;
+
+    //扩展属性
     int r_sum; //预约人数
+    String a_name;
+    String a_phone;
 
     public Device(int d_no, String a_no, String d_state, int d_borrowed_times, String d_name, String d_important_param, String d_main_use, String d_save_site) {
         this.d_no = d_no;
@@ -100,6 +103,22 @@ public class Device {
         this.r_sum = r_sum;
     }
 
+    public String getA_name() {
+        return a_name;
+    }
+
+    public void setA_name(String a_name) {
+        this.a_name = a_name;
+    }
+
+    public String getA_phone() {
+        return a_phone;
+    }
+
+    public void setA_phone(String a_phone) {
+        this.a_phone = a_phone;
+    }
+
     @Override
     public String toString() {
         return "Device{" +
@@ -111,6 +130,9 @@ public class Device {
                 ", d_important_param='" + d_important_param + '\'' +
                 ", d_main_use='" + d_main_use + '\'' +
                 ", d_save_site='" + d_save_site + '\'' +
+                ", r_sum=" + r_sum +
+                ", a_name='" + a_name + '\'' +
+                ", a_phone='" + a_phone + '\'' +
                 '}';
     }
 }

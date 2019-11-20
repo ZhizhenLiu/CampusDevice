@@ -66,15 +66,4 @@ public class JDBCUtils {
         }
     }
     
-    /*
-     * @Description: 数据库操作之前初始化参数
-     * @Param resultSet  statement  connection
-     * @Return: void
-     */
-    public static void init(ResultSet resultSet, Statement statement, Connection connection)
-    {
-        resultSet = null;
-        statement = null;
-        connection = null;
-    }
 }

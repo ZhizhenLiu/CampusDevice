@@ -1,8 +1,11 @@
 package dao;
 
+import bean.Device;
+import bean.Reservation;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.Date;
+import java.util.List;
 
 public interface ReservationDao {
 
@@ -12,21 +15,21 @@ public interface ReservationDao {
      * @Param deviceNo  wechatId  startDate  endDate
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject reserveDevice(int deviceNo, String wechatId, Date startDate, Date endDate);
+    int reserveDevice(int deviceNo, String wechatId, Date startDate, Date endDate);
 
     /*
-     * @Description: 通过标识获取管理员管辖范围内的有人预约的设备
-     * @Param wechatId
-     * @Return: com.alibaba.fastjson.JSONObject
+     * @Description: 通过管理员编号获取管理员管辖范围内的有人预约的设备
+     * @Param a_no
+     * @Return: java.util.List<bean.Device>
      */
-    JSONObject getReservation(String wechatId);
+    List<Device> getReservedDevice(int a_no);
 
     /*
      * @Description: 获取某一个设备的预约队列
-     * @Param deviceId
-     * @Return: com.alibaba.fastjson.JSONObject
+     * @Param deviceNo
+     * @Return: java.util.List<bean.Reservation>
      */
-    JSONObject getReservationDetail(String deviceNo);
+    List<Reservation> getReservationDetail(String deviceNo);
 
     /*
      * @Description: 获取某个用户预约设备的开始日期

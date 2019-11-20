@@ -37,7 +37,7 @@ public class HandleReservationServlet extends HttpServlet {
         if (result.get("errcode").equals("0"))
         {
             wechatId = (String) result.get("openid");
-            printWriter.write(adminService.getReservation(wechatId).toJSONString());
+            printWriter.write(adminService.getReservedDevice(wechatId).toJSONString());
         }
         //请求失败，返回错误信息
         else

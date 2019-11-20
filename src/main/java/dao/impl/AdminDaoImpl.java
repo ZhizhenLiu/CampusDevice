@@ -23,7 +23,9 @@ public class AdminDaoImpl implements AdminDao {
     public Admin getAdminByWechatId(String wechatId)
     {
         //初始化
-        JDBCUtils.init(rs, pStmt, con);
+        con = null;
+        pStmt = null;
+        rs = null;
 
         try {
             con = JDBCUtils.getConnection();

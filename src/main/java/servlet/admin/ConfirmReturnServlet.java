@@ -1,11 +1,8 @@
 package servlet.admin;
 
-import bean.User;
 import com.alibaba.fastjson.JSONObject;
 import service.AdminService;
-import service.UserService;
 import service.impl.AdminServiceImpl;
-import service.impl.UserServiceImpl;
 import utils.HttpUtils;
 
 import javax.servlet.ServletException;
