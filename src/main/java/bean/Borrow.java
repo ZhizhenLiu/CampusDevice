@@ -8,14 +8,22 @@ public class Borrow {
     String b_return_date;
     int b_state;
 
-    //附加属性
+    //附加用户属性
     String u_name;
     String u_type;
     int u_credit_grade;
     String u_phone;
     String u_email;
 
-    public Borrow(int b_no, int d_no, String u_no, String b_borrow_date, String b_return_date, int b_state, String u_name, String u_type, int u_credit_grade, String u_phone, String u_email) {
+    //附加设备属性
+    String return_place;
+    String d_name;
+    String d_main_use;
+
+    public Borrow() {
+    }
+
+    public Borrow(int b_no, int d_no, String u_no, String b_borrow_date, String b_return_date, int b_state, String u_name, String u_type, int u_credit_grade, String u_phone, String u_email, String return_place, String d_name, String d_main_use) {
         this.b_no = b_no;
         this.d_no = d_no;
         this.u_no = u_no;
@@ -27,9 +35,9 @@ public class Borrow {
         this.u_credit_grade = u_credit_grade;
         this.u_phone = u_phone;
         this.u_email = u_email;
-    }
-
-    public Borrow() {
+        this.return_place = return_place;
+        this.d_name = d_name;
+        this.d_main_use = d_main_use;
     }
 
     public int getB_no() {
@@ -120,6 +128,30 @@ public class Borrow {
         this.u_email = u_email;
     }
 
+    public String getReturn_place() {
+        return return_place;
+    }
+
+    public void setReturn_place(String return_place) {
+        this.return_place = return_place;
+    }
+
+    public String getD_name() {
+        return d_name;
+    }
+
+    public void setD_name(String d_name) {
+        this.d_name = d_name;
+    }
+
+    public String getD_main_use() {
+        return d_main_use;
+    }
+
+    public void setD_main_use(String d_main_use) {
+        this.d_main_use = d_main_use;
+    }
+
     @Override
     public String toString() {
         return "Borrow{" +
@@ -134,6 +166,9 @@ public class Borrow {
                 ", u_credit_grade=" + u_credit_grade +
                 ", u_phone='" + u_phone + '\'' +
                 ", u_email='" + u_email + '\'' +
+                ", return_place='" + return_place + '\'' +
+                ", d_name='" + d_name + '\'' +
+                ", d_main_use='" + d_main_use + '\'' +
                 '}';
     }
 }

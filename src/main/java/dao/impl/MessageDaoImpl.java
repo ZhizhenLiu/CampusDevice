@@ -1,0 +1,94 @@
+package dao.impl;
+
+import bean.Message;
+import dao.MessageDao;
+import utils.JDBCUtils;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+public class MessageDaoImpl implements MessageDao {
+    private Connection con;
+    private PreparedStatement pStmt;
+    private ResultSet rs;
+    private String sql;
+
+    /*
+     * @Description: 用户查看消息栏信息 分页查询
+     * @Param userNo  page  count
+     * @Return: java.util.List<bean.Message>
+     */
+    public List<Message> getMessageByPage(String userNo, int page, int count)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+        List<Message> messageList = new ArrayList<>();
+
+        try{
+            con = JDBCUtils.getConnection();
+            sql = "SELECT * FROM message WHERE u_no = ? LIMIT ?,?";
+            pStmt = con.prepareStatement(sql);
+            //执行操作
+            pStmt.setString(1,userNo);
+            pStmt.setInt(2, (page-1)*count);
+            pStmt.setInt(3, count);
+            rs = pStmt.executeQuery();
+            while(rs.next())
+            {
+                messageList.add(new Message(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getDate(4)));
+            }
+
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return messageList;
+    }
+
+    /*
+     * @Description: 获取所有信息的数量
+     * @Param userNo
+     * @Return: int
+     */
+    public int getAllMessageNum(String userNo)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+        int num = 0;
+
+        try{
+            con = JDBCUtils.getConnection();
+            sql = "select count(*) from message where u_no = ?";
+            pStmt = con.prepareStatement(sql);
+
+            //执行操作
+            pStmt.setString(1,userNo);
+            rs = pStmt.executeQuery();
+
+            if(rs.next())
+            {
+                num = rs.getInt(1);
+            }
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return num;
+    }
+}

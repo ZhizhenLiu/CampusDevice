@@ -8,6 +8,13 @@ import java.util.List;
 public interface BorrowDao {
 
     /*
+     * @Description: 查询用户借用的记录(借用中b_state=0，归还b_state=1,逾期未还b_state= -1)
+     * @Param userNo
+     * @Return: java.util.List<bean.Borrow>
+     */
+    List<Borrow> getBorrowRecord(String userNo);
+
+    /*
      * @Description: 管理员确认设备租借给某个用户
      * @Param u_no  d_no  borrowDate  returnDate
      * @Return: int

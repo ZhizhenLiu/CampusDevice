@@ -265,4 +265,74 @@ public class ReservationDaoImpl implements ReservationDao {
         }
         return flag;
     }
+
+    /*
+     * @Description: 用户查看我的预约
+     * @Param userNo
+     * @Return: java.util.List<bean.Reservation>
+     */
+    public List<Reservation> getReservation(String userNo)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+        List<Reservation> reservationList = new ArrayList<>();
+
+        try{
+            con = JDBCUtils.getConnection();
+            sql = "SELECT * FROM reservation WHERE u_no = ?";
+            pStmt = con.prepareStatement(sql);
+
+            //执行操作
+            pStmt.setString(1, userNo);
+            ResultSet rs = pStmt.executeQuery();
+            while(rs.next())
+            {
+                Reservation reservation = new Reservation();
+                reservation.setR_no(rs.getInt("r_no"));
+                reservation.setD_no(rs.getInt("d_no"));
+                reservation.setR_reservation_date(rs.getString("r_reservation_date"));
+                reservation.setR_borrow_date(rs.getString("r_start_date"));
+                reservation.setR_return_date(rs.getString("r_return_date"));
+                reservation.setR_feedback(rs.getString("r_feedback"));
+                reservation.setR_state(rs.getInt("r_state"));
+                reservationList.add(reservation);
+            }
+
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return reservationList;
+    }
+
+
+    public int getReservationNum(String userNo) {
+        try{
+            Connection conn = JDBCUtils.getConnection();
+            String sql = "select count(*) from reservation where u_no = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            //执行操作
+            ps.setString(1,userNo);
+            ResultSet rs = ps.executeQuery();
+            int num = 0;
+            if(rs.next())
+            {
+                num = rs.getInt(1);
+            }
+
+            conn.close();
+            return num;
+
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

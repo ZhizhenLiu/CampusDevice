@@ -50,6 +50,24 @@ public interface UserService {
      */
     JSONObject reserveDevice(int deviceNo, String wechatId, Date startDate, Date endDate);
 
+    /*
+     * @Description: 查询用户借用的记录(借用中b_state=0，归还b_state=1,逾期未还b_state= -1)
+     * @Param wechatID
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject getBorrowRecord(String wechatID);
 
+    /*
+     * @Description: 获取用户的信用记录:分页查询
+     * @Param wechatID  page  count
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject getCreditRecordByPage(String wechatID, int page, int count);
 
+    /*
+     * @Description: 获取用户的接收到的消息:分页查询
+     * @Param wechatID  page  count
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject getMessageByPage(String wechatID, int page, int count);
 }

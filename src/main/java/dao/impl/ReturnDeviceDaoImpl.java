@@ -31,7 +31,7 @@ public class ReturnDeviceDaoImpl implements ReturnDeviceDao {
         try {
             con = JDBCUtils.getConnection();
             sql = "INSERT INTO return_device(u_no, d_no, b_no, rd_date) " +
-                    "VALUES (?, ?, ?, CURRENT_DATE )";
+                  "VALUES (?, ?, ?, CURRENT_DATE )";
             pStmt = con.prepareStatement(sql);
             pStmt.setInt(1, d_no);
             pStmt.setString(2, u_no);

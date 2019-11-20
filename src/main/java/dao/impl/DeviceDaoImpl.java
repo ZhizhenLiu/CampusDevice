@@ -31,7 +31,7 @@ public class DeviceDaoImpl implements DeviceDao {
 
         List<Device> deviceList = new ArrayList<>();
         con = JDBCUtils.getConnection();
-        sql = "select * from device limit ?,?";
+        sql = "SELECT * FROM device LIMIT ?,?";
         try {
             pStmt = con.prepareStatement(sql);
             pStmt.setInt(1, (page-1)*count);

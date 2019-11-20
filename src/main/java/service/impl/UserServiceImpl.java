@@ -1,16 +1,11 @@
 package service.impl;
 
-import bean.Device;
-import bean.User;
+import bean.*;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import dao.DeviceDao;
-import dao.ReservationDao;
-import dao.UserDao;
-import dao.impl.DeviceDaoImpl;
-import dao.impl.ReservationDaoImpl;
-import dao.impl.UserDaoImpl;
+import dao.*;
+import dao.impl.*;
 import service.UserService;
 
 import java.util.Date;
@@ -20,6 +15,9 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao = new UserDaoImpl();
     private ReservationDao reservationDao = new ReservationDaoImpl();
     private DeviceDao deviceDao = new DeviceDaoImpl();
+    private BorrowDao borrowDao = new BorrowDaoImpl();
+    private CreditRecordDao creditRecordDao = new CreditRecordDaoImpl();
+    private MessageDao messageDao = new MessageDaoImpl();
 
     /*
      * @Description: 通过用户编号获取用户对象
@@ -139,6 +137,52 @@ public class UserServiceImpl implements UserService {
             errmsg.add("设备当前不可借用");
         }
         info.put("errmsg",errmsg);
+        return info;
+    }
+
+    /*
+     * @Description: 查询用户借用的记录(借用中b_state=0，归还b_state=1,逾期未还b_state= -1)
+     * @Param wechatID
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject getBorrowRecord(String wechatID)
+    {
+        String u_no = userDao.getUserByWechatID(wechatID).getU_no();
+        JSONObject info = new JSONObject();
+        List<Borrow> borrowList = borrowDao.getBorrowRecord(u_no);
+        info.put("borrowed_item",JSONArray.parseArray(JSON.toJSONString(borrowList)));
+        return info;
+    }
+
+    /*
+     * @Description: 获取用户的信用记录
+     * @Param wechatID  page  count
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject getCreditRecordByPage(String wechatID, int page, int count)
+    {
+        User user = userDao.getUserByWechatID(wechatID);
+        String u_no = user.getU_no();
+        int credit_score = user.getU_credit_grade();
+        JSONObject info = new JSONObject();
+        List<CreditRecord> creditRecordList = creditRecordDao.getRecordByPage(u_no, page, count);
+        info.put("score", credit_score);
+        info.put("record", JSONArray.parseArray(JSON.toJSONString(creditRecordList)));
+        return info;
+    }
+
+    /*
+     * @Description: 获取用户的接收到的消息:分页查询
+     * @Param wechatID  page  count
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject getMessageByPage(String wechatID, int page, int count)
+    {
+        User user = userDao.getUserByWechatID(wechatID);
+        String u_no = user.getU_no();
+        JSONObject info = new JSONObject();
+        List<Message> messageList = messageDao.getMessageByPage(u_no, page, count);
+        info.put("messages",JSONArray.parseArray(JSON.toJSONString(messageList)));
         return info;
     }
 }

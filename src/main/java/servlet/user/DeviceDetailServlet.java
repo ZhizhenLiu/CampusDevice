@@ -27,6 +27,7 @@ public class DeviceDetailServlet extends HttpServlet {
         printWriter.write(userService.getDeviceDetails(d_no).toJSONString());
 
         printWriter.flush();
+        printWriter.close();
     }
 
 

@@ -16,7 +16,7 @@ public class User {
     private String u_major_class;
 
 
-    public User(String u_no, String u_name, String u_wechatId, String u_email, String u_phone, int u_credit_grade, String u_type, String u_mentor_name, String u_mentor_phone, String u_major_class, String r_borrow_date, String r_return_date) {
+    public User(String u_no, String u_name, String u_wechatId, String u_email, String u_phone, int u_credit_grade, String u_type, String u_mentor_name, String u_mentor_phone, String u_major_class) {
         this.u_no = u_no;
         this.u_name = u_name;
         this.u_wechatId = u_wechatId;

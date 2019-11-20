@@ -39,7 +39,7 @@ public class ReserveServlet extends HttpServlet {
 
         //向微信服务器接口发送code，获取用户唯一标识openid, 返回参数
         JSONObject result = JSONObject.parseObject(HttpUtils.sendGet(code));
-        JSONObject returnData = null;
+        JSONObject info = null;
         PrintWriter printWriter = response.getWriter();
         UserService userService = new UserServiceImpl();
         String wechatId = "";
@@ -47,18 +47,18 @@ public class ReserveServlet extends HttpServlet {
         if (result.get("errcode").equals("0"))
         {
             wechatId = (String) result.get("openid");
-            returnData = userService.reserveDevice(d_no, wechatId, startDate, endDate);
-            printWriter.write(returnData.toJSONString());
+            info = userService.reserveDevice(d_no, wechatId, startDate, endDate);
+            printWriter.write(info.toJSONString());
         }
         //请求失败，返回错误信息
         else
         {
-            returnData.put("errms",result.get("errmsg"));
-            returnData.put("flag","0");
+            info.put("errms",result.get("errmsg"));
+            info.put("flag","0");
             printWriter.write(result.get("errmsg").toString());
         }
-
         printWriter.flush();
+        printWriter.close();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

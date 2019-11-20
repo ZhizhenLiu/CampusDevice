@@ -39,7 +39,7 @@ public class RegisterServlet extends HttpServlet {
         System.out.println( "u_email: " +  u_email);
         JSONObject result = JSONObject.parseObject(HttpUtils.sendGet(code));
         System.out.println(result);
-        JSONObject returnData = null;
+        JSONObject info = null;
         PrintWriter printWriter = response.getWriter();
         UserService userService = new UserServiceImpl();
         String wechatId = "";
@@ -48,20 +48,20 @@ public class RegisterServlet extends HttpServlet {
         {
             wechatId = (String) result.get("openid");
             System.out.println(result);
-            User user = new User(u_no, u_name, wechatId, u_email, u_phone, 100, u_type, u_mentor_name, u_mentor_phone,u_class_major, null, null);
+            User user = new User(u_no, u_name, wechatId, u_email, u_phone, 100, u_type, u_mentor_name, u_mentor_phone,u_class_major);
             System.out.println(user);
-            returnData = userService.registerUser(user);
-            printWriter.write(returnData.toJSONString());
+            info = userService.registerUser(user);
+            printWriter.write(info.toJSONString());
         }
         //请求失败，返回错误信息
         else
         {
-            returnData.put("errms",result.get("errmsg"));
-            returnData.put("flag","0");
-            printWriter.write(returnData.toJSONString());
+            info.put("errms",result.get("errmsg"));
+            info.put("flag","0");
+            printWriter.write(info.toJSONString());
         }
-
-
+        printWriter.flush();
+        printWriter.close();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

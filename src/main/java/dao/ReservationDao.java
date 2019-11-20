@@ -52,4 +52,14 @@ public interface ReservationDao {
      */
     int reserveSucceed(String u_no, int d_no);
 
+    /*
+     * @Description: 用户查看我的预约
+     * @Param userNo
+     * @Return: java.util.List<bean.Reservation>
+     */
+    List<Reservation> getReservation(String userNo);
+
+    //获取用户预约设备的数量
+    int getReservationNum(String userNo);
+
 }

@@ -23,6 +23,60 @@ public class BorrowDaoImpl implements BorrowDao {
     private String sql;
 
     /*
+     * @Description: 查询用户借用中的记录(借用中b_state=0，归还b_state=1,逾期未还b_state= -1)
+     * @Param userNo
+     * @Return: java.util.List<bean.Borrow>
+     */
+    public List<Borrow> getBorrowRecord(String userNo)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+        List<Borrow> borrowList = new ArrayList<>();
+
+        try {
+            con = JDBCUtils.getConnection();
+            sql = "SELECT" +
+                  "b_borrow_date," +
+                  "b_return_date," +
+                  "d_save_site," +
+                  "device.d_no," +
+                  "d_name," +
+                  "d_main_use," +
+                  "b_state " +
+                  "FROM borrow, device " +
+                  "WHERE u_no = ?";
+            pStmt = con.prepareStatement(sql);
+
+            //执行操作
+            pStmt.setString(1,userNo);
+            rs = pStmt.executeQuery();
+            while(rs.next())
+            {
+                Borrow borrow = new Borrow();
+                borrow.setB_borrow_date(rs.getString("b_borrow_date"));
+                borrow.setB_return_date(rs.getString("b_return_date"));
+                borrow.setReturn_place(rs.getString("d_save_site"));
+                borrow.setD_no(rs.getInt("d_no"));
+                borrow.setD_name(rs.getString("d_name"));
+                borrow.setD_main_use(rs.getString("d_main_use"));
+                borrow.setB_state(rs.getInt("b_state"));
+                borrowList.add(borrow);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return borrowList;
+    }
+
+    /*
      * @Description: 管理员确认设备租借给某个用户
      * @Param u_no  d_no  borrowDate  returnDate
      * @Return: int
