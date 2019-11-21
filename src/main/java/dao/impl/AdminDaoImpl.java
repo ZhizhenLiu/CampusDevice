@@ -10,42 +10,46 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AdminDaoImpl implements AdminDao {
-    private Connection con;
-    private PreparedStatement pStmt;
-    private ResultSet rs;
-    private String sql;
+    private Connection m_con;
+    private PreparedStatement m_pStmt;
+    private ResultSet m_rs;
+    private String m_sql;
 
     /*
      * @Description: 通过微信唯一标识获取管理员信息
      * @Param wechatId
      * @Return: bean.Admin
      */
-    public Admin getAdminByWechatId(String wechatId)
+    public Admin getAdminByWechatID(String wechatID)
     {
         //初始化
-        con = null;
-        pStmt = null;
-        rs = null;
+        m_con = null;
+        m_pStmt = null;
+        m_rs = null;
 
-        try {
-            con = JDBCUtils.getConnection();
-            sql = "select * from administrator where a_wechatid = ?";
-            pStmt = con.prepareStatement(sql);
+        try
+        {
+            m_con = JDBCUtils.getM_connection();
+            m_sql = "select * from administrator where a_wechatid = ?";
+            m_pStmt = m_con.prepareStatement(m_sql);
 
             //替换参数，从1开始
-            pStmt.setString(1, wechatId);
-            rs = pStmt.executeQuery();
+            m_pStmt.setString(1, wechatID);
+            m_rs = m_pStmt.executeQuery();
 
-            if (rs.next())
+            if (m_rs.next())
             {
-                return new Admin(rs.getInt("a_no"),rs.getString("a_name"),rs.getString("a_wechatid"),
-                    rs.getString("a_type"),rs.getString("a_phone"),rs.getString("a_emial"));
+                return new Admin(m_rs.getInt("a_no"), m_rs.getString("a_name"), m_rs.getString("a_wechatid"),
+                    m_rs.getString("a_type"), m_rs.getString("a_phone"), m_rs.getString("a_emial"));
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
-        finally {
-            JDBCUtils.closeAll(rs, pStmt, con);
+        finally
+        {
+            JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
         }
         return  null;
     }

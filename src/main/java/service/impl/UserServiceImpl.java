@@ -24,9 +24,9 @@ public class UserServiceImpl implements UserService {
      * @Param userNo
      * @Return: bean.User
      */
-    public User getUserByWechatId(String wechatId)
+    public User getUserByWechatID(String wechatID)
     {
-        return userDao.getUserByWechatID(wechatId);
+        return userDao.getUserByWechatID(wechatID);
     }
 
     /*
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
      * @Param wechatId
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject getUserBywechatId(String wechatID)
+    public JSONObject getJSONUserByWechatID(String wechatID)
     {
         User user = userDao.getUserByWechatID(wechatID);
         JSONObject info = new JSONObject();
@@ -95,10 +95,10 @@ public class UserServiceImpl implements UserService {
      * @Param deviceNo
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject getDeviceDetails(int deviceNo)
+    public JSONObject getDeviceDetails(int d_no)
     {
         JSONObject info = new JSONObject();
-        Device device = deviceDao.getDeviceDetails(deviceNo);
+        Device device = deviceDao.getDeviceDetails(d_no);
         if (device == null)
         {
             info.put("flag", 0);
@@ -113,17 +113,17 @@ public class UserServiceImpl implements UserService {
      * @Param deviceNo  wechatId  startDate  endDate
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject reserveDevice(int deviceNo, String wechatId, Date startDate, Date endDate)
+    public JSONObject reserveDevice(int d_no, String wechatId, Date startDate, Date endDate)
     {
-        String u_no = userDao.getUserByWechatID(wechatId).getU_no();
+        String u_no = userDao.getUserByWechatID(wechatId).getM_Uno();
         JSONObject info = new JSONObject();
         JSONArray errmsg = new JSONArray();
 
         //获取设备但前状态
-        String state = deviceDao.getDeviceState(deviceNo);
+        String state = deviceDao.getDeviceState(d_no);
         if (state.equals("在库"))
         {
-            int flag = reservationDao.reserveDevice(deviceNo, u_no, startDate, endDate);
+            int flag = reservationDao.reserveDevice(d_no, u_no, startDate, endDate);
             info.put("flag", flag);
             if (flag == 0 )
             {
@@ -147,7 +147,7 @@ public class UserServiceImpl implements UserService {
      */
     public JSONObject getBorrowRecord(String wechatID)
     {
-        String u_no = userDao.getUserByWechatID(wechatID).getU_no();
+        String u_no = userDao.getUserByWechatID(wechatID).getM_Uno();
         JSONObject info = new JSONObject();
         List<Borrow> borrowList = borrowDao.getBorrowRecord(u_no);
         info.put("borrowed_item",JSONArray.parseArray(JSON.toJSONString(borrowList)));
@@ -162,8 +162,8 @@ public class UserServiceImpl implements UserService {
     public JSONObject getCreditRecordByPage(String wechatID, int page, int count)
     {
         User user = userDao.getUserByWechatID(wechatID);
-        String u_no = user.getU_no();
-        int credit_score = user.getU_credit_grade();
+        String u_no = user.getM_Uno();
+        int credit_score = user.getM_UcreditGrade();
         JSONObject info = new JSONObject();
         List<CreditRecord> creditRecordList = creditRecordDao.getRecordByPage(u_no, page, count);
         info.put("score", credit_score);
@@ -179,7 +179,7 @@ public class UserServiceImpl implements UserService {
     public JSONObject getMessageByPage(String wechatID, int page, int count)
     {
         User user = userDao.getUserByWechatID(wechatID);
-        String u_no = user.getU_no();
+        String u_no = user.getM_Uno();
         JSONObject info = new JSONObject();
         List<Message> messageList = messageDao.getMessageByPage(u_no, page, count);
         info.put("messages",JSONArray.parseArray(JSON.toJSONString(messageList)));

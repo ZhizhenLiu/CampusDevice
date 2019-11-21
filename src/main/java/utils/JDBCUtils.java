@@ -7,32 +7,32 @@ import java.sql.*;
  */
 public class JDBCUtils {
 
-    private static String url = "jdbc:mysql://49.235.73.29:3306/testdb?serverTimezone=UTC";
-    private static String user = "root";
-    private static String password = "skplroot";
-    private static Connection connection;
+    private static String c_url = "jdbc:mysql://49.235.73.29:3306/testdb?serverTimezone=UTC";
+    private static String c_user = "root";
+    private static String c_password = "skplroot";
+    private static Connection m_connection;
     
     /*
      * @Description: 创建连接：连接mytest数据库
      * @Param
      * @Return: java.sql.Connection
      */
-    public static Connection getConnection()
+    public static Connection getM_connection()
     {
-        connection = null;
+        m_connection = null;
         try{
             //选择加载驱动
             Class.forName("com.mysql.cj.jdbc.Driver");
             //建立连接
-            connection = DriverManager.getConnection(url, user, password);
-            return connection;
+            m_connection = DriverManager.getConnection(c_url, c_user, c_password);
+            return m_connection;
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
         //如果发生异常，则返回一个空的连接
-        return connection;
+        return m_connection;
     }
 
     /*

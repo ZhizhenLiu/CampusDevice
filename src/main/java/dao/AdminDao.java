@@ -5,6 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 
 public interface AdminDao {
 
-    Admin getAdminByWechatId(String wechatId);
+    Admin getAdminByWechatID(String wechatID);
 
 }

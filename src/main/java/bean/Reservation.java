@@ -1,139 +1,139 @@
 package bean;
 
 public class Reservation {
-    int r_no;
-    int d_no;
-    String u_no;
-    String r_reservation_date;
-    String r_borrow_date;
-    String r_return_date;
-    String r_feedback;
-    int r_state;
+    private int m_Rno;
+    private int m_Dno;
+    private String m_Uno;
+    private String m_RreservationDate;
+    private String m_RborrowDate;
+    private String m_RreturnDate;
+    private String m_RfeedBack;
+    private int m_Rstate;
 
     //附加属性
-    String u_name;
-    String u_type;
-    int u_credit_grade;
+    private String m_Uname;
+    private String m_Utype;
+    private int m_UcreditGrade;
 
-    public Reservation(int r_no, int d_no, String u_no, String r_reservation_date, String r_borrow_date, String r_return_date, String r_feedback, int r_state, String u_name, String u_type, int u_credit_grade) {
-        this.r_no = r_no;
-        this.d_no = d_no;
-        this.u_no = u_no;
-        this.r_reservation_date = r_reservation_date;
-        this.r_borrow_date = r_borrow_date;
-        this.r_return_date = r_return_date;
-        this.r_feedback = r_feedback;
-        this.r_state = r_state;
-        this.u_name = u_name;
-        this.u_type = u_type;
-        this.u_credit_grade = u_credit_grade;
+    public Reservation(int m_Rno, int m_Dno, String m_Uno, String m_RreservationDate, String m_RborrowDate, String m_RreturnDate, String m_RfeedBack, int m_Rstate, String m_Uname, String m_Utype, int m_UcreditGrade) {
+        this.m_Rno = m_Rno;
+        this.m_Dno = m_Dno;
+        this.m_Uno = m_Uno;
+        this.m_RreservationDate = m_RreservationDate;
+        this.m_RborrowDate = m_RborrowDate;
+        this.m_RreturnDate = m_RreturnDate;
+        this.m_RfeedBack = m_RfeedBack;
+        this.m_Rstate = m_Rstate;
+        this.m_Uname = m_Uname;
+        this.m_Utype = m_Utype;
+        this.m_UcreditGrade = m_UcreditGrade;
     }
 
     public Reservation() {
     }
 
-    public int getR_no() {
-        return r_no;
+    public int getM_Rno() {
+        return m_Rno;
     }
 
-    public void setR_no(int r_no) {
-        this.r_no = r_no;
+    public void setM_Rno(int m_Rno) {
+        this.m_Rno = m_Rno;
     }
 
-    public int getD_no() {
-        return d_no;
+    public int getM_Dno() {
+        return m_Dno;
     }
 
-    public void setD_no(int d_no) {
-        this.d_no = d_no;
+    public void setM_Dno(int m_Dno) {
+        this.m_Dno = m_Dno;
     }
 
-    public String getU_no() {
-        return u_no;
+    public String getM_Uno() {
+        return m_Uno;
     }
 
-    public void setU_no(String u_no) {
-        this.u_no = u_no;
+    public void setM_Uno(String m_Uno) {
+        this.m_Uno = m_Uno;
     }
 
-    public String getR_reservation_date() {
-        return r_reservation_date;
+    public String getM_RreservationDate() {
+        return m_RreservationDate;
     }
 
-    public void setR_reservation_date(String r_reservation_date) {
-        this.r_reservation_date = r_reservation_date;
+    public void setM_RreservationDate(String m_RreservationDate) {
+        this.m_RreservationDate = m_RreservationDate;
     }
 
-    public String getR_borrow_date() {
-        return r_borrow_date;
+    public String getM_RborrowDate() {
+        return m_RborrowDate;
     }
 
-    public void setR_borrow_date(String r_borrow_date) {
-        this.r_borrow_date = r_borrow_date;
+    public void setM_RborrowDate(String m_RborrowDate) {
+        this.m_RborrowDate = m_RborrowDate;
     }
 
-    public String getR_return_date() {
-        return r_return_date;
+    public String getM_RreturnDate() {
+        return m_RreturnDate;
     }
 
-    public void setR_return_date(String r_return_date) {
-        this.r_return_date = r_return_date;
+    public void setM_RreturnDate(String m_RreturnDate) {
+        this.m_RreturnDate = m_RreturnDate;
     }
 
-    public String getR_feedback() {
-        return r_feedback;
+    public String getM_RfeedBack() {
+        return m_RfeedBack;
     }
 
-    public void setR_feedback(String r_feedback) {
-        this.r_feedback = r_feedback;
+    public void setM_RfeedBack(String m_RfeedBack) {
+        this.m_RfeedBack = m_RfeedBack;
     }
 
-    public int getR_state() {
-        return r_state;
+    public int getM_Rstate() {
+        return m_Rstate;
     }
 
-    public void setR_state(int r_state) {
-        this.r_state = r_state;
+    public void setM_Rstate(int m_Rstate) {
+        this.m_Rstate = m_Rstate;
     }
 
-    public String getU_name() {
-        return u_name;
+    public String getM_Uname() {
+        return m_Uname;
     }
 
-    public void setU_name(String u_name) {
-        this.u_name = u_name;
+    public void setM_Uname(String m_Uname) {
+        this.m_Uname = m_Uname;
     }
 
-    public String getU_type() {
-        return u_type;
+    public String getM_Utype() {
+        return m_Utype;
     }
 
-    public void setU_type(String u_type) {
-        this.u_type = u_type;
+    public void setM_Utype(String m_Utype) {
+        this.m_Utype = m_Utype;
     }
 
-    public int getU_credit_grade() {
-        return u_credit_grade;
+    public int getM_UcreditGrade() {
+        return m_UcreditGrade;
     }
 
-    public void setU_credit_grade(int u_credit_grade) {
-        this.u_credit_grade = u_credit_grade;
+    public void setM_UcreditGrade(int m_UcreditGrade) {
+        this.m_UcreditGrade = m_UcreditGrade;
     }
 
     @Override
     public String toString() {
         return "Reservation{" +
-                "r_no=" + r_no +
-                ", d_no=" + d_no +
-                ", u_no='" + u_no + '\'' +
-                ", r_reservation_date='" + r_reservation_date + '\'' +
-                ", r_borrow_date='" + r_borrow_date + '\'' +
-                ", r_return_date='" + r_return_date + '\'' +
-                ", r_feedback='" + r_feedback + '\'' +
-                ", r_state=" + r_state +
-                ", u_name='" + u_name + '\'' +
-                ", u_type='" + u_type + '\'' +
-                ", u_credit_grade=" + u_credit_grade +
+                "r_no=" + m_Rno +
+                ", d_no=" + m_Dno +
+                ", u_no='" + m_Uno + '\'' +
+                ", r_reservation_date='" + m_RreservationDate + '\'' +
+                ", r_borrow_date='" + m_RborrowDate + '\'' +
+                ", r_return_date='" + m_RreturnDate + '\'' +
+                ", r_feedback='" + m_RfeedBack + '\'' +
+                ", r_state=" + m_Rstate +
+                ", u_name='" + m_Uname + '\'' +
+                ", u_type='" + m_Utype + '\'' +
+                ", u_credit_grade=" + m_UcreditGrade +
                 '}';
     }
 }

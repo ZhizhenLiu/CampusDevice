@@ -12,14 +12,14 @@ public interface UserService {
      * @Param userNo
      * @Return: bean.User
      */
-    User getUserByWechatId(String wechatId);
+    User getUserByWechatID(String wechatID);
 
     /*
      * @Description: 通过微信唯一标识获取用户
      * @Param wechatId
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject getUserBywechatId(String wechatId);
+    JSONObject getJSONUserByWechatID(String wechatID);
 
     /*
      * @Description: 用户首次登陆添加到user表中
@@ -38,17 +38,17 @@ public interface UserService {
 
     /*
      * @Description: 用户浏览获取设备具体信息
-     * @Param deviceNo
+     * @Param d_no
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject getDeviceDetails(int deviceNo);
+    JSONObject getDeviceDetails(int d_no);
 
     /*
      * @Description: 用户预约设备
-     * @Param deviceNo  wechatId  startDate  endDate
+     * @Param d_no  wechatId  startDate  endDate
      * @Return: int : 1为成功、0为失败
      */
-    JSONObject reserveDevice(int deviceNo, String wechatId, Date startDate, Date endDate);
+    JSONObject reserveDevice(int d_no, String wechatId, Date startDate, Date endDate);
 
     /*
      * @Description: 查询用户借用的记录(借用中b_state=0，归还b_state=1,逾期未还b_state= -1)

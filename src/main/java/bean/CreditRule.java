@@ -6,52 +6,52 @@ package bean;
 public class CreditRule {
 
     //信用规则_编号
-    private int cr_no;
+    private int m_CrNo;
     //信用规则_内容
-    private String ce_content;
+    private String m_CrContent;
     //信用规则_加减分
-    private int cr_score;
+    private int m_CrScore;
 
 
-    public CreditRule(int cr_no, String ce_content, int cr_score) {
-        this.cr_no = cr_no;
-        this.ce_content = ce_content;
-        this.cr_score = cr_score;
+    public CreditRule(int m_CrNo, String m_CrContent, int m_CrScore) {
+        this.m_CrNo = m_CrNo;
+        this.m_CrContent = m_CrContent;
+        this.m_CrScore = m_CrScore;
     }
 
     @Override
     public String toString() {
         return "CreditRule{" +
-                "cr_no=" + cr_no +
-                ", ce_content='" + ce_content + '\'' +
-                ", cr_score=" + cr_score +
+                "cr_no=" + m_CrNo +
+                ", ce_content='" + m_CrContent + '\'' +
+                ", cr_score=" + m_CrScore +
                 '}';
     }
 
     public CreditRule() {
     }
 
-    public int getCr_no() {
-        return cr_no;
+    public int getM_CrNo() {
+        return m_CrNo;
     }
 
-    public void setCr_no(int cr_no) {
-        this.cr_no = cr_no;
+    public void setM_CrNo(int m_CrNo) {
+        this.m_CrNo = m_CrNo;
     }
 
-    public String getCe_content() {
-        return ce_content;
+    public String getM_CrContent() {
+        return m_CrContent;
     }
 
-    public void setCe_content(String ce_content) {
-        this.ce_content = ce_content;
+    public void setM_CrContent(String m_CrContent) {
+        this.m_CrContent = m_CrContent;
     }
 
-    public int getCr_score() {
-        return cr_score;
+    public int getM_CrScore() {
+        return m_CrScore;
     }
 
-    public void setCr_score(int cr_score) {
-        this.cr_score = cr_score;
+    public void setM_CrScore(int m_CrScore) {
+        this.m_CrScore = m_CrScore;
     }
 }

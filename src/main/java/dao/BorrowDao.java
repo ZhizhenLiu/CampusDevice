@@ -9,10 +9,10 @@ public interface BorrowDao {
 
     /*
      * @Description: 查询用户借用的记录(借用中b_state=0，归还b_state=1,逾期未还b_state= -1)
-     * @Param userNo
+     * @Param u_no
      * @Return: java.util.List<bean.Borrow>
      */
-    List<Borrow> getBorrowRecord(String userNo);
+    List<Borrow> getBorrowRecord(String u_no);
 
     /*
      * @Description: 管理员确认设备租借给某个用户

@@ -12,10 +12,10 @@ public interface ReservationDao {
 
     /*
      * @Description: 用户预约设备
-     * @Param deviceNo  wechatId  startDate  endDate
+     * @Param d_no  wechatId  startDate  endDate
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    int reserveDevice(int deviceNo, String wechatId, Date startDate, Date endDate);
+    int reserveDevice(int d_no, String wechatId, Date startDate, Date endDate);
 
     /*
      * @Description: 通过管理员编号获取管理员管辖范围内的有人预约的设备
@@ -26,10 +26,10 @@ public interface ReservationDao {
 
     /*
      * @Description: 获取某一个设备的预约队列
-     * @Param deviceNo
+     * @Param d_no
      * @Return: java.util.List<bean.Reservation>
      */
-    List<Reservation> getReservationDetail(String deviceNo);
+    List<Reservation> getReservationDetail(String d_no);
 
     /*
      * @Description: 获取某个用户预约设备的开始日期
@@ -54,12 +54,12 @@ public interface ReservationDao {
 
     /*
      * @Description: 用户查看我的预约
-     * @Param userNo
+     * @Param u_no
      * @Return: java.util.List<bean.Reservation>
      */
-    List<Reservation> getReservation(String userNo);
+    List<Reservation> getReservation(String u_no);
 
     //获取用户预约设备的数量
-    int getReservationNum(String userNo);
+    int getReservationNum(String u_no);
 
 }

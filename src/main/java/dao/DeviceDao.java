@@ -15,10 +15,10 @@ public interface DeviceDao {
 
     /*
      * @Description: 用户浏览获取设备具体信息
-     * @Param deviceNo
+     * @Param d_no
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    Device getDeviceDetails(int deviceNo);
+    Device getDeviceDetails(int d_no);
 
     /*
      * @Description: 改变设备状态

@@ -1,174 +1,174 @@
 package bean;
 
 public class Borrow {
-    int b_no;
-    int d_no;
-    String u_no;
-    String b_borrow_date;
-    String b_return_date;
-    int b_state;
+    private int m_Bno;
+    private int m_Dno;
+    private String m_Uno;
+    private String m_BborrowDate;
+    private String m_BreturnDate;
+    private int m_Bstate;
 
     //附加用户属性
-    String u_name;
-    String u_type;
-    int u_credit_grade;
-    String u_phone;
-    String u_email;
+    private String m_Uname;
+    private String m_Utype;
+    private int m_UcreditGrade;
+    private String m_Uphone;
+    private String m_Uemail;
 
     //附加设备属性
-    String return_place;
-    String d_name;
-    String d_main_use;
+    private String m_DdeviceSite;
+    private String m_Dname;
+    private String m_DmainUse;
 
     public Borrow() {
     }
 
-    public Borrow(int b_no, int d_no, String u_no, String b_borrow_date, String b_return_date, int b_state, String u_name, String u_type, int u_credit_grade, String u_phone, String u_email, String return_place, String d_name, String d_main_use) {
-        this.b_no = b_no;
-        this.d_no = d_no;
-        this.u_no = u_no;
-        this.b_borrow_date = b_borrow_date;
-        this.b_return_date = b_return_date;
-        this.b_state = b_state;
-        this.u_name = u_name;
-        this.u_type = u_type;
-        this.u_credit_grade = u_credit_grade;
-        this.u_phone = u_phone;
-        this.u_email = u_email;
-        this.return_place = return_place;
-        this.d_name = d_name;
-        this.d_main_use = d_main_use;
+    public Borrow(int m_Bno, int m_Dno, String m_Uno, String m_BborrowDate, String m_BreturnDate, int m_Bstate, String m_Uname, String m_Utype, int m_UcreditGrade, String m_Uphone, String m_Uemail, String m_DdeviceSite, String m_Dname, String m_DmainUse) {
+        this.m_Bno = m_Bno;
+        this.m_Dno = m_Dno;
+        this.m_Uno = m_Uno;
+        this.m_BborrowDate = m_BborrowDate;
+        this.m_BreturnDate = m_BreturnDate;
+        this.m_Bstate = m_Bstate;
+        this.m_Uname = m_Uname;
+        this.m_Utype = m_Utype;
+        this.m_UcreditGrade = m_UcreditGrade;
+        this.m_Uphone = m_Uphone;
+        this.m_Uemail = m_Uemail;
+        this.m_DdeviceSite = m_DdeviceSite;
+        this.m_Dname = m_Dname;
+        this.m_DmainUse = m_DmainUse;
     }
 
-    public int getB_no() {
-        return b_no;
+    public int getM_Bno() {
+        return m_Bno;
     }
 
-    public void setB_no(int b_no) {
-        this.b_no = b_no;
+    public void setM_Bno(int m_Bno) {
+        this.m_Bno = m_Bno;
     }
 
-    public int getD_no() {
-        return d_no;
+    public int getM_Dno() {
+        return m_Dno;
     }
 
-    public void setD_no(int d_no) {
-        this.d_no = d_no;
+    public void setM_Dno(int m_Dno) {
+        this.m_Dno = m_Dno;
     }
 
-    public String getU_no() {
-        return u_no;
+    public String getM_Uno() {
+        return m_Uno;
     }
 
-    public void setU_no(String u_no) {
-        this.u_no = u_no;
+    public void setM_Uno(String m_Uno) {
+        this.m_Uno = m_Uno;
     }
 
-    public String getB_borrow_date() {
-        return b_borrow_date;
+    public String getM_BborrowDate() {
+        return m_BborrowDate;
     }
 
-    public void setB_borrow_date(String b_borrow_date) {
-        this.b_borrow_date = b_borrow_date;
+    public void setM_BborrowDate(String m_BborrowDate) {
+        this.m_BborrowDate = m_BborrowDate;
     }
 
-    public String getB_return_date() {
-        return b_return_date;
+    public String getM_BreturnDate() {
+        return m_BreturnDate;
     }
 
-    public void setB_return_date(String b_return_date) {
-        this.b_return_date = b_return_date;
+    public void setM_BreturnDate(String m_BreturnDate) {
+        this.m_BreturnDate = m_BreturnDate;
     }
 
-    public int getB_state() {
-        return b_state;
+    public int getM_Bstate() {
+        return m_Bstate;
     }
 
-    public void setB_state(int b_state) {
-        this.b_state = b_state;
+    public void setM_Bstate(int m_Bstate) {
+        this.m_Bstate = m_Bstate;
     }
 
-    public String getU_name() {
-        return u_name;
+    public String getM_Uname() {
+        return m_Uname;
     }
 
-    public void setU_name(String u_name) {
-        this.u_name = u_name;
+    public void setM_Uname(String m_Uname) {
+        this.m_Uname = m_Uname;
     }
 
-    public String getU_type() {
-        return u_type;
+    public String getM_Utype() {
+        return m_Utype;
     }
 
-    public void setU_type(String u_type) {
-        this.u_type = u_type;
+    public void setM_Utype(String m_Utype) {
+        this.m_Utype = m_Utype;
     }
 
-    public int getU_credit_grade() {
-        return u_credit_grade;
+    public int getM_UcreditGrade() {
+        return m_UcreditGrade;
     }
 
-    public void setU_credit_grade(int u_credit_grade) {
-        this.u_credit_grade = u_credit_grade;
+    public void setM_UcreditGrade(int m_UcreditGrade) {
+        this.m_UcreditGrade = m_UcreditGrade;
     }
 
-    public String getU_phone() {
-        return u_phone;
+    public String getM_Uphone() {
+        return m_Uphone;
     }
 
-    public void setU_phone(String u_phone) {
-        this.u_phone = u_phone;
+    public void setM_Uphone(String m_Uphone) {
+        this.m_Uphone = m_Uphone;
     }
 
-    public String getU_email() {
-        return u_email;
+    public String getM_Uemail() {
+        return m_Uemail;
     }
 
-    public void setU_email(String u_email) {
-        this.u_email = u_email;
+    public void setM_Uemail(String m_Uemail) {
+        this.m_Uemail = m_Uemail;
     }
 
-    public String getReturn_place() {
-        return return_place;
+    public String getM_DdeviceSite() {
+        return m_DdeviceSite;
     }
 
-    public void setReturn_place(String return_place) {
-        this.return_place = return_place;
+    public void setM_DdeviceSite(String m_DdeviceSite) {
+        this.m_DdeviceSite = m_DdeviceSite;
     }
 
-    public String getD_name() {
-        return d_name;
+    public String getM_Dname() {
+        return m_Dname;
     }
 
-    public void setD_name(String d_name) {
-        this.d_name = d_name;
+    public void setM_Dname(String m_Dname) {
+        this.m_Dname = m_Dname;
     }
 
-    public String getD_main_use() {
-        return d_main_use;
+    public String getM_DmainUse() {
+        return m_DmainUse;
     }
 
-    public void setD_main_use(String d_main_use) {
-        this.d_main_use = d_main_use;
+    public void setM_DmainUse(String m_DmainUse) {
+        this.m_DmainUse = m_DmainUse;
     }
 
     @Override
     public String toString() {
         return "Borrow{" +
-                "b_no=" + b_no +
-                ", d_no=" + d_no +
-                ", u_no='" + u_no + '\'' +
-                ", b_borrow_date='" + b_borrow_date + '\'' +
-                ", b_return_date='" + b_return_date + '\'' +
-                ", b_state=" + b_state +
-                ", u_name='" + u_name + '\'' +
-                ", u_type='" + u_type + '\'' +
-                ", u_credit_grade=" + u_credit_grade +
-                ", u_phone='" + u_phone + '\'' +
-                ", u_email='" + u_email + '\'' +
-                ", return_place='" + return_place + '\'' +
-                ", d_name='" + d_name + '\'' +
-                ", d_main_use='" + d_main_use + '\'' +
+                "b_no=" + m_Bno +
+                ", d_no=" + m_Dno +
+                ", u_no='" + m_Uno + '\'' +
+                ", b_borrow_date='" + m_BborrowDate + '\'' +
+                ", b_return_date='" + m_BreturnDate + '\'' +
+                ", b_state=" + m_Bstate +
+                ", u_name='" + m_Uname + '\'' +
+                ", u_type='" + m_Utype + '\'' +
+                ", u_credit_grade=" + m_UcreditGrade +
+                ", u_phone='" + m_Uphone + '\'' +
+                ", u_email='" + m_Uemail + '\'' +
+                ", return_place='" + m_DdeviceSite + '\'' +
+                ", d_name='" + m_Dname + '\'' +
+                ", d_main_use='" + m_DmainUse + '\'' +
                 '}';
     }
 }

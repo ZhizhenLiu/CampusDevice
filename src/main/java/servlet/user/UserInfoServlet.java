@@ -1,6 +1,5 @@
 package servlet.user;
 
-import bean.User;
 import com.alibaba.fastjson.JSONObject;
 import service.UserService;
 import service.impl.UserServiceImpl;
@@ -35,13 +34,13 @@ public class UserInfoServlet extends HttpServlet {
         if (result.containsKey("openid"))
         {
             wechatId = (String) result.get("openid");
-            info = userService.getUserBywechatId(wechatId);
+            info = userService.getJSONUserByWechatID(wechatId);
             printWriter.write(info.toJSONString());
         }
         //请求失败，返回错误信息
         else
         {
-            info.put("errms",result.get("errmsg"));
+            info.put("errmsg",result.get("errmsg"));
             info.put("flag","0");
             printWriter.write(info.toJSONString());
         }

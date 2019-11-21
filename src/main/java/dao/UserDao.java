@@ -9,10 +9,10 @@ public interface UserDao {
 
     /*
      * @Description: 通过用户wechatId获取用户对象
-     * @Param wechatId
+     * @Param wechatID
      * @Return: bean.User
      */
-    User getUserByWechatID(String wechatId);
+    User getUserByWechatID(String wechatID);
 
 
     /*

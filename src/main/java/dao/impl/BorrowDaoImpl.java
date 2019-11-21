@@ -1,11 +1,6 @@
 package dao.impl;
 
 import bean.Borrow;
-import bean.Device;
-import bean.Reservation;
-import bean.User;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import dao.BorrowDao;
 import utils.JDBCUtils;
 
@@ -17,27 +12,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BorrowDaoImpl implements BorrowDao {
-    private Connection con;
-    private PreparedStatement pStmt;
-    private ResultSet rs;
-    private String sql;
+    private Connection m_con;
+    private PreparedStatement m_pStmt;
+    private ResultSet m_rs;
+    private String m_sql;
 
     /*
      * @Description: 查询用户借用中的记录(借用中b_state=0，归还b_state=1,逾期未还b_state= -1)
      * @Param userNo
      * @Return: java.util.List<bean.Borrow>
      */
-    public List<Borrow> getBorrowRecord(String userNo)
+    public List<Borrow> getBorrowRecord(String u_no)
     {
         //初始化
-        con = null;
-        pStmt = null;
-        rs = null;
+        m_con = null;
+        m_pStmt = null;
+        m_rs = null;
         List<Borrow> borrowList = new ArrayList<>();
 
         try {
-            con = JDBCUtils.getConnection();
-            sql = "SELECT" +
+            m_con = JDBCUtils.getM_connection();
+            m_sql = "SELECT " +
                   "b_borrow_date," +
                   "b_return_date," +
                   "d_save_site," +
@@ -47,21 +42,21 @@ public class BorrowDaoImpl implements BorrowDao {
                   "b_state " +
                   "FROM borrow, device " +
                   "WHERE u_no = ?";
-            pStmt = con.prepareStatement(sql);
+            m_pStmt = m_con.prepareStatement(m_sql);
 
             //执行操作
-            pStmt.setString(1,userNo);
-            rs = pStmt.executeQuery();
-            while(rs.next())
+            m_pStmt.setString(1, u_no);
+            m_rs = m_pStmt.executeQuery();
+            while(m_rs.next())
             {
                 Borrow borrow = new Borrow();
-                borrow.setB_borrow_date(rs.getString("b_borrow_date"));
-                borrow.setB_return_date(rs.getString("b_return_date"));
-                borrow.setReturn_place(rs.getString("d_save_site"));
-                borrow.setD_no(rs.getInt("d_no"));
-                borrow.setD_name(rs.getString("d_name"));
-                borrow.setD_main_use(rs.getString("d_main_use"));
-                borrow.setB_state(rs.getInt("b_state"));
+                borrow.setM_BborrowDate(m_rs.getString("b_borrow_date"));
+                borrow.setM_BreturnDate(m_rs.getString("b_return_date"));
+                borrow.setM_DdeviceSite(m_rs.getString("d_save_site"));
+                borrow.setM_Dno(m_rs.getInt("d_no"));
+                borrow.setM_Dname(m_rs.getString("d_name"));
+                borrow.setM_DmainUse(m_rs.getString("d_main_use"));
+                borrow.setM_Bstate(m_rs.getInt("b_state"));
                 borrowList.add(borrow);
             }
         }
@@ -71,7 +66,7 @@ public class BorrowDaoImpl implements BorrowDao {
         }
         finally
         {
-            JDBCUtils.closeAll(rs, pStmt, con);
+            JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
         }
         return borrowList;
     }
@@ -84,30 +79,33 @@ public class BorrowDaoImpl implements BorrowDao {
     public int confirmBorrow(String u_no, int d_no, String borrowDate, String returnDate)
     {
         //初始化
-        con = null;
-        pStmt = null;
-        rs = null;
+        m_con = null;
+        m_pStmt = null;
+        m_rs = null;
 
         int flag = 0;
-        con = JDBCUtils.getConnection();
-        sql = "INSERT INTO borrow(d_no, u_no, b_borrow_date, b_return_date) " +
+        m_con = JDBCUtils.getM_connection();
+        m_sql = "INSERT INTO borrow(d_no, u_no, b_borrow_date, b_return_date) " +
               "VALUES (?, ?, ?, ?)";
-        try {
-            pStmt = con.prepareStatement(sql);
-            pStmt.setInt(1, d_no);
-            pStmt.setString(2, u_no);
-            pStmt.setString(3, borrowDate);
-            pStmt.setString(4, returnDate);
+        try
+        {
+            m_pStmt = m_con.prepareStatement(m_sql);
+            m_pStmt.setInt(1, d_no);
+            m_pStmt.setString(2, u_no);
+            m_pStmt.setString(3, borrowDate);
+            m_pStmt.setString(4, returnDate);
 
             //返回执行状态
-            flag = pStmt.executeUpdate();
+            flag = m_pStmt.executeUpdate();
 
         }
-        catch (SQLException e) {
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
-        finally {
-            JDBCUtils.closeAll(null, pStmt, con);
+        finally
+        {
+            JDBCUtils.closeAll(null, m_pStmt, m_con);
         }
         return flag;
     }
@@ -119,25 +117,28 @@ public class BorrowDaoImpl implements BorrowDao {
     public int setAllStateOverDue()
     {
         //初始化
-        con = null;
-        pStmt = null;
-        rs = null;
+        m_con = null;
+        m_pStmt = null;
+        m_rs = null;
 
         int result = 0;
-        try {
-            con = JDBCUtils.getConnection();
-            sql = "UPDATE borrow SET b_state = -1 " +
+        try
+        {
+            m_con = JDBCUtils.getM_connection();
+            m_sql = "UPDATE borrow SET b_state = -1 " +
                     "WHERE b_return_date < CURRENT_DATE "+
                     "AND b_state = 0";
-            pStmt = con.prepareStatement(sql);
+            m_pStmt = m_con.prepareStatement(m_sql);
 
-            result = pStmt.executeUpdate();
+            result = m_pStmt.executeUpdate();
         }
-        catch (SQLException e) {
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
-        finally {
-            JDBCUtils.closeAll(rs, pStmt, con);
+        finally
+        {
+            JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
         }
         return result;
     }
@@ -150,33 +151,34 @@ public class BorrowDaoImpl implements BorrowDao {
     public List<Borrow> getOverDueList(int a_no)
     {
         //初始化
-        con = null;
-        pStmt = null;
-        rs = null;
+        m_con = null;
+        m_pStmt = null;
+        m_rs = null;
 
         List<Borrow> borrowList = new ArrayList<>();
-        try {
-            con = JDBCUtils.getConnection();
-            sql = "SELECT u.u_name,u.u_type, u.u_credit_grade, b.b_borrow_date, b.b_return_date,u.u_phone, u.u_email FROM borrow b, device d, `user` u " +
+        try
+        {
+            m_con = JDBCUtils.getM_connection();
+            m_sql = "SELECT u.u_name,u.u_type, u.u_credit_grade, b.b_borrow_date, b.b_return_date,u.u_phone, u.u_email FROM borrow b, device d, `user` u " +
                   "WHERE b.d_no = d.d_no " +
                   "AND u.u_no = b.u_no " +
                   "AND d.a_no = ? " +
                   "AND b_state = -1 ";
-            pStmt = con.prepareStatement(sql);
+            m_pStmt = m_con.prepareStatement(m_sql);
 
             //替换参数，从1开始
-            pStmt.setInt(1, a_no);
-            rs = pStmt.executeQuery();
+            m_pStmt.setInt(1, a_no);
+            m_rs = m_pStmt.executeQuery();
 
             //判断是否存在记录
-            while (rs.next())
+            while (m_rs.next())
             {
                 Borrow borrow = new Borrow();
-                borrow.setU_name(rs.getString("u_name"));
-                borrow.setU_type(rs.getString("u_type"));
-                borrow.setU_credit_grade(rs.getInt("u_credit_grade"));
-                borrow.setB_borrow_date(rs.getString("b_borrow_date"));
-                borrow.setB_return_date(rs.getString("b_return_date"));
+                borrow.setM_Uname(m_rs.getString("u_name"));
+                borrow.setM_Utype(m_rs.getString("u_type"));
+                borrow.setM_UcreditGrade(m_rs.getInt("u_credit_grade"));
+                borrow.setM_BborrowDate(m_rs.getString("b_borrow_date"));
+                borrow.setM_BreturnDate(m_rs.getString("b_return_date"));
                 borrowList.add(borrow);
             }
         }
@@ -184,8 +186,9 @@ public class BorrowDaoImpl implements BorrowDao {
         {
             e.printStackTrace();
         }
-        finally {
-            JDBCUtils.closeAll(rs, pStmt, con);
+        finally
+        {
+            JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
         }
         return borrowList;
     }
@@ -198,30 +201,32 @@ public class BorrowDaoImpl implements BorrowDao {
     public int returnBorrow(String u_no, int d_no)
     {
         //初始化
-        con = null;
-        pStmt = null;
-        rs = null;
+        m_con = null;
+        m_pStmt = null;
+        m_rs = null;
 
         int flag = 0;
-        try {
-            con = JDBCUtils.getConnection();
-            sql = "UPDATE borrow SET b_state = 1 " +
+        try
+        {
+            m_con = JDBCUtils.getM_connection();
+            m_sql = "UPDATE borrow SET b_state = 1 " +
                     "WHERE u_no = ? "+
                     "AND d_no = ? " +
                     "AND b_state = 0";
-            pStmt = con.prepareStatement(sql);
+            m_pStmt = m_con.prepareStatement(m_sql);
 
             //替换参数，从1开始
-            pStmt.setString(1, u_no);
-            pStmt.setInt(2, d_no);
+            m_pStmt.setString(1, u_no);
+            m_pStmt.setInt(2, d_no);
 
-            flag = pStmt.executeUpdate();
+            flag = m_pStmt.executeUpdate();
         }
-        catch (SQLException e) {
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
         finally {
-            JDBCUtils.closeAll(rs, pStmt, con);
+            JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
         }
         return flag;
     }
@@ -234,33 +239,36 @@ public class BorrowDaoImpl implements BorrowDao {
     public int getBorrowNo(String u_no, int d_no)
     {
         //初始化
-        con = null;
-        pStmt = null;
-        rs = null;
+        m_con = null;
+        m_pStmt = null;
+        m_rs = null;
 
         int b_no = 0;
-        try {
-            con = JDBCUtils.getConnection();
-            sql = "SELECT b_no FROM borrow " +
+        try
+        {
+            m_con = JDBCUtils.getM_connection();
+            m_sql = "SELECT b_no FROM borrow " +
                     "WHERE u_no = ? " +
                     "AND d_no = ? ";
-            pStmt = con.prepareStatement(sql);
+            m_pStmt = m_con.prepareStatement(m_sql);
 
             //替换参数，从1开始
-            pStmt.setString(1, u_no);
-            pStmt.setInt(2, d_no);
+            m_pStmt.setString(1, u_no);
+            m_pStmt.setInt(2, d_no);
 
-            rs = pStmt.executeQuery();
-            if (rs.next())
+            m_rs = m_pStmt.executeQuery();
+            if (m_rs.next())
             {
-                b_no = rs.getInt("b_no");
+                b_no = m_rs.getInt("b_no");
             }
         }
-        catch (SQLException e) {
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
-        finally {
-            JDBCUtils.closeAll(rs, pStmt, con);
+        finally
+        {
+            JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
         }
         return b_no;
     }

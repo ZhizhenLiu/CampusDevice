@@ -3,136 +3,136 @@ package bean;
  * @Description: 设备信息
  */
 public class Device {
-    int d_no;
-    String a_no;
-    String d_state;
-    int d_borrowed_times;
-    String d_name;
-    String d_important_param;
-    String d_main_use;
-    String d_save_site;
+    private int m_Dno;
+    private String m_Ano;
+    private String m_Dstate;
+    private int m_DborrowedTimes;
+    private String m_Dname;
+    private String m_DimportantParam;
+    private String m_DmainUse;
+    private String m_DdeviceSite;
 
     //扩展属性
-    int r_sum; //预约人数
-    String a_name;
-    String a_phone;
+    private int m_Rsum; //预约人数
+    private String m_Aname;
+    private String m_Aphone;
 
-    public Device(int d_no, String a_no, String d_state, int d_borrowed_times, String d_name, String d_important_param, String d_main_use, String d_save_site) {
-        this.d_no = d_no;
-        this.a_no = a_no;
-        this.d_state = d_state;
-        this.d_borrowed_times = d_borrowed_times;
-        this.d_name = d_name;
-        this.d_important_param = d_important_param;
-        this.d_main_use = d_main_use;
-        this.d_save_site = d_save_site;
+    public Device(int m_Dno, String m_Ano, String m_Dstate, int m_DborrowedTimes, String m_Dname, String m_DimportantParam, String m_DmainUse, String m_DdeviceSite) {
+        this.m_Dno = m_Dno;
+        this.m_Ano = m_Ano;
+        this.m_Dstate = m_Dstate;
+        this.m_DborrowedTimes = m_DborrowedTimes;
+        this.m_Dname = m_Dname;
+        this.m_DimportantParam = m_DimportantParam;
+        this.m_DmainUse = m_DmainUse;
+        this.m_DdeviceSite = m_DdeviceSite;
     }
 
     public Device() {
     }
 
-    public int getD_no() {
-        return d_no;
+    public int getM_Dno() {
+        return m_Dno;
     }
 
-    public void setD_no(int d_no) {
-        this.d_no = d_no;
+    public void setM_Dno(int m_Dno) {
+        this.m_Dno = m_Dno;
     }
 
-    public String getA_no() {
-        return a_no;
+    public String getM_Ano() {
+        return m_Ano;
     }
 
-    public void setA_no(String a_no) {
-        this.a_no = a_no;
+    public void setM_Ano(String m_Ano) {
+        this.m_Ano = m_Ano;
     }
 
-    public String getD_state() {
-        return d_state;
+    public String getM_Dstate() {
+        return m_Dstate;
     }
 
-    public void setD_state(String d_state) {
-        this.d_state = d_state;
+    public void setM_Dstate(String m_Dstate) {
+        this.m_Dstate = m_Dstate;
     }
 
-    public int getD_borrowed_times() {
-        return d_borrowed_times;
+    public int getM_DborrowedTimes() {
+        return m_DborrowedTimes;
     }
 
-    public void setD_borrowed_times(int d_borrowed_times) {
-        this.d_borrowed_times = d_borrowed_times;
+    public void setM_DborrowedTimes(int m_DborrowedTimes) {
+        this.m_DborrowedTimes = m_DborrowedTimes;
     }
 
-    public String getD_name() {
-        return d_name;
+    public String getM_Dname() {
+        return m_Dname;
     }
 
-    public void setD_name(String d_name) {
-        this.d_name = d_name;
+    public void setM_Dname(String m_Dname) {
+        this.m_Dname = m_Dname;
     }
 
-    public String getD_important_param() {
-        return d_important_param;
+    public String getM_DimportantParam() {
+        return m_DimportantParam;
     }
 
-    public void setD_important_param(String d_important_param) {
-        this.d_important_param = d_important_param;
+    public void setM_DimportantParam(String m_DimportantParam) {
+        this.m_DimportantParam = m_DimportantParam;
     }
 
-    public String getD_main_use() {
-        return d_main_use;
+    public String getM_DmainUse() {
+        return m_DmainUse;
     }
 
-    public void setD_main_use(String d_main_use) {
-        this.d_main_use = d_main_use;
+    public void setM_DmainUse(String m_DmainUse) {
+        this.m_DmainUse = m_DmainUse;
     }
 
-    public String getD_save_site() {
-        return d_save_site;
+    public String getM_DdeviceSite() {
+        return m_DdeviceSite;
     }
 
-    public void setD_save_site(String d_save_site) {
-        this.d_save_site = d_save_site;
+    public void setM_DdeviceSite(String m_DdeviceSite) {
+        this.m_DdeviceSite = m_DdeviceSite;
     }
 
-    public int getR_sum() {
-        return r_sum;
+    public int getM_Rsum() {
+        return m_Rsum;
     }
 
-    public void setR_sum(int r_sum) {
-        this.r_sum = r_sum;
+    public void setM_Rsum(int m_Rsum) {
+        this.m_Rsum = m_Rsum;
     }
 
-    public String getA_name() {
-        return a_name;
+    public String getM_Aname() {
+        return m_Aname;
     }
 
-    public void setA_name(String a_name) {
-        this.a_name = a_name;
+    public void setM_Aname(String m_Aname) {
+        this.m_Aname = m_Aname;
     }
 
-    public String getA_phone() {
-        return a_phone;
+    public String getM_Aphone() {
+        return m_Aphone;
     }
 
-    public void setA_phone(String a_phone) {
-        this.a_phone = a_phone;
+    public void setM_Aphone(String m_Aphone) {
+        this.m_Aphone = m_Aphone;
     }
 
     @Override
     public String toString() {
         return "Device{" +
-                "d_no=" + d_no +
-                ", a_no='" + a_no + '\'' +
-                ", d_state='" + d_state + '\'' +
-                ", d_borrowed_times=" + d_borrowed_times +
-                ", d_name='" + d_name + '\'' +
-                ", d_important_param='" + d_important_param + '\'' +
-                ", d_main_use='" + d_main_use + '\'' +
-                ", d_save_site='" + d_save_site + '\'' +
-                ", r_sum=" + r_sum +
-                ", a_name='" + a_name + '\'' +
-                ", a_phone='" + a_phone + '\'' +
+                "d_no=" + m_Dno +
+                ", a_no='" + m_Ano + '\'' +
+                ", d_state='" + m_Dstate + '\'' +
+                ", d_borrowed_times=" + m_DborrowedTimes +
+                ", d_name='" + m_Dname + '\'' +
+                ", d_important_param='" + m_DimportantParam + '\'' +
+                ", d_main_use='" + m_DmainUse + '\'' +
+                ", d_save_site='" + m_DdeviceSite + '\'' +
+                ", r_sum=" + m_Rsum +
+                ", a_name='" + m_Aname + '\'' +
+                ", a_phone='" + m_Aphone + '\'' +
                 '}';
     }
 }

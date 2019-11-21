@@ -10,43 +10,46 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDaoImpl implements UserDao {
-    private Connection con;
-    private PreparedStatement pStmt;
-    private ResultSet rs;
-    private String sql;
+    private Connection m_con;
+    private PreparedStatement m_pStmt;
+    private ResultSet m_rs;
+    private String m_sql;
     /*
      * @Description: select:通过用户编号获取用户对象
      * @Param userNo
      * @Return: bean.User
      */
-    public User getUserByWechatID(String wechatId)
+    public User getUserByWechatID(String wechatID)
     {
         //初始化
-        con = null;
-        pStmt = null;
-        rs = null;
+        m_con = null;
+        m_pStmt = null;
+        m_rs = null;
 
         User user = new User();
-        try {
-            con = JDBCUtils.getConnection();
-            sql = "select * from user where u_wechatid = ?";
-            pStmt = con.prepareStatement(sql);
+        try
+        {
+            m_con = JDBCUtils.getM_connection();
+            m_sql = "SELECT * FROM user WHERE u_wechatid = ?";
+            m_pStmt = m_con.prepareStatement(m_sql);
 
             //替换参数，从1开始
-            pStmt.setString(1, wechatId);
-            rs = pStmt.executeQuery();
+            m_pStmt.setString(1, wechatID);
+            m_rs = m_pStmt.executeQuery();
 
-            if (rs.next())
+            if (m_rs.next())
             {
-                user = new User(rs.getString("u_no"),rs.getString("u_name"),rs.getString("u_wechatid"),rs.getString("u_email"),
-                       rs.getString("u_phone"),rs.getInt("u_credit_grade"),rs.getString("u_type"),rs.getString("u_mentor_name"),
-                       rs.getString("u_mentor_phone"),rs.getString("u_major_class"));
+                user = new User(m_rs.getString("u_no"), m_rs.getString("u_name"), m_rs.getString("u_wechatid"), m_rs.getString("u_email"),
+                       m_rs.getString("u_phone"), m_rs.getInt("u_credit_grade"), m_rs.getString("u_type"), m_rs.getString("u_mentor_name"),
+                       m_rs.getString("u_mentor_phone"), m_rs.getString("u_major_class"));
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
-        finally {
-            JDBCUtils.closeAll(rs, pStmt, con);
+        finally
+        {
+            JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
         }
         return  user;
     }
@@ -60,35 +63,38 @@ public class UserDaoImpl implements UserDao {
     public int registerUser(User user)
     {
         //初始化
-        con = null;
-        pStmt = null;
-        rs = null;
+        m_con = null;
+        m_pStmt = null;
+        m_rs = null;
 
         int flag = 0;
-        try {
-            con = JDBCUtils.getConnection();
-            sql = "insert into user values (?,?,?,?,?,?,?,?,?,?)";
-            pStmt = con.prepareStatement(sql);
+        try
+        {
+            m_con = JDBCUtils.getM_connection();
+            m_sql = "INSERT INT user VALUES (?,?,?,?,?,?,?,?,?,?)";
+            m_pStmt = m_con.prepareStatement(m_sql);
 
-            pStmt.setString(1,user.getU_no());
-            pStmt.setString(2,user.getU_name());
-            pStmt.setString(3,user.getU_wechatId());
-            pStmt.setString(4,user.getU_email());
-            pStmt.setString(5,user.getU_phone());
-            pStmt.setInt(6,user.getU_credit_grade());
-            pStmt.setString(7,user.getU_type());
-            pStmt.setString(8,user.getU_mentor_name());
-            pStmt.setString(9,user.getU_mentor_phone());
-            pStmt.setString(10,user.getU_major_class());
+            m_pStmt.setString(1,user.getM_Uno());
+            m_pStmt.setString(2,user.getM_Uname());
+            m_pStmt.setString(3,user.getM_UwechatID());
+            m_pStmt.setString(4,user.getM_Uemail());
+            m_pStmt.setString(5,user.getM_Uphone());
+            m_pStmt.setInt(6,user.getM_UcreditGrade());
+            m_pStmt.setString(7,user.getM_Utype());
+            m_pStmt.setString(8,user.getM_UmentorName());
+            m_pStmt.setString(9,user.getM_UmentorPhone());
+            m_pStmt.setString(10,user.getM_UmajorClass());
 
-            flag = pStmt.executeUpdate();
+            flag = m_pStmt.executeUpdate();
 
         }
-        catch (SQLException e) {
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
-        finally {
-            JDBCUtils.closeAll(null, pStmt, con);
+        finally
+        {
+            JDBCUtils.closeAll(null, m_pStmt, m_con);
         }
         return flag;
     }
@@ -98,37 +104,40 @@ public class UserDaoImpl implements UserDao {
      * @Param user
      * @Return: void
      */
-    public int changeUserInfo( User user) {
+    public int changeUserInfo( User user)
+    {
         //初始化
-        con = null;
-        pStmt = null;
-        rs = null;
+        m_con = null;
+        m_pStmt = null;
+        m_rs = null;
 
         int flag = 0;
         try {
-            con = JDBCUtils.getConnection();
+            m_con = JDBCUtils.getM_connection();
             String sql = "UPDATE user SET u_name=?, u_email=?, u_phone=?, u_credit_grade=?, u_mentor_name=?, u_mentor_phone=?, u_major_class=? " +
                          "WHERE u_no = ?";
-            pStmt = con.prepareStatement(sql);
+            m_pStmt = m_con.prepareStatement(sql);
 
             //替换参数，从1开始
-            pStmt.setString(1,user.getU_name());
-            pStmt.setString(2,user.getU_email());
-            pStmt.setString(3,user.getU_phone());
-            pStmt.setInt(4,user.getU_credit_grade());
-            pStmt.setString(5,user.getU_mentor_name());
-            pStmt.setString(6,user.getU_phone());
-            pStmt.setString(7,user.getU_major_class());
-            pStmt.setString(8,user.getU_no());
+            m_pStmt.setString(1,user.getM_Uname());
+            m_pStmt.setString(2,user.getM_Uemail());
+            m_pStmt.setString(3,user.getM_Uphone());
+            m_pStmt.setInt(4,user.getM_UcreditGrade());
+            m_pStmt.setString(5,user.getM_UmentorName());
+            m_pStmt.setString(6,user.getM_Uphone());
+            m_pStmt.setString(7,user.getM_UmajorClass());
+            m_pStmt.setString(8,user.getM_Uno());
 
-            flag = pStmt.executeUpdate();
+            flag = m_pStmt.executeUpdate();
 
         }
-        catch (SQLException e) {
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
-        finally {
-            JDBCUtils.closeAll(null, pStmt, con);
+        finally
+        {
+            JDBCUtils.closeAll(null, m_pStmt, m_con);
         }
         return flag;
     }

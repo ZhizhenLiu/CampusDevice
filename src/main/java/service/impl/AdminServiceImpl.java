@@ -3,7 +3,6 @@ package service.impl;
 import bean.Borrow;
 import bean.Device;
 import bean.Reservation;
-import bean.User;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -22,13 +21,13 @@ public class AdminServiceImpl implements AdminService {
     private ReturnDeviceDao returnDeviceDao = new ReturnDeviceDaoImpl();
     /*
      * @Description: 通过标识获取管理员管辖范围内的有人预约的设备
-     * @Param wechatId
+     * @Param wechatID
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject getReservedDevice(String wechatId)
+    public JSONObject getReservedDevice(String wechatID)
     {
         //获取主键，通过主键查询
-        int a_no = adminDao.getAdminByWechatId(wechatId).getA_no();
+        int a_no = adminDao.getAdminByWechatID(wechatID).getM_Ano();
         JSONObject info = new JSONObject();
         List<Device> deviceList = reservationDao.getReservedDevice(a_no);
         info.put("flag", 1);
@@ -41,10 +40,10 @@ public class AdminServiceImpl implements AdminService {
      * @Param deviceNo
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject getReservationDetail(String deviceNo)
+    public JSONObject getReservationDetail(String d_no)
     {
         JSONObject info = new JSONObject();
-        List<Reservation> reservationList = reservationDao.getReservationDetail(deviceNo);
+        List<Reservation> reservationList = reservationDao.getReservationDetail(d_no);
         info.put("flag", 1);
         info.put("reservation", JSONArray.parseArray(JSON.toJSONString(reservationList)));
         return info;
@@ -73,13 +72,13 @@ public class AdminServiceImpl implements AdminService {
 
     /*
      * @Description: 通过微信唯一标识获得对应管理范围设备外借预期信息
-     * @Param wechatId
+     * @Param wechatID
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject getOverDue(String wechatId)
+    public JSONObject getOverDue(String wechatID)
     {
         //获取主键，通过主键查询
-        int a_no = adminDao.getAdminByWechatId(wechatId).getA_no();
+        int a_no = adminDao.getAdminByWechatID(wechatID).getM_Ano();
 
         //设置所有逾期设备状态为 -1 表示逾期未还
         borrowDao.setAllStateOverDue();
@@ -101,13 +100,13 @@ public class AdminServiceImpl implements AdminService {
 
     /*
      * @Description: 管理员确认用户归还设备
-     * @Param wechatId  d_no
+     * @Param wechatID  d_no
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject confirmReturn(String wechatId, int d_no)
+    public JSONObject confirmReturn(String wechatID, int d_no)
     {
         JSONObject info = new JSONObject();
-        String u_no = userDao.getUserByWechatID(wechatId).getU_no();
+        String u_no = userDao.getUserByWechatID(wechatID).getM_Uno();
 
         //获取用户借用记录的编号，唯一标识一条记录
         int b_no = borrowDao.getBorrowNo(u_no, d_no);

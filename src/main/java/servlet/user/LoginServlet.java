@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet {
             //查询对应openid的用户是否存在
             //返回查询：flag为0：不存在用户。
             // flag为1：存在该用户
-            info = userService.getUserBywechatId(wechatId);
+            info = userService.getJSONUserByWechatID(wechatId);
             printWriter.write(info.toJSONString());
         }
         //请求失败，返回错误信息
