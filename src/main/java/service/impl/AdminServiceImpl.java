@@ -13,12 +13,12 @@ import service.AdminService;
 import java.util.List;
 
 public class AdminServiceImpl implements AdminService {
-    private AdminDao adminDao = new AdminDaoImpl();
-    private UserDao userDao = new UserDaoImpl();
-    private DeviceDao deviceDao = new DeviceDaoImpl();
-    private ReservationDao reservationDao = new ReservationDaoImpl();
-    private BorrowDao borrowDao = new BorrowDaoImpl();
-    private ReturnDeviceDao returnDeviceDao = new ReturnDeviceDaoImpl();
+    private AdminDao m_adminDao = new AdminDaoImpl();
+    private UserDao m_userDao = new UserDaoImpl();
+    private DeviceDao m_deviceDao = new DeviceDaoImpl();
+    private ReservationDao m_reservationDao = new ReservationDaoImpl();
+    private BorrowDao m_borrowDao = new BorrowDaoImpl();
+    private ReturnDeviceDao m_returnDeviceDao = new ReturnDeviceDaoImpl();
     /*
      * @Description: 通过标识获取管理员管辖范围内的有人预约的设备
      * @Param wechatID
@@ -27,9 +27,9 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject getReservedDevice(String wechatID)
     {
         //获取主键，通过主键查询
-        int a_no = adminDao.getAdminByWechatID(wechatID).getM_Ano();
+        int a_no = m_adminDao.getAdminByWechatID(wechatID).getM_Ano();
         JSONObject info = new JSONObject();
-        List<Device> deviceList = reservationDao.getReservedDevice(a_no);
+        List<Device> deviceList = m_reservationDao.getReservedDevice(a_no);
         info.put("flag", 1);
         info.put("device", JSONArray.parseArray(JSON.toJSONString(deviceList)));
         return info;
@@ -43,7 +43,7 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject getReservationDetail(String d_no)
     {
         JSONObject info = new JSONObject();
-        List<Reservation> reservationList = reservationDao.getReservationDetail(d_no);
+        List<Reservation> reservationList = m_reservationDao.getReservationDetail(d_no);
         info.put("flag", 1);
         info.put("reservation", JSONArray.parseArray(JSON.toJSONString(reservationList)));
         return info;
@@ -57,11 +57,11 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject confirmBorrow(String u_no, int d_no)
     {
         JSONObject info = new JSONObject();
-        String borrowDate = reservationDao.getBorrowDate(u_no, d_no);
-        String returnDate = reservationDao.getReturnDate(u_no, d_no);
-        System.out.println(d_no+"设备状态更改"+u_no+": "+deviceDao.setDeviceState("外借", d_no));
-        System.out.println(reservationDao.reserveSucceed(u_no, d_no));
-        int flag = borrowDao.confirmBorrow(u_no, d_no, borrowDate, returnDate);
+        String borrowDate = m_reservationDao.getBorrowDate(u_no, d_no);
+        String returnDate = m_reservationDao.getReturnDate(u_no, d_no);
+        System.out.println(d_no+"设备状态更改"+u_no+": "+ m_deviceDao.setDeviceState("外借", d_no));
+        System.out.println(m_reservationDao.reserveSucceed(u_no, d_no));
+        int flag = m_borrowDao.confirmBorrow(u_no, d_no, borrowDate, returnDate);
         info.put("flag", flag);
         if (flag == 0)
         {
@@ -78,13 +78,13 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject getOverDue(String wechatID)
     {
         //获取主键，通过主键查询
-        int a_no = adminDao.getAdminByWechatID(wechatID).getM_Ano();
+        int a_no = m_adminDao.getAdminByWechatID(wechatID).getM_Ano();
 
         //设置所有逾期设备状态为 -1 表示逾期未还
-        borrowDao.setAllStateOverDue();
+        m_borrowDao.setAllStateOverDue();
 
         JSONObject info = new JSONObject();
-        List<Borrow> borrowList = borrowDao.getOverDueList(a_no);
+        List<Borrow> borrowList = m_borrowDao.getOverDueList(a_no);
         if (borrowList.isEmpty())
         {
             info.put("flag", 0 );
@@ -106,13 +106,13 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject confirmReturn(String wechatID, int d_no)
     {
         JSONObject info = new JSONObject();
-        String u_no = userDao.getUserByWechatID(wechatID).getM_Uno();
+        String u_no = m_userDao.getUserByWechatID(wechatID).getM_Uno();
 
         //获取用户借用记录的编号，唯一标识一条记录
-        int b_no = borrowDao.getBorrowNo(u_no, d_no);
+        int b_no = m_borrowDao.getBorrowNo(u_no, d_no);
 
         //归还设备
-        int flag= returnDeviceDao.ReturnDevice(u_no, d_no, b_no);
+        int flag= m_returnDeviceDao.ReturnDevice(u_no, d_no, b_no);
         info.put("flag", flag);
         if (flag == 0)
         {

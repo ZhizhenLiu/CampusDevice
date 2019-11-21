@@ -52,7 +52,7 @@ public class BorrowDaoImpl implements BorrowDao {
                 Borrow borrow = new Borrow();
                 borrow.setM_BborrowDate(m_rs.getString("b_borrow_date"));
                 borrow.setM_BreturnDate(m_rs.getString("b_return_date"));
-                borrow.setM_DdeviceSite(m_rs.getString("d_save_site"));
+                borrow.setM_DsaveSite(m_rs.getString("d_save_site"));
                 borrow.setM_Dno(m_rs.getInt("d_no"));
                 borrow.setM_Dname(m_rs.getString("d_name"));
                 borrow.setM_DmainUse(m_rs.getString("d_main_use"));

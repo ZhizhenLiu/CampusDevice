@@ -45,10 +45,10 @@ public interface UserService {
 
     /*
      * @Description: 用户预约设备
-     * @Param d_no  wechatId  startDate  endDate
+     * @Param d_no  wechatId  startDate  returnDate
      * @Return: int : 1为成功、0为失败
      */
-    JSONObject reserveDevice(int d_no, String wechatId, Date startDate, Date endDate);
+    JSONObject reserveDevice(int d_no, String wechatId, Date startDate, Date returnDate);
 
     /*
      * @Description: 查询用户借用的记录(借用中b_state=0，归还b_state=1,逾期未还b_state= -1)

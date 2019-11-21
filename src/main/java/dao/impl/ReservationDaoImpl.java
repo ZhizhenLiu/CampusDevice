@@ -24,7 +24,7 @@ public class ReservationDaoImpl implements ReservationDao {
      * @Param deviceNo  wechatId  startDate  endDate
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public int reserveDevice(int d_no, String u_no, Date startDate, Date endDate)
+    public int reserveDevice(int d_no, String u_no, Date startDate, Date returnDate)
     {
         //初始化
         m_con = null;
@@ -36,12 +36,12 @@ public class ReservationDaoImpl implements ReservationDao {
         {
             m_con = JDBCUtils.getM_connection();
             m_sql = "INSERT INTO reservation(d_no,u_no,r_reservation_date,r_start_date,r_return_date) " +
-                  "VALUES(?, ?, CURRENT_DATE, ?, ?)";
+                    "VALUES(?, ?, CURRENT_DATE, ?, ?)";
             m_pStmt = m_con.prepareStatement(m_sql);
             m_pStmt.setInt(1, d_no);
             m_pStmt.setString(2, u_no);
             m_pStmt.setDate(3, new java.sql.Date(startDate.getTime()));
-            m_pStmt.setDate(4, new java.sql.Date(endDate.getTime()));
+            m_pStmt.setDate(4, new java.sql.Date(returnDate.getTime()));
 
             //记录执行状态
             flag = m_pStmt.executeUpdate();
@@ -125,11 +125,12 @@ public class ReservationDaoImpl implements ReservationDao {
         try
         {
             m_con = JDBCUtils.getM_connection();
-            m_sql = "SELECT u_name, u_type, r_reservation_date, r_borrow_date, r_return_date, u_credit_grade " +
+            m_sql = "SELECT u_name, u_type, r_reservation_date, r_start_date, r_return_date, r_reservation_date, u_credit_grade " +
                     "FROM user, reservation " +
                     "WHERE user.u_no = reservation.u_no " +
                     "AND d_no = ? " +
-                    "AND r_state = 0 ";
+                    "AND r_state = 0 " +
+                    "ORDER BY r_reservation_date";
             m_pStmt = m_con.prepareStatement(m_sql);
 
             //替换参数，从1开始
@@ -141,8 +142,9 @@ public class ReservationDaoImpl implements ReservationDao {
                 Reservation reservation = new Reservation();
                 reservation.setM_Uname(m_rs.getString("u_name"));
                 reservation.setM_Utype(m_rs.getString("u_type"));
-                reservation.setM_RborrowDate(m_rs.getString("r_borrow_date"));
+                reservation.setM_RstartDate(m_rs.getString("r_start_date"));
                 reservation.setM_RreturnDate(m_rs.getString("r_return_date"));
+                reservation.setM_RreservationDate(m_rs.getString("r_reservation_date"));
                 reservation.setM_UcreditGrade(m_rs.getInt("u_credit_grade"));
                 reservationList.add(reservation);
             }
@@ -165,14 +167,14 @@ public class ReservationDaoImpl implements ReservationDao {
         m_pStmt = null;
         m_rs = null;
 
-        String borrowDate = "";
+        String startDate = "";
         try
         {
             m_con = JDBCUtils.getM_connection();
-            m_sql = "SELECT r_borrow_date " +
-                  "FROM reservation " +
-                  "WHERE u_no = ? " +
-                  "AND d_no = ? ";
+            m_sql = "SELECT r_start_date " +
+                    "FROM reservation " +
+                    "WHERE u_no = ? " +
+                    "AND d_no = ? ";
             m_pStmt = m_con.prepareStatement(m_sql);
 
             //替换参数，从1开始
@@ -183,11 +185,11 @@ public class ReservationDaoImpl implements ReservationDao {
             //判断是否存在记录
             if (m_rs.next())
             {
-                borrowDate = m_rs.getString("r_borrow_date");
+                startDate = m_rs.getString("r_start_date");
             }
             else
             {
-                borrowDate = "not found";
+                startDate = "not found";
             }
         }
         catch (SQLException e)
@@ -198,7 +200,7 @@ public class ReservationDaoImpl implements ReservationDao {
         {
             JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
         }
-        return borrowDate;
+        return startDate;
     }
 
     public String getReturnDate(String u_no, int d_no)
@@ -213,9 +215,9 @@ public class ReservationDaoImpl implements ReservationDao {
         {
             m_con = JDBCUtils.getM_connection();
             m_sql = "SELECT r_return_date " +
-                  "FROM reservation " +
-                  "WHERE u_no = ? " +
-                  "AND d_no = ? ";
+                    "FROM reservation " +
+                    "WHERE u_no = ? " +
+                    "AND d_no = ? ";
             m_pStmt = m_con.prepareStatement(m_sql);
 
             //替换参数，从1开始
@@ -303,17 +305,17 @@ public class ReservationDaoImpl implements ReservationDao {
 
             //执行操作
             m_pStmt.setString(1, u_no);
-            ResultSet rs = m_pStmt.executeQuery();
-            while(rs.next())
+            m_rs = m_pStmt.executeQuery();
+            while(m_rs.next())
             {
                 Reservation reservation = new Reservation();
-                reservation.setM_Rno(rs.getInt("r_no"));
-                reservation.setM_Dno(rs.getInt("d_no"));
-                reservation.setM_RreservationDate(rs.getString("r_reservation_date"));
-                reservation.setM_RborrowDate(rs.getString("r_start_date"));
-                reservation.setM_RreturnDate(rs.getString("r_return_date"));
-                reservation.setM_RfeedBack(rs.getString("r_feedback"));
-                reservation.setM_Rstate(rs.getInt("r_state"));
+                reservation.setM_Rno(m_rs.getInt("r_no"));
+                reservation.setM_Dno(m_rs.getInt("d_no"));
+                reservation.setM_RreservationDate(m_rs.getString("r_reservation_date"));
+                reservation.setM_RstartDate(m_rs.getString("r_start_date"));
+                reservation.setM_RreturnDate(m_rs.getString("r_return_date"));
+                reservation.setM_RfeedBack(m_rs.getString("r_feedback"));
+                reservation.setM_Rstate(m_rs.getInt("r_state"));
                 reservationList.add(reservation);
             }
 

@@ -44,13 +44,15 @@ public class UserDaoImpl implements UserDao {
                        m_rs.getString("u_mentor_phone"), m_rs.getString("u_major_class"));
             }
         }
-        catch (SQLException e) {
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
         finally
         {
             JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
         }
+        System.out.println(user);
         return  user;
     }
 

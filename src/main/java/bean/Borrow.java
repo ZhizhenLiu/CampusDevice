@@ -16,14 +16,14 @@ public class Borrow {
     private String m_Uemail;
 
     //附加设备属性
-    private String m_DdeviceSite;
+    private String m_DsaveSite;
     private String m_Dname;
     private String m_DmainUse;
 
     public Borrow() {
     }
 
-    public Borrow(int m_Bno, int m_Dno, String m_Uno, String m_BborrowDate, String m_BreturnDate, int m_Bstate, String m_Uname, String m_Utype, int m_UcreditGrade, String m_Uphone, String m_Uemail, String m_DdeviceSite, String m_Dname, String m_DmainUse) {
+    public Borrow(int m_Bno, int m_Dno, String m_Uno, String m_BborrowDate, String m_BreturnDate, int m_Bstate, String m_Uname, String m_Utype, int m_UcreditGrade, String m_Uphone, String m_Uemail, String m_DsaveSite, String m_Dname, String m_DmainUse) {
         this.m_Bno = m_Bno;
         this.m_Dno = m_Dno;
         this.m_Uno = m_Uno;
@@ -35,7 +35,7 @@ public class Borrow {
         this.m_UcreditGrade = m_UcreditGrade;
         this.m_Uphone = m_Uphone;
         this.m_Uemail = m_Uemail;
-        this.m_DdeviceSite = m_DdeviceSite;
+        this.m_DsaveSite = m_DsaveSite;
         this.m_Dname = m_Dname;
         this.m_DmainUse = m_DmainUse;
     }
@@ -128,12 +128,12 @@ public class Borrow {
         this.m_Uemail = m_Uemail;
     }
 
-    public String getM_DdeviceSite() {
-        return m_DdeviceSite;
+    public String getM_DsaveSite() {
+        return m_DsaveSite;
     }
 
-    public void setM_DdeviceSite(String m_DdeviceSite) {
-        this.m_DdeviceSite = m_DdeviceSite;
+    public void setM_DsaveSite(String m_DsaveSite) {
+        this.m_DsaveSite = m_DsaveSite;
     }
 
     public String getM_Dname() {
@@ -166,7 +166,7 @@ public class Borrow {
                 ", u_credit_grade=" + m_UcreditGrade +
                 ", u_phone='" + m_Uphone + '\'' +
                 ", u_email='" + m_Uemail + '\'' +
-                ", return_place='" + m_DdeviceSite + '\'' +
+                ", return_place='" + m_DsaveSite + '\'' +
                 ", d_name='" + m_Dname + '\'' +
                 ", d_main_use='" + m_DmainUse + '\'' +
                 '}';

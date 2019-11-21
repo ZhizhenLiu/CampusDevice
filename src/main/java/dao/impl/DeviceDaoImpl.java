@@ -74,7 +74,7 @@ public class DeviceDaoImpl implements DeviceDao {
         try
         {
             m_con = JDBCUtils.getM_connection();
-            String sql = "SELECT d_no,d_name,d_main_use,d_important_param,d_save_site, " +
+            String sql = "SELECT d_no,d_name,d_main_use,d_important_param,d_save_site,d_state," +
                          "(SELECT a_name FROM administrator a1 WHERE a1.a_no = d.a_no ) a_name, " +
                          "(SELECT a_phone FROM administrator a2 WHERE a2.a_no = d.a_no ) a_phone  " +
                          "FROM device d WHERE d_no = ? ";
@@ -87,7 +87,8 @@ public class DeviceDaoImpl implements DeviceDao {
                 device.setM_Dname(m_rs.getString("d_name"));
                 device.setM_DmainUse(m_rs.getString("d_main_use"));
                 device.setM_DimportantParam(m_rs.getString("d_important_param"));
-                device.setM_DdeviceSite(m_rs.getString("d_save_site"));
+                device.setM_DsaveSite(m_rs.getString("d_save_site"));
+                device.setM_Dstate(m_rs.getString("d_state"));
                 device.setM_Aname(m_rs.getString("a_name"));
                 device.setM_Aphone(m_rs.getString("a_phone"));
             }

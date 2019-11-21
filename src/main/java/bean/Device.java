@@ -10,14 +10,14 @@ public class Device {
     private String m_Dname;
     private String m_DimportantParam;
     private String m_DmainUse;
-    private String m_DdeviceSite;
+    private String m_DsaveSite;
 
     //扩展属性
     private int m_Rsum; //预约人数
     private String m_Aname;
     private String m_Aphone;
 
-    public Device(int m_Dno, String m_Ano, String m_Dstate, int m_DborrowedTimes, String m_Dname, String m_DimportantParam, String m_DmainUse, String m_DdeviceSite) {
+    public Device(int m_Dno, String m_Ano, String m_Dstate, int m_DborrowedTimes, String m_Dname, String m_DimportantParam, String m_DmainUse, String m_DsaveSite) {
         this.m_Dno = m_Dno;
         this.m_Ano = m_Ano;
         this.m_Dstate = m_Dstate;
@@ -25,7 +25,7 @@ public class Device {
         this.m_Dname = m_Dname;
         this.m_DimportantParam = m_DimportantParam;
         this.m_DmainUse = m_DmainUse;
-        this.m_DdeviceSite = m_DdeviceSite;
+        this.m_DsaveSite = m_DsaveSite;
     }
 
     public Device() {
@@ -87,12 +87,12 @@ public class Device {
         this.m_DmainUse = m_DmainUse;
     }
 
-    public String getM_DdeviceSite() {
-        return m_DdeviceSite;
+    public String getM_DsaveSite() {
+        return m_DsaveSite;
     }
 
-    public void setM_DdeviceSite(String m_DdeviceSite) {
-        this.m_DdeviceSite = m_DdeviceSite;
+    public void setM_DsaveSite(String m_DsaveSite) {
+        this.m_DsaveSite = m_DsaveSite;
     }
 
     public int getM_Rsum() {
@@ -129,7 +129,7 @@ public class Device {
                 ", d_name='" + m_Dname + '\'' +
                 ", d_important_param='" + m_DimportantParam + '\'' +
                 ", d_main_use='" + m_DmainUse + '\'' +
-                ", d_save_site='" + m_DdeviceSite + '\'' +
+                ", d_save_site='" + m_DsaveSite + '\'' +
                 ", r_sum=" + m_Rsum +
                 ", a_name='" + m_Aname + '\'' +
                 ", a_phone='" + m_Aphone + '\'' +

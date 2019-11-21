@@ -34,6 +34,7 @@ public class UserInfoServlet extends HttpServlet {
         if (result.containsKey("openid"))
         {
             wechatId = (String) result.get("openid");
+            System.out.println(wechatId);
             info = userService.getJSONUserByWechatID(wechatId);
             printWriter.write(info.toJSONString());
         }

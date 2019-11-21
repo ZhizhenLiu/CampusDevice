@@ -24,6 +24,7 @@ public class HandleReservationServlet extends HttpServlet {
 
         //获取参数
         String code = request.getParameter("code");
+        System.out.println(code);
 
         //向微信服务器接口发送code，获取用户唯一标识openid, 返回参数
         AdminService adminService = new AdminServiceImpl();
@@ -34,7 +35,7 @@ public class HandleReservationServlet extends HttpServlet {
         String wechatId = "";
 
         //请求成功,获取管理员openid
-        if (result.get("errcode").equals("0"))
+        if (result.containsKey("openid"))
         {
             wechatId = (String) result.get("openid");
             printWriter.write(adminService.getReservedDevice(wechatId).toJSONString());

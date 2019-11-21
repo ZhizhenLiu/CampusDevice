@@ -33,7 +33,7 @@ public class OverDueServlet extends HttpServlet {
         String wechatId = "";
 
         //请求成功,获取管理员openid
-        if (result.get("errcode").equals("0"))
+        if (result.containsKey("openid"))
         {
             wechatId = (String) result.get("openid");
             printWriter.write(adminService.getOverDue(wechatId).toJSONString());

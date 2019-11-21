@@ -32,7 +32,7 @@ public class LoginServlet extends HttpServlet {
         String wechatId;
 
         //请求成功,获取用户openiid
-        if (result.get("errcode").equals("0"))
+        if (result.containsKey("openid"))
         {
             wechatId = (String) result.get("openid");
             //查询对应openid的用户是否存在

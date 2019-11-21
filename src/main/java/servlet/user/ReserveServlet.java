@@ -27,15 +27,25 @@ public class ReserveServlet extends HttpServlet {
         //获取参数
         int d_no = Integer.parseInt(request.getParameter("d_no"));
         String code = request.getParameter("code");
+        String start = request.getParameter("startDate");
+        String end = request.getParameter("returnDate");
 
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate = null, endDate = null;
-        try {
-             startDate = format.parse(request.getParameter("startDate"));
-             endDate = format.parse(request.getParameter("endDate"));
-        } catch (ParseException e) {
+        Date startDate = null, returnDate = null;
+        try
+        {
+             System.out.println(start+" "+end);
+             startDate = format.parse(start);
+             returnDate = format.parse(end);
+        }
+        catch (ParseException e)
+        {
             e.printStackTrace();
         }
+        System.out.println(d_no);
+        System.out.println(code);
+        System.out.println(startDate);
+        System.out.println(returnDate);
 
         //向微信服务器接口发送code，获取用户唯一标识openid, 返回参数
         JSONObject result = JSONObject.parseObject(HttpUtils.sendGet(code));
@@ -44,10 +54,10 @@ public class ReserveServlet extends HttpServlet {
         UserService userService = new UserServiceImpl();
         String wechatId = "";
         //请求成功
-        if (result.get("errcode").equals("0"))
+        if (result.containsKey("openid"))
         {
             wechatId = (String) result.get("openid");
-            info = userService.reserveDevice(d_no, wechatId, startDate, endDate);
+            info = userService.reserveDevice(d_no, wechatId, startDate, returnDate);
             printWriter.write(info.toJSONString());
         }
         //请求失败，返回错误信息
