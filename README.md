@@ -4,6 +4,7 @@
   --
   - bean层: JavaBean的属性命名为：m_ + 表名缩写 + 表字段，采用驼峰命名如：
     - Device（设备）: m_Dno（m_ + D(Device缩写) + no(device编号) ）
+  - test文件夹（测试）已被标注为 "Test Resources Root" ,内容均是调试，不在项目代码范围内部，自行无视忽略
   
   
 - 修改说明 
