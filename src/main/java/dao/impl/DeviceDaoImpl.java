@@ -1,6 +1,7 @@
 package dao.impl;
 
 import bean.Device;
+import bean.User;
 import dao.DeviceDao;
 import utils.JDBCUtils;
 
@@ -212,5 +213,46 @@ public class DeviceDaoImpl implements DeviceDao {
             JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
         }
         return flag;
+    }
+
+    /*
+     * @Description: 通过设备编号获取设备信息
+     * @Param d_no
+     * @Return: bean.Device
+     */
+    public Device getDeviceByNo(int d_no)
+    {
+        //初始化
+        m_con = null;
+        m_pStmt = null;
+        m_rs = null;
+        Device device = new Device();
+
+        try
+        {
+            m_con = JDBCUtils.getM_connection();
+            m_sql = "SELECT * FROM device WHERE d_no = ?";
+            m_pStmt = m_con.prepareStatement(m_sql);
+
+            //替换参数，从1开始
+            m_pStmt.setInt(1, d_no);
+            m_rs = m_pStmt.executeQuery();
+
+            if (m_rs.next())
+            {
+                device = new Device(m_rs.getInt("d_no"),m_rs.getString("a_no"),m_rs.getString("d_state"),
+                         m_rs.getInt("d_borrowed_times"), m_rs.getString("d_name"),m_rs.getString("d_important_param"),
+                         m_rs.getString("d_main_use"),m_rs.getString("d_save_site"));
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
+        }
+        return  device;
     }
 }

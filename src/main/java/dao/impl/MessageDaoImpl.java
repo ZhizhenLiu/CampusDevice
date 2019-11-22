@@ -42,7 +42,7 @@ public class MessageDaoImpl implements MessageDao {
             m_rs = m_pStmt.executeQuery();
             while(m_rs.next())
             {
-                messageList.add(new Message(m_rs.getInt(1), m_rs.getString(2), m_rs.getString(3), m_rs.getDate(4)));
+                messageList.add(new Message(m_rs.getInt(1), m_rs.getString(2), m_rs.getString(3), m_rs.getString(4)));
             }
 
         }

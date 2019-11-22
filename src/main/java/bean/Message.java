@@ -14,23 +14,16 @@ public class Message {
     //消息_内容
     private String m_Mcontent;
     //消息_时间
-    private Date m_Mdate;
+    private String m_Mdate;
 
-    public Message(int m_Mno, String m_Uno, String m_Mcontent, Date m_Mdate) {
+    public Message(int m_Mno, String m_Uno, String m_Mcontent, String m_Mdate) {
         this.m_Mno = m_Mno;
         this.m_Uno = m_Uno;
         this.m_Mcontent = m_Mcontent;
         this.m_Mdate = m_Mdate;
     }
 
-    @Override
-    public String toString() {
-        return "Message{" +
-                "m_no=" + m_Mno +
-                ", u_no='" + m_Uno + '\'' +
-                ", m_content='" + m_Mcontent + '\'' +
-                ", m_date=" + m_Mdate +
-                '}';
+    public Message() {
     }
 
     public int getM_Mno() {
@@ -57,11 +50,21 @@ public class Message {
         this.m_Mcontent = m_Mcontent;
     }
 
-    public Date getM_Mdate() {
+    public String getM_Mdate() {
         return m_Mdate;
     }
 
-    public void setM_Mdate(Date m_Mdate) {
+    public void setM_Mdate(String m_Mdate) {
         this.m_Mdate = m_Mdate;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "m_Mno=" + m_Mno +
+                ", m_Uno='" + m_Uno + '\'' +
+                ", m_Mcontent='" + m_Mcontent + '\'' +
+                ", m_Mdate='" + m_Mdate + '\'' +
+                '}';
     }
 }

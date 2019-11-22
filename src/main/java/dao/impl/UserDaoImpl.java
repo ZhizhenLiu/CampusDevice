@@ -52,7 +52,6 @@ public class UserDaoImpl implements UserDao {
         {
             JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
         }
-        System.out.println(user);
         return  user;
     }
 
@@ -142,5 +141,47 @@ public class UserDaoImpl implements UserDao {
             JDBCUtils.closeAll(null, m_pStmt, m_con);
         }
         return flag;
+    }
+
+    /*
+     * @Description: 通过用户学工号获取用户对象
+     * @Param u_no
+     * @Return: bean.User
+     */
+    public User getUserByNo(String u_no)
+    {
+        //初始化
+        m_con = null;
+        m_pStmt = null;
+        m_rs = null;
+
+        User user = new User();
+        try
+        {
+            m_con = JDBCUtils.getM_connection();
+            m_sql = "SELECT * FROM user WHERE u_no = ?";
+            m_pStmt = m_con.prepareStatement(m_sql);
+
+            //替换参数，从1开始
+            m_pStmt.setString(1, u_no);
+            m_rs = m_pStmt.executeQuery();
+
+            if (m_rs.next())
+            {
+                user = new User(m_rs.getString("u_no"), m_rs.getString("u_name"), m_rs.getString("u_wechatid"), m_rs.getString("u_email"),
+                        m_rs.getString("u_phone"), m_rs.getInt("u_credit_grade"), m_rs.getString("u_type"), m_rs.getString("u_mentor_name"),
+                        m_rs.getString("u_mentor_phone"), m_rs.getString("u_major_class"));
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
+        }
+        return  user;
+
     }
 }

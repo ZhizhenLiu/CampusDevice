@@ -159,11 +159,11 @@ public class BorrowDaoImpl implements BorrowDao {
         try
         {
             m_con = JDBCUtils.getM_connection();
-            m_sql = "SELECT u.u_name,u.u_type, u.u_credit_grade, b.b_borrow_date, b.b_return_date,u.u_phone, u.u_email FROM borrow b, device d, `user` u " +
-                  "WHERE b.d_no = d.d_no " +
-                  "AND u.u_no = b.u_no " +
-                  "AND d.a_no = ? " +
-                  "AND b_state = -1 ";
+            m_sql = "SELECT u.u_name, u.u_no, u.u_type, u.u_credit_grade, b.b_borrow_date, b.b_return_date,u.u_phone, u.u_email FROM borrow b, device d, `user` u " +
+                    "WHERE b.d_no = d.d_no " +
+                    "AND u.u_no = b.u_no " +
+                    "AND d.a_no = ? " +
+                    "AND b_state = -1 ";
             m_pStmt = m_con.prepareStatement(m_sql);
 
             //替换参数，从1开始
@@ -175,6 +175,7 @@ public class BorrowDaoImpl implements BorrowDao {
             {
                 Borrow borrow = new Borrow();
                 borrow.setM_Uname(m_rs.getString("u_name"));
+                borrow.setM_Uno(m_rs.getString("u_no"));
                 borrow.setM_Utype(m_rs.getString("u_type"));
                 borrow.setM_UcreditGrade(m_rs.getInt("u_credit_grade"));
                 borrow.setM_BborrowDate(m_rs.getString("b_borrow_date"));

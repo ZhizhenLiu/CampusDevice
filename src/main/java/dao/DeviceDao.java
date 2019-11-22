@@ -40,4 +40,11 @@ public interface DeviceDao {
      * @Return: int
      */
     int addBorrowedTimes(int d_no);
+
+    /*
+     * @Description: 通过设备编号获取设备信息
+     * @Param d_no
+     * @Return: bean.Device
+     */
+    Device getDeviceByNo(int d_no);
 }

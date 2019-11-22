@@ -47,4 +47,10 @@ public interface AdminService {
      */
     JSONObject confirmReturn(String u_no, int d_no);
 
+    /*
+     * @Description: 管理员主动提醒逾期未还用户
+     * @Param u_no  d_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject remindOverDue(String u_no, int d_no);
 }

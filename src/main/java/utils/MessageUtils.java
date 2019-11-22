@@ -14,7 +14,7 @@ public class MessageUtils {
      * @Param number  name
      * @Return: java.lang.String
      */
-    public static String SendTextMessage(String number,String name)
+    public static String sendVerifyCode(String number, String name)
     {
 
         ZhenziSmsClient client = new ZhenziSmsClient(c_apiUrl, c_appId, c_appSecret);
@@ -23,7 +23,8 @@ public class MessageUtils {
         String verifyCode = String.valueOf(new Random().nextInt(899999) + 100000);
         try
         {
-            String message = "尊敬的"+name+"，您的验证码为:"+ verifyCode+"，该码有效期为5分钟，该码只能使用一次!";
+            String message = name+"，您的验证码为:"+ verifyCode+"，该码有效期为5分钟，该码只能使用一次!";
+            System.out.println(message);
             String result = client.send(number, message);
         }
         catch (Exception e)
@@ -32,4 +33,25 @@ public class MessageUtils {
         }
         return verifyCode;
     }
+
+    /*
+     * @Description: 管理员提醒归还设备
+     * @Param number  u_name  d_name
+     * @Return: void
+     */
+    public static void sendRemindMessage(String number, String u_name, String d_name)
+    {
+        ZhenziSmsClient client = new ZhenziSmsClient(c_apiUrl, c_appId, c_appSecret);
+        try
+        {
+            String message = u_name+"，您借用的设备:"+ d_name+"，已经逾期未还，请尽快归还!";
+            System.out.println(message);
+            String result = client.send(number, message);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
 }

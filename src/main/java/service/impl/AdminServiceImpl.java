@@ -3,12 +3,14 @@ package service.impl;
 import bean.Borrow;
 import bean.Device;
 import bean.Reservation;
+import bean.User;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import dao.*;
 import dao.impl.*;
 import service.AdminService;
+import utils.MessageUtils;
 
 import java.util.List;
 
@@ -183,6 +185,21 @@ public class AdminServiceImpl implements AdminService {
             info.put("flag", flag);
         }
         info.put("errmsg", errmsg);
+        return info;
+    }
+
+    /*
+     * @Description: 管理员主动提醒逾期未还用户
+     * @Param u_no  d_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject remindOverDue(String u_no, int d_no)
+    {
+        JSONObject info = new JSONObject();
+        User user = m_userDao.getUserByNo(u_no);
+        Device device = m_deviceDao.getDeviceByNo(d_no);
+        MessageUtils.sendRemindMessage(user.getM_Uphone(),user.getM_Uname(),device.getM_Dname());
+        info.put("flag", 1);
         return info;
     }
 }

@@ -29,4 +29,10 @@ public interface UserDao {
      */
     int changeUserInfo(User user);
 
+    /*
+     * @Description: 通过用户学工号获取用户对象
+     * @Param u_no
+     * @Return: bean.User
+     */
+    User getUserByNo(String u_no);
 }

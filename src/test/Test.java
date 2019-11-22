@@ -1,11 +1,16 @@
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import dao.DeviceDao;
 import dao.ReservationDao;
+import dao.UserDao;
+import dao.impl.DeviceDaoImpl;
 import dao.impl.ReservationDaoImpl;
+import dao.impl.UserDaoImpl;
 import service.AdminService;
 import service.UserService;
 import service.impl.AdminServiceImpl;
 import service.impl.UserServiceImpl;
+import utils.MessageUtils;
 
 public class Test {
     @org.junit.jupiter.api.Test
@@ -37,12 +42,11 @@ public class Test {
 
        UserService userService = new UserServiceImpl();
        AdminService adminService = new AdminServiceImpl();
+       UserDao userDao = new UserDaoImpl();
+       DeviceDao deviceDao = new DeviceDaoImpl();
        /*
        System.out.println(adminService.confirmBorrow("201726010310",5));*/
 //       System.out.println(adminService.refuseBorrow());
-
-       System.out.println(adminService.getReservationDetail(1));
-       System.out.println(adminService.refuseBorrow("201726010310",1,"丑拒"));
-
+       System.out.println(adminService.getOverDue("o0ug241yqbsjM0N5xR5qhLxi8gH0"));
    }
 }
