@@ -10,29 +10,29 @@ public class JDBCUtils {
     private static String c_url = "jdbc:mysql://49.235.73.29:3306/testdb?serverTimezone=UTC";
     private static String c_user = "root";
     private static String c_password = "skplroot";
-    private static Connection m_connection;
+    private static Connection connection;
     
     /*
      * @Description: 创建连接：连接mytest数据库
      * @Param
      * @Return: java.sql.Connection
      */
-    public static Connection getM_connection()
+    public static Connection getConnection()
     {
-        m_connection = null;
+        connection = null;
         try{
             //选择加载驱动
             Class.forName("com.mysql.cj.jdbc.Driver");
             //建立连接
-            m_connection = DriverManager.getConnection(c_url, c_user, c_password);
-            return m_connection;
+            connection = DriverManager.getConnection(c_url, c_user, c_password);
+            return connection;
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
         //如果发生异常，则返回一个空的连接
-        return m_connection;
+        return connection;
     }
 
     /*

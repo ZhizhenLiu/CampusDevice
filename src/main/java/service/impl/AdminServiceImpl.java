@@ -15,13 +15,13 @@ import utils.MessageUtils;
 import java.util.List;
 
 public class AdminServiceImpl implements AdminService {
-    private AdminDao m_adminDao = new AdminDaoImpl();
-    private UserDao m_userDao = new UserDaoImpl();
-    private DeviceDao m_deviceDao = new DeviceDaoImpl();
-    private ReservationDao m_reservationDao = new ReservationDaoImpl();
-    private BorrowDao m_borrowDao = new BorrowDaoImpl();
-    private ReturnDeviceDao m_returnDeviceDao = new ReturnDeviceDaoImpl();
-    private MessageDao m_messageDao = new MessageDaoImpl();
+    private AdminDao adminDao = new AdminDaoImpl();
+    private UserDao userDao = new UserDaoImpl();
+    private DeviceDao deviceDao = new DeviceDaoImpl();
+    private ReservationDao reservationDao = new ReservationDaoImpl();
+    private BorrowDao borrowDao = new BorrowDaoImpl();
+    private ReturnDeviceDao returnDeviceDao = new ReturnDeviceDaoImpl();
+    private MessageDao messageDao = new MessageDaoImpl();
     /*
      * @Description: 通过标识获取管理员管辖范围内的有人预约的设备
      * @Param wechatID
@@ -30,9 +30,9 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject getReservedDevice(String wechatID)
     {
         //获取主键，通过主键查询
-        int a_no = m_adminDao.getAdminByWechatID(wechatID).getM_Ano();
+        int a_no = adminDao.getAdminByWechatID(wechatID).getA_no();
         JSONObject info = new JSONObject();
-        List<Device> deviceList = m_reservationDao.getReservedDevice(a_no);
+        List<Device> deviceList = reservationDao.getReservedDevice(a_no);
         info.put("flag", 1);
         info.put("device", JSONArray.parseArray(JSON.toJSONString(deviceList)));
         return info;
@@ -46,7 +46,7 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject getReservationDetail(int d_no)
     {
         JSONObject info = new JSONObject();
-        List<Reservation> reservationList = m_reservationDao.getReservationDetail(d_no);
+        List<Reservation> reservationList = reservationDao.getReservationDetail(d_no);
         info.put("flag", 1);
         info.put("reservation", JSONArray.parseArray(JSON.toJSONString(reservationList)));
         return info;
@@ -61,14 +61,14 @@ public class AdminServiceImpl implements AdminService {
     {
         JSONObject info = new JSONObject();
         JSONArray errmsg = new JSONArray();
-        String state = m_deviceDao.getDeviceState(d_no);
+        String state = deviceDao.getDeviceState(d_no);
         if (state.equals("在库"))
         {
-            String borrowDate = m_reservationDao.getStartDate(u_no, d_no);
-            String returnDate = m_reservationDao.getReturnDate(u_no, d_no);
+            String borrowDate = reservationDao.getStartDate(u_no, d_no);
+            String returnDate = reservationDao.getReturnDate(u_no, d_no);
 
-            int flag = m_borrowDao.confirmBorrow(u_no, d_no, borrowDate, returnDate);
-            flag += m_reservationDao.confirmReserve(u_no, d_no);
+            int flag = borrowDao.confirmBorrow(u_no, d_no, borrowDate, returnDate);
+            flag += reservationDao.confirmReserve(u_no, d_no);
             info.put("flag", flag == 2? 1: 0);
 
             if (flag == 0)
@@ -94,7 +94,7 @@ public class AdminServiceImpl implements AdminService {
     {
         JSONObject info = new JSONObject();
         JSONArray errmsg = new JSONArray();
-        int flag = m_reservationDao.refuseReserve(u_no, d_no, r_feedBack);
+        int flag = reservationDao.refuseReserve(u_no, d_no, r_feedBack);
         info.put("flag", flag);
         if (flag == 0)
         {
@@ -104,7 +104,7 @@ public class AdminServiceImpl implements AdminService {
         //反馈不为空
         if (r_feedBack != null)
         {
-            flag = m_messageDao.sendMessage(u_no, r_feedBack);
+            flag = messageDao.sendMessage(u_no, r_feedBack);
             if (flag == 0)
             {
                 errmsg.add("发送消息给用户失败");
@@ -122,13 +122,13 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject getOverDue(String wechatID)
     {
         //获取主键，通过主键查询
-        int a_no = m_adminDao.getAdminByWechatID(wechatID).getM_Ano();
+        int a_no = adminDao.getAdminByWechatID(wechatID).getA_no();
 
         //设置所有逾期设备状态为 -1 表示逾期未还
-        m_borrowDao.setAllStateOverDue();
+        borrowDao.setAllStateOverDue();
 
         JSONObject info = new JSONObject();
-        List<Borrow> borrowList = m_borrowDao.getOverDueList(a_no);
+        List<Borrow> borrowList = borrowDao.getOverDueList(a_no);
         if (borrowList.isEmpty())
         {
             info.put("flag", 0 );
@@ -153,7 +153,7 @@ public class AdminServiceImpl implements AdminService {
         JSONArray errmsg = new JSONArray();
 
         //获取用户借用记录的编号，唯一标识一条记录
-        int b_no = m_borrowDao.getBorrowNo(u_no, d_no);
+        int b_no = borrowDao.getBorrowNo(u_no, d_no);
         if (b_no == 0)
         {
             info.put("flag", 0);
@@ -161,23 +161,23 @@ public class AdminServiceImpl implements AdminService {
         }
         else
         {
-            int flag = m_borrowDao.returnBorrow(b_no);
+            int flag = borrowDao.returnBorrow(b_no);
             if (flag == 0)
             {
                 errmsg.add("修改借用记录状态为归还失败");
             }
             //归还设备
-            flag = m_returnDeviceDao.returnDevice(u_no, d_no, b_no);
+            flag = returnDeviceDao.returnDevice(u_no, d_no, b_no);
             if (flag == 0)
             {
                 errmsg.add("添加到已归还设备失败");
             }
-            flag = m_deviceDao.setDeviceState("在库", d_no);
+            flag = deviceDao.setDeviceState("在库", d_no);
             if (flag == 0)
             {
                 errmsg.add("修改设备状态失败");
             }
-            flag = m_deviceDao.addBorrowedTimes(d_no);
+            flag = deviceDao.addBorrowedTimes(d_no);
             if (flag == 0)
             {
                 errmsg.add("设备借用次数增长");
@@ -196,9 +196,9 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject remindOverDue(String u_no, int d_no)
     {
         JSONObject info = new JSONObject();
-        User user = m_userDao.getUserByNo(u_no);
-        Device device = m_deviceDao.getDeviceByNo(d_no);
-        MessageUtils.sendRemindMessage(user.getM_Uphone(),user.getM_Uname(),device.getM_Dname());
+        User user = userDao.getUserByNo(u_no);
+        Device device = deviceDao.getDeviceByNo(d_no);
+        MessageUtils.sendRemindMessage(user.getU_phone(),user.getU_name(),device.getD_name());
         info.put("flag", 1);
         return info;
     }

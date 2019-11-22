@@ -6,87 +6,87 @@ package bean;
 public class CreditRecord {
 
     //信用记录_编号
-    private int m_CrNo;
+    private int cr_no;
     //用户_学工号
-    private String m_Uno;
+    private String u_no;
     //信用记录_分数浮动
-    private int m_CrChangeScore;
+    private int cr_changeScore;
     //信用记录_变化原因
-    private String m_CrChangeReason;
+    private String cr_changeReason;
     //信用记录_日期(自动填写)
-    private String m_CrDate;
+    private String cr_date;
     //信用记录_变化后分数
-    private int m_CrAfterGrade;
+    private int cr_afterGrade;
 
-    public CreditRecord(int m_CrNo, String m_Uno, int m_CrChangeScore, String m_CrChangeReason, String m_CrDate, int m_CrAfterGrade) {
-        this.m_CrNo = m_CrNo;
-        this.m_Uno = m_Uno;
-        this.m_CrChangeScore = m_CrChangeScore;
-        this.m_CrChangeReason = m_CrChangeReason;
-        this.m_CrDate = m_CrDate;
-        this.m_CrAfterGrade = m_CrAfterGrade;
+    public CreditRecord(int cr_no, String u_no, int cr_changeScore, String cr_changeReason, String cr_date, int cr_afterGrade) {
+        this.cr_no = cr_no;
+        this.u_no = u_no;
+        this.cr_changeScore = cr_changeScore;
+        this.cr_changeReason = cr_changeReason;
+        this.cr_date = cr_date;
+        this.cr_afterGrade = cr_afterGrade;
     }
 
     public CreditRecord() {
     }
 
-    public int getM_CrNo() {
-        return m_CrNo;
+    public int getCr_no() {
+        return cr_no;
     }
 
-    public void setM_CrNo(int m_CrNo) {
-        this.m_CrNo = m_CrNo;
+    public void setCr_no(int cr_no) {
+        this.cr_no = cr_no;
     }
 
-    public String getM_Uno() {
-        return m_Uno;
+    public String getU_no() {
+        return u_no;
     }
 
-    public void setM_Uno(String m_Uno) {
-        this.m_Uno = m_Uno;
+    public void setU_no(String u_no) {
+        this.u_no = u_no;
     }
 
-    public int getM_CrChangeScore() {
-        return m_CrChangeScore;
+    public int getCr_changeScore() {
+        return cr_changeScore;
     }
 
-    public void setM_CrChangeScore(int m_CrChangeScore) {
-        this.m_CrChangeScore = m_CrChangeScore;
+    public void setCr_changeScore(int cr_changeScore) {
+        this.cr_changeScore = cr_changeScore;
     }
 
-    public String getM_CrChangeReason() {
-        return m_CrChangeReason;
+    public String getCr_changeReason() {
+        return cr_changeReason;
     }
 
-    public void setM_CrChangeReason(String m_CrChangeReason) {
-        this.m_CrChangeReason = m_CrChangeReason;
+    public void setCr_changeReason(String cr_changeReason) {
+        this.cr_changeReason = cr_changeReason;
     }
 
-    public String getM_CrDate() {
-        return m_CrDate;
+    public String getCr_date() {
+        return cr_date;
     }
 
-    public void setM_CrDate(String m_CrDate) {
-        this.m_CrDate = m_CrDate;
+    public void setCr_date(String cr_date) {
+        this.cr_date = cr_date;
     }
 
-    public int getM_CrAfterGrade() {
-        return m_CrAfterGrade;
+    public int getCr_afterGrade() {
+        return cr_afterGrade;
     }
 
-    public void setM_CrAfterGrade(int m_CrAfterGrade) {
-        this.m_CrAfterGrade = m_CrAfterGrade;
+    public void setCr_afterGrade(int cr_afterGrade) {
+        this.cr_afterGrade = cr_afterGrade;
     }
 
     @Override
     public String toString() {
         return "CreditRecord{" +
-                "cr_no=" + m_CrNo +
-                ", u_no='" + m_Uno + '\'' +
-                ", cr_change_score=" + m_CrChangeScore +
-                ", cr_change_reason='" + m_CrChangeReason + '\'' +
-                ", cr_date='" + m_CrDate + '\'' +
-                ", cr_after_grade=" + m_CrAfterGrade +
+                "cr_no=" + cr_no +
+                ", u_no='" + u_no + '\'' +
+                ", cr_change_score=" + cr_changeScore +
+                ", cr_change_reason='" + cr_changeReason + '\'' +
+                ", cr_date='" + cr_date + '\'' +
+                ", cr_after_grade=" + cr_afterGrade +
                 '}';
     }
 }

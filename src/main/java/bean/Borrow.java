@@ -1,174 +1,174 @@
 package bean;
 
 public class Borrow {
-    private int m_Bno;
-    private int m_Dno;
-    private String m_Uno;
-    private String m_BborrowDate;
-    private String m_BreturnDate;
-    private int m_Bstate;
+    private int b_no;
+    private int d_no;
+    private String u_no;
+    private String b_borrowDate;
+    private String b_returnDate;
+    private int b_state;
 
     //附加用户属性
-    private String m_Uname;
-    private String m_Utype;
-    private int m_UcreditGrade;
-    private String m_Uphone;
-    private String m_Uemail;
+    private String u_name;
+    private String u_type;
+    private int u_creditGrade;
+    private String u_phone;
+    private String u_email;
 
     //附加设备属性
-    private String m_DsaveSite;
-    private String m_Dname;
-    private String m_DmainUse;
+    private String d_saveSite;
+    private String d_name;
+    private String d_mainUse;
 
     public Borrow() {
     }
 
-    public Borrow(int m_Bno, int m_Dno, String m_Uno, String m_BborrowDate, String m_BreturnDate, int m_Bstate, String m_Uname, String m_Utype, int m_UcreditGrade, String m_Uphone, String m_Uemail, String m_DsaveSite, String m_Dname, String m_DmainUse) {
-        this.m_Bno = m_Bno;
-        this.m_Dno = m_Dno;
-        this.m_Uno = m_Uno;
-        this.m_BborrowDate = m_BborrowDate;
-        this.m_BreturnDate = m_BreturnDate;
-        this.m_Bstate = m_Bstate;
-        this.m_Uname = m_Uname;
-        this.m_Utype = m_Utype;
-        this.m_UcreditGrade = m_UcreditGrade;
-        this.m_Uphone = m_Uphone;
-        this.m_Uemail = m_Uemail;
-        this.m_DsaveSite = m_DsaveSite;
-        this.m_Dname = m_Dname;
-        this.m_DmainUse = m_DmainUse;
+    public Borrow(int b_no, int d_no, String u_no, String b_borrowDate, String b_returnDate, int b_state, String u_name, String u_type, int u_creditGrade, String u_phone, String u_email, String d_saveSite, String d_name, String d_mainUse) {
+        this.b_no = b_no;
+        this.d_no = d_no;
+        this.u_no = u_no;
+        this.b_borrowDate = b_borrowDate;
+        this.b_returnDate = b_returnDate;
+        this.b_state = b_state;
+        this.u_name = u_name;
+        this.u_type = u_type;
+        this.u_creditGrade = u_creditGrade;
+        this.u_phone = u_phone;
+        this.u_email = u_email;
+        this.d_saveSite = d_saveSite;
+        this.d_name = d_name;
+        this.d_mainUse = d_mainUse;
     }
 
-    public int getM_Bno() {
-        return m_Bno;
+    public int getB_no() {
+        return b_no;
     }
 
-    public void setM_Bno(int m_Bno) {
-        this.m_Bno = m_Bno;
+    public void setB_no(int b_no) {
+        this.b_no = b_no;
     }
 
-    public int getM_Dno() {
-        return m_Dno;
+    public int getD_no() {
+        return d_no;
     }
 
-    public void setM_Dno(int m_Dno) {
-        this.m_Dno = m_Dno;
+    public void setD_no(int d_no) {
+        this.d_no = d_no;
     }
 
-    public String getM_Uno() {
-        return m_Uno;
+    public String getU_no() {
+        return u_no;
     }
 
-    public void setM_Uno(String m_Uno) {
-        this.m_Uno = m_Uno;
+    public void setU_no(String u_no) {
+        this.u_no = u_no;
     }
 
-    public String getM_BborrowDate() {
-        return m_BborrowDate;
+    public String getB_borrowDate() {
+        return b_borrowDate;
     }
 
-    public void setM_BborrowDate(String m_BborrowDate) {
-        this.m_BborrowDate = m_BborrowDate;
+    public void setB_borrowDate(String b_borrowDate) {
+        this.b_borrowDate = b_borrowDate;
     }
 
-    public String getM_BreturnDate() {
-        return m_BreturnDate;
+    public String getB_returnDate() {
+        return b_returnDate;
     }
 
-    public void setM_BreturnDate(String m_BreturnDate) {
-        this.m_BreturnDate = m_BreturnDate;
+    public void setB_returnDate(String b_returnDate) {
+        this.b_returnDate = b_returnDate;
     }
 
-    public int getM_Bstate() {
-        return m_Bstate;
+    public int getB_state() {
+        return b_state;
     }
 
-    public void setM_Bstate(int m_Bstate) {
-        this.m_Bstate = m_Bstate;
+    public void setB_state(int b_state) {
+        this.b_state = b_state;
     }
 
-    public String getM_Uname() {
-        return m_Uname;
+    public String getU_name() {
+        return u_name;
     }
 
-    public void setM_Uname(String m_Uname) {
-        this.m_Uname = m_Uname;
+    public void setU_name(String u_name) {
+        this.u_name = u_name;
     }
 
-    public String getM_Utype() {
-        return m_Utype;
+    public String getU_type() {
+        return u_type;
     }
 
-    public void setM_Utype(String m_Utype) {
-        this.m_Utype = m_Utype;
+    public void setU_type(String u_type) {
+        this.u_type = u_type;
     }
 
-    public int getM_UcreditGrade() {
-        return m_UcreditGrade;
+    public int getU_creditGrade() {
+        return u_creditGrade;
     }
 
-    public void setM_UcreditGrade(int m_UcreditGrade) {
-        this.m_UcreditGrade = m_UcreditGrade;
+    public void setU_creditGrade(int u_creditGrade) {
+        this.u_creditGrade = u_creditGrade;
     }
 
-    public String getM_Uphone() {
-        return m_Uphone;
+    public String getU_phone() {
+        return u_phone;
     }
 
-    public void setM_Uphone(String m_Uphone) {
-        this.m_Uphone = m_Uphone;
+    public void setU_phone(String u_phone) {
+        this.u_phone = u_phone;
     }
 
-    public String getM_Uemail() {
-        return m_Uemail;
+    public String getU_email() {
+        return u_email;
     }
 
-    public void setM_Uemail(String m_Uemail) {
-        this.m_Uemail = m_Uemail;
+    public void setU_email(String u_email) {
+        this.u_email = u_email;
     }
 
-    public String getM_DsaveSite() {
-        return m_DsaveSite;
+    public String getD_saveSite() {
+        return d_saveSite;
     }
 
-    public void setM_DsaveSite(String m_DsaveSite) {
-        this.m_DsaveSite = m_DsaveSite;
+    public void setD_saveSite(String d_saveSite) {
+        this.d_saveSite = d_saveSite;
     }
 
-    public String getM_Dname() {
-        return m_Dname;
+    public String getD_name() {
+        return d_name;
     }
 
-    public void setM_Dname(String m_Dname) {
-        this.m_Dname = m_Dname;
+    public void setD_name(String d_name) {
+        this.d_name = d_name;
     }
 
-    public String getM_DmainUse() {
-        return m_DmainUse;
+    public String getD_mainUse() {
+        return d_mainUse;
     }
 
-    public void setM_DmainUse(String m_DmainUse) {
-        this.m_DmainUse = m_DmainUse;
+    public void setD_mainUse(String d_mainUse) {
+        this.d_mainUse = d_mainUse;
     }
 
     @Override
     public String toString() {
         return "Borrow{" +
-                "b_no=" + m_Bno +
-                ", d_no=" + m_Dno +
-                ", u_no='" + m_Uno + '\'' +
-                ", b_borrow_date='" + m_BborrowDate + '\'' +
-                ", b_return_date='" + m_BreturnDate + '\'' +
-                ", b_state=" + m_Bstate +
-                ", u_name='" + m_Uname + '\'' +
-                ", u_type='" + m_Utype + '\'' +
-                ", u_credit_grade=" + m_UcreditGrade +
-                ", u_phone='" + m_Uphone + '\'' +
-                ", u_email='" + m_Uemail + '\'' +
-                ", return_place='" + m_DsaveSite + '\'' +
-                ", d_name='" + m_Dname + '\'' +
-                ", d_main_use='" + m_DmainUse + '\'' +
+                "b_no=" + b_no +
+                ", d_no=" + d_no +
+                ", u_no='" + u_no + '\'' +
+                ", b_borrow_date='" + b_borrowDate + '\'' +
+                ", b_return_date='" + b_returnDate + '\'' +
+                ", b_state=" + b_state +
+                ", u_name='" + u_name + '\'' +
+                ", u_type='" + u_type + '\'' +
+                ", u_credit_grade=" + u_creditGrade +
+                ", u_phone='" + u_phone + '\'' +
+                ", u_email='" + u_email + '\'' +
+                ", return_place='" + d_saveSite + '\'' +
+                ", d_name='" + d_name + '\'' +
+                ", d_main_use='" + d_mainUse + '\'' +
                 '}';
     }
 }

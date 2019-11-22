@@ -8,19 +8,19 @@ import java.util.Date;
 public class Feedback {
 
     //反馈_编号
-    private int m_FbNo;
+    private int fb_no;
     //用户_学工号
-    private String m_Uno;
+    private String u_no;
     //反馈_内容
-    private String m_FbContent;
+    private String fb_content;
     //反馈_时间
-    private Date m_FbDate;
+    private Date fb_date;
 
-    public Feedback(int m_FbNo, String m_Uno, String m_FbContent, Date m_FbDate) {
-        this.m_FbNo = m_FbNo;
-        this.m_Uno = m_Uno;
-        this.m_FbContent = m_FbContent;
-        this.m_FbDate = m_FbDate;
+    public Feedback(int fb_no, String u_no, String fb_content, Date fb_date) {
+        this.fb_no = fb_no;
+        this.u_no = u_no;
+        this.fb_content = fb_content;
+        this.fb_date = fb_date;
     }
 
     public Feedback() {
@@ -29,42 +29,42 @@ public class Feedback {
     @Override
     public String toString() {
         return "Feedback{" +
-                "f_no=" + m_FbNo +
-                ", u_no='" + m_Uno + '\'' +
-                ", f_content='" + m_FbContent + '\'' +
-                ", f_date=" + m_FbDate +
+                "f_no=" + fb_no +
+                ", u_no='" + u_no + '\'' +
+                ", f_content='" + fb_content + '\'' +
+                ", f_date=" + fb_date +
                 '}';
     }
 
-    public int getM_FbNo() {
-        return m_FbNo;
+    public int getFb_no() {
+        return fb_no;
     }
 
-    public void setM_FbNo(int m_FbNo) {
-        this.m_FbNo = m_FbNo;
+    public void setFb_no(int fb_no) {
+        this.fb_no = fb_no;
     }
 
-    public String getM_Uno() {
-        return m_Uno;
+    public String getU_no() {
+        return u_no;
     }
 
-    public void setM_Uno(String m_Uno) {
-        this.m_Uno = m_Uno;
+    public void setU_no(String u_no) {
+        this.u_no = u_no;
     }
 
-    public String getM_FbContent() {
-        return m_FbContent;
+    public String getFb_content() {
+        return fb_content;
     }
 
-    public void setM_FbContent(String m_FbContent) {
-        this.m_FbContent = m_FbContent;
+    public void setFb_content(String fb_content) {
+        this.fb_content = fb_content;
     }
 
-    public Date getM_FbDate() {
-        return m_FbDate;
+    public Date getFb_date() {
+        return fb_date;
     }
 
-    public void setM_FbDate(Date m_FbDate) {
-        this.m_FbDate = m_FbDate;
+    public void setFb_date(Date fb_date) {
+        this.fb_date = fb_date;
     }
 }

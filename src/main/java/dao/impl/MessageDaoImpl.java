@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MessageDaoImpl implements MessageDao {
-    private Connection m_con;
-    private PreparedStatement m_pStmt;
-    private ResultSet m_rs;
-    private String m_sql;
+    private Connection con;
+    private PreparedStatement pStmt;
+    private ResultSet rs;
+    private String sql;
 
     /*
      * @Description: 用户查看消息栏信息 分页查询
@@ -25,24 +25,24 @@ public class MessageDaoImpl implements MessageDao {
     public List<Message> getMessageByPage(String u_no, int page, int count)
     {
         //初始化
-        m_con = null;
-        m_pStmt = null;
-        m_rs = null;
+        con = null;
+        pStmt = null;
+        rs = null;
         List<Message> messageList = new ArrayList<>();
 
         try
         {
-            m_con = JDBCUtils.getM_connection();
-            m_sql = "SELECT * FROM message WHERE u_no = ? LIMIT ?,?";
-            m_pStmt = m_con.prepareStatement(m_sql);
+            con = JDBCUtils.getConnection();
+            sql = "SELECT * FROM message WHERE u_no = ? LIMIT ?,?";
+            pStmt = con.prepareStatement(sql);
             //执行操作
-            m_pStmt.setString(1, u_no);
-            m_pStmt.setInt(2, (page-1)*count);
-            m_pStmt.setInt(3, count);
-            m_rs = m_pStmt.executeQuery();
-            while(m_rs.next())
+            pStmt.setString(1, u_no);
+            pStmt.setInt(2, (page-1)*count);
+            pStmt.setInt(3, count);
+            rs = pStmt.executeQuery();
+            while(rs.next())
             {
-                messageList.add(new Message(m_rs.getInt(1), m_rs.getString(2), m_rs.getString(3), m_rs.getString(4)));
+                messageList.add(new Message(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));
             }
 
         }
@@ -52,7 +52,7 @@ public class MessageDaoImpl implements MessageDao {
         }
         finally
         {
-            JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
+            JDBCUtils.closeAll(rs, pStmt, con);
         }
         return messageList;
     }
@@ -65,23 +65,23 @@ public class MessageDaoImpl implements MessageDao {
     public int sendMessage(String u_no, String m_content)
     {
         //初始化
-        m_con = null;
-        m_pStmt = null;
-        m_rs = null;
+        con = null;
+        pStmt = null;
+        rs = null;
 
         int flag = 0;
         try
         {
-            m_con = JDBCUtils.getM_connection();
-            m_sql = "INSERT INTO message(u_no, m_content, m_date) " +
+            con = JDBCUtils.getConnection();
+            sql = "INSERT INTO message(u_no, m_content, m_date) " +
                     "VALUES (?, ?, CURRENT_DATE)";
-            m_pStmt = m_con.prepareStatement(m_sql);
+            pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
-            m_pStmt.setString(1,u_no);
-            m_pStmt.setString(2, m_content);
+            pStmt.setString(1,u_no);
+            pStmt.setString(2, m_content);
 
-            flag = m_pStmt.executeUpdate();
+            flag = pStmt.executeUpdate();
         }
         catch (SQLException e)
         {
@@ -89,7 +89,7 @@ public class MessageDaoImpl implements MessageDao {
         }
         finally
         {
-            JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
+            JDBCUtils.closeAll(rs, pStmt, con);
         }
         return flag;
     }
@@ -102,24 +102,24 @@ public class MessageDaoImpl implements MessageDao {
     public int getAllMessageNum(String u_no)
     {
         //初始化
-        m_con = null;
-        m_pStmt = null;
-        m_rs = null;
+        con = null;
+        pStmt = null;
+        rs = null;
         int num = 0;
 
         try
         {
-            m_con = JDBCUtils.getM_connection();
-            m_sql = "select count(*) from message where u_no = ?";
-            m_pStmt = m_con.prepareStatement(m_sql);
+            con = JDBCUtils.getConnection();
+            sql = "select count(*) from message where u_no = ?";
+            pStmt = con.prepareStatement(sql);
 
             //执行操作
-            m_pStmt.setString(1, u_no);
-            m_rs = m_pStmt.executeQuery();
+            pStmt.setString(1, u_no);
+            rs = pStmt.executeQuery();
 
-            if(m_rs.next())
+            if(rs.next())
             {
-                num = m_rs.getInt(1);
+                num = rs.getInt(1);
             }
 
         }
@@ -129,7 +129,7 @@ public class MessageDaoImpl implements MessageDao {
         }
         finally
         {
-            JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
+            JDBCUtils.closeAll(rs, pStmt, con);
         }
         return num;
     }

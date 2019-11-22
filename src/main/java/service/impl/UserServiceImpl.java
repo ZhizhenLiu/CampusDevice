@@ -12,12 +12,12 @@ import java.util.Date;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
-    private UserDao m_userDao = new UserDaoImpl();
-    private ReservationDao m_reservationDao = new ReservationDaoImpl();
-    private DeviceDao m_deviceDao = new DeviceDaoImpl();
-    private BorrowDao m_borrowDao = new BorrowDaoImpl();
-    private CreditRecordDao m_creditRecordDao = new CreditRecordDaoImpl();
-    private MessageDao m_messageDao = new MessageDaoImpl();
+    private UserDao userDao = new UserDaoImpl();
+    private ReservationDao reservationDao = new ReservationDaoImpl();
+    private DeviceDao deviceDao = new DeviceDaoImpl();
+    private BorrowDao borrowDao = new BorrowDaoImpl();
+    private CreditRecordDao creditRecordDao = new CreditRecordDaoImpl();
+    private MessageDao messageDao = new MessageDaoImpl();
 
     /*
      * @Description: 通过用户编号获取用户对象
@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
      */
     public User getUserByWechatID(String wechatID)
     {
-        return m_userDao.getUserByWechatID(wechatID);
+        return userDao.getUserByWechatID(wechatID);
     }
 
     /*
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
      */
     public JSONObject getJSONUserByWechatID(String wechatID)
     {
-        User user = m_userDao.getUserByWechatID(wechatID);
+        User user = userDao.getUserByWechatID(wechatID);
         JSONObject info = new JSONObject();
         if (user == null)
         {
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
      */
     public JSONObject registerUser(User user)
     {
-        int flag = m_userDao.registerUser(user);
+        int flag = userDao.registerUser(user);
         JSONObject info = new JSONObject();
         info.put("flag", flag);
         if (flag == 0)
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
      */
     public JSONObject getHotDeviceByPage(int page, int count)
     {
-        List<Device> deviceList = m_deviceDao.getHotDeviceByPage(page, count);
+        List<Device> deviceList = deviceDao.getHotDeviceByPage(page, count);
         JSONObject info = new JSONObject();
         if (deviceList.isEmpty())
         {
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
     public JSONObject getDeviceDetails(int d_no)
     {
         JSONObject info = new JSONObject();
-        Device device = m_deviceDao.getDeviceDetails(d_no);
+        Device device = deviceDao.getDeviceDetails(d_no);
 
         if (device == null)
         {
@@ -120,15 +120,15 @@ public class UserServiceImpl implements UserService {
      */
     public JSONObject reserveDevice(int d_no, String wechatId, Date startDate, Date returnDate)
     {
-        String u_no = m_userDao.getUserByWechatID(wechatId).getM_Uno();
+        String u_no = userDao.getUserByWechatID(wechatId).getU_no();
         JSONObject info = new JSONObject();
         JSONArray errmsg = new JSONArray();
 
         //获取设备但前状态
-        String state = m_deviceDao.getDeviceState(d_no);
+        String state = deviceDao.getDeviceState(d_no);
         if (state.equals("在库"))
         {
-            int flag = m_reservationDao.reserveDevice(d_no, u_no, startDate, returnDate);
+            int flag = reservationDao.reserveDevice(d_no, u_no, startDate, returnDate);
             info.put("flag", flag);
             if (flag == 0 )
             {
@@ -152,9 +152,9 @@ public class UserServiceImpl implements UserService {
      */
     public JSONObject getBorrowRecord(String wechatID)
     {
-        String u_no = m_userDao.getUserByWechatID(wechatID).getM_Uno();
+        String u_no = userDao.getUserByWechatID(wechatID).getU_no();
         JSONObject info = new JSONObject();
-        List<Borrow> borrowList = m_borrowDao.getBorrowRecord(u_no);
+        List<Borrow> borrowList = borrowDao.getBorrowRecord(u_no);
         info.put("borrowed_item",JSONArray.parseArray(JSON.toJSONString(borrowList)));
         return info;
     }
@@ -166,11 +166,11 @@ public class UserServiceImpl implements UserService {
      */
     public JSONObject getCreditRecordByPage(String wechatID, int page, int count)
     {
-        User user = m_userDao.getUserByWechatID(wechatID);
-        String u_no = user.getM_Uno();
-        int credit_score = user.getM_UcreditGrade();
+        User user = userDao.getUserByWechatID(wechatID);
+        String u_no = user.getU_no();
+        int credit_score = user.getU_creditGrade();
         JSONObject info = new JSONObject();
-        List<CreditRecord> creditRecordList = m_creditRecordDao.getRecordByPage(u_no, page, count);
+        List<CreditRecord> creditRecordList = creditRecordDao.getRecordByPage(u_no, page, count);
         info.put("score", credit_score);
         info.put("record", JSONArray.parseArray(JSON.toJSONString(creditRecordList)));
         return info;
@@ -183,10 +183,10 @@ public class UserServiceImpl implements UserService {
      */
     public JSONObject getMessageByPage(String wechatID, int page, int count)
     {
-        User user = m_userDao.getUserByWechatID(wechatID);
-        String u_no = user.getM_Uno();
+        User user = userDao.getUserByWechatID(wechatID);
+        String u_no = user.getU_no();
         JSONObject info = new JSONObject();
-        List<Message> messageList = m_messageDao.getMessageByPage(u_no, page, count);
+        List<Message> messageList = messageDao.getMessageByPage(u_no, page, count);
         info.put("messages",JSONArray.parseArray(JSON.toJSONString(messageList)));
         return info;
     }
@@ -198,10 +198,10 @@ public class UserServiceImpl implements UserService {
      */
     public JSONObject getReservation(String wechatID)
     {
-        User user = m_userDao.getUserByWechatID(wechatID);
+        User user = userDao.getUserByWechatID(wechatID);
         JSONObject info = new JSONObject();
-        String u_no = user.getM_Uno();
-        List<Reservation> reservationList = m_reservationDao.getReservation(u_no);
+        String u_no = user.getU_no();
+        List<Reservation> reservationList = reservationDao.getReservation(u_no);
         info.put("reservation",JSONArray.parseArray(JSON.toJSONString(reservationList)));
         return info;
     }

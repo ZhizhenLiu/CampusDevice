@@ -9,10 +9,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ReturnDeviceDaoImpl implements ReturnDeviceDao {
-    private Connection m_con;
-    private PreparedStatement m_pStmt;
-    private ResultSet m_rs;
-    private String m_sql;
+    private Connection con;
+    private PreparedStatement pStmt;
+    private ResultSet rs;
+    private String sql;
 
     /*
      * @Description: 归还设备
@@ -22,23 +22,23 @@ public class ReturnDeviceDaoImpl implements ReturnDeviceDao {
     public int returnDevice(String u_no, int d_no, int b_bo)
     {
         //初始化
-        m_con = null;
-        m_pStmt = null;
-        m_rs = null;
+        con = null;
+        pStmt = null;
+        rs = null;
         int flag = 0;
 
         try
         {
-            m_con = JDBCUtils.getM_connection();
-            m_sql = "INSERT INTO return_device(u_no, d_no, b_no, rd_date) " +
+            con = JDBCUtils.getConnection();
+            sql = "INSERT INTO return_device(u_no, d_no, b_no, rd_date) " +
                     "VALUES (?, ?, ?, CURRENT_DATE )";
-            m_pStmt = m_con.prepareStatement(m_sql);
-            m_pStmt.setString(1, u_no);
-            m_pStmt.setInt(2, d_no);
-            m_pStmt.setInt(3, b_bo);
+            pStmt = con.prepareStatement(sql);
+            pStmt.setString(1, u_no);
+            pStmt.setInt(2, d_no);
+            pStmt.setInt(3, b_bo);
 
             //返回执行状态
-            flag = m_pStmt.executeUpdate();
+            flag = pStmt.executeUpdate();
 
         }
         catch (SQLException e)
@@ -47,7 +47,7 @@ public class ReturnDeviceDaoImpl implements ReturnDeviceDao {
         }
         finally
         {
-            JDBCUtils.closeAll(null, m_pStmt, m_con);
+            JDBCUtils.closeAll(null, pStmt, con);
         }
         return flag;
     }

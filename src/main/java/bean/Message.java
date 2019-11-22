@@ -1,70 +1,68 @@
 package bean;
 
-import java.util.Date;
-
 /**
  * 消息表
  */
 public class Message {
 
     //消息_编号
-    private int m_Mno;
+    private int m_no;
     //用户_学工号
-    private String m_Uno;
+    private String u_no;
     //消息_内容
-    private String m_Mcontent;
+    private String m_content;
     //消息_时间
-    private String m_Mdate;
+    private String m_date;
 
-    public Message(int m_Mno, String m_Uno, String m_Mcontent, String m_Mdate) {
-        this.m_Mno = m_Mno;
-        this.m_Uno = m_Uno;
-        this.m_Mcontent = m_Mcontent;
-        this.m_Mdate = m_Mdate;
+    public Message(int m_no, String u_no, String m_content, String m_date) {
+        this.m_no = m_no;
+        this.u_no = u_no;
+        this.m_content = m_content;
+        this.m_date = m_date;
     }
 
     public Message() {
     }
 
-    public int getM_Mno() {
-        return m_Mno;
+    public int getM_no() {
+        return m_no;
     }
 
-    public void setM_Mno(int m_Mno) {
-        this.m_Mno = m_Mno;
+    public void setM_no(int m_no) {
+        this.m_no = m_no;
     }
 
-    public String getM_Uno() {
-        return m_Uno;
+    public String getU_no() {
+        return u_no;
     }
 
-    public void setM_Uno(String m_Uno) {
-        this.m_Uno = m_Uno;
+    public void setU_no(String u_no) {
+        this.u_no = u_no;
     }
 
-    public String getM_Mcontent() {
-        return m_Mcontent;
+    public String getM_content() {
+        return m_content;
     }
 
-    public void setM_Mcontent(String m_Mcontent) {
-        this.m_Mcontent = m_Mcontent;
+    public void setM_content(String m_content) {
+        this.m_content = m_content;
     }
 
-    public String getM_Mdate() {
-        return m_Mdate;
+    public String getM_date() {
+        return m_date;
     }
 
-    public void setM_Mdate(String m_Mdate) {
-        this.m_Mdate = m_Mdate;
+    public void setM_date(String m_date) {
+        this.m_date = m_date;
     }
 
     @Override
     public String toString() {
         return "Message{" +
-                "m_Mno=" + m_Mno +
-                ", m_Uno='" + m_Uno + '\'' +
-                ", m_Mcontent='" + m_Mcontent + '\'' +
-                ", m_Mdate='" + m_Mdate + '\'' +
+                "m_Mno=" + m_no +
+                ", m_Uno='" + u_no + '\'' +
+                ", m_Mcontent='" + m_content + '\'' +
+                ", m_Mdate='" + m_date + '\'' +
                 '}';
     }
 }
