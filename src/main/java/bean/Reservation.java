@@ -10,12 +10,16 @@ public class Reservation {
     private String m_RfeedBack;
     private int m_Rstate;
 
-    //附加属性
+    //附加用户属性
     private String m_Uname;
     private String m_Utype;
     private int m_UcreditGrade;
+    //附加设备属性
+    private String m_Dname;
+    private String m_DsaveSite;
+    private String m_DmainUse;
 
-    public Reservation(int m_Rno, int m_Dno, String m_Uno, String m_RreservationDate, String m_RstartDate, String m_RreturnDate, String m_RfeedBack, int m_Rstate, String m_Uname, String m_Utype, int m_UcreditGrade) {
+    public Reservation(int m_Rno, int m_Dno, String m_Uno, String m_RreservationDate, String m_RstartDate, String m_RreturnDate, String m_RfeedBack, int m_Rstate, String m_Uname, String m_Utype, int m_UcreditGrade, String m_Dname, String m_DsaveSite, String m_DmainUse) {
         this.m_Rno = m_Rno;
         this.m_Dno = m_Dno;
         this.m_Uno = m_Uno;
@@ -27,6 +31,9 @@ public class Reservation {
         this.m_Uname = m_Uname;
         this.m_Utype = m_Utype;
         this.m_UcreditGrade = m_UcreditGrade;
+        this.m_Dname = m_Dname;
+        this.m_DsaveSite = m_DsaveSite;
+        this.m_DmainUse = m_DmainUse;
     }
 
     public Reservation() {
@@ -120,20 +127,47 @@ public class Reservation {
         this.m_UcreditGrade = m_UcreditGrade;
     }
 
+    public String getM_Dname() {
+        return m_Dname;
+    }
+
+    public void setM_Dname(String m_Dname) {
+        this.m_Dname = m_Dname;
+    }
+
+    public String getM_DsaveSite() {
+        return m_DsaveSite;
+    }
+
+    public void setM_DsaveSite(String m_DsaveSite) {
+        this.m_DsaveSite = m_DsaveSite;
+    }
+
+    public String getM_DmainUse() {
+        return m_DmainUse;
+    }
+
+    public void setM_DmainUse(String m_DmainUse) {
+        this.m_DmainUse = m_DmainUse;
+    }
+
     @Override
     public String toString() {
         return "Reservation{" +
-                "r_no=" + m_Rno +
-                ", d_no=" + m_Dno +
-                ", u_no='" + m_Uno + '\'' +
-                ", r_reservation_date='" + m_RreservationDate + '\'' +
-                ", r_borrow_date='" + m_RstartDate + '\'' +
-                ", r_return_date='" + m_RreturnDate + '\'' +
-                ", r_feedback='" + m_RfeedBack + '\'' +
-                ", r_state=" + m_Rstate +
-                ", u_name='" + m_Uname + '\'' +
-                ", u_type='" + m_Utype + '\'' +
-                ", u_credit_grade=" + m_UcreditGrade +
+                "m_Rno=" + m_Rno +
+                ", m_Dno=" + m_Dno +
+                ", m_Uno='" + m_Uno + '\'' +
+                ", m_RreservationDate='" + m_RreservationDate + '\'' +
+                ", m_RstartDate='" + m_RstartDate + '\'' +
+                ", m_RreturnDate='" + m_RreturnDate + '\'' +
+                ", m_RfeedBack='" + m_RfeedBack + '\'' +
+                ", m_Rstate=" + m_Rstate +
+                ", m_Uname='" + m_Uname + '\'' +
+                ", m_Utype='" + m_Utype + '\'' +
+                ", m_UcreditGrade=" + m_UcreditGrade +
+                ", m_Dname='" + m_Dname + '\'' +
+                ", m_DsaveSite='" + m_DsaveSite + '\'' +
+                ", m_DmainUse='" + m_DmainUse + '\'' +
                 '}';
     }
 }

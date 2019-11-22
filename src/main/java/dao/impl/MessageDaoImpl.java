@@ -7,6 +7,7 @@ import utils.JDBCUtils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +55,43 @@ public class MessageDaoImpl implements MessageDao {
             JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
         }
         return messageList;
+    }
+
+    /*
+     * @Description: 系统向用户发送消息
+     * @Param u_no  m_content
+     * @Return: int
+     */
+    public int sendMessage(String u_no, String m_content)
+    {
+        //初始化
+        m_con = null;
+        m_pStmt = null;
+        m_rs = null;
+
+        int flag = 0;
+        try
+        {
+            m_con = JDBCUtils.getM_connection();
+            m_sql = "INSERT INTO message(u_no, m_content, m_date) " +
+                    "VALUES (?, ?, CURRENT_DATE)";
+            m_pStmt = m_con.prepareStatement(m_sql);
+
+            //替换参数，从1开始
+            m_pStmt.setString(1,u_no);
+            m_pStmt.setString(2, m_content);
+
+            flag = m_pStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
+        }
+        return flag;
     }
 
     /*

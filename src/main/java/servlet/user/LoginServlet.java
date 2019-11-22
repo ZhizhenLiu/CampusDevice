@@ -35,9 +35,12 @@ public class LoginServlet extends HttpServlet {
         if (result.containsKey("openid"))
         {
             wechatId = (String) result.get("openid");
-            //查询对应openid的用户是否存在
-            //返回查询：flag为0：不存在用户。
-            // flag为1：存在该用户
+
+            /*
+            1、查询对应openid的用户是否存在
+            2、返回查询：flag为0：不存在用户。
+                         flag为1：存在该用户
+             */
             info = userService.getJSONUserByWechatID(wechatId);
             printWriter.write(info.toJSONString());
         }

@@ -2,8 +2,11 @@
 
 - 编码格式说明 
   --
-  - bean层: JavaBean的属性命名为：m_ + 表名缩写 + 表字段，采用驼峰命名如：
+  - bean层: JavaBean的属性命名为：m_ + 表名缩写 + 表字段，然后采用驼峰命名如：
     - Device（设备）: m_Dno（m_ + D(Device缩写) + no(device编号) ）
+  - 通用: 涉及到表的字段属性时为： 表名缩写 + 表字段，然后采用驼峰命名如
+    - d_no：d(device缩写) + no(device编号)
+    - r_feedBack: r(reservation缩写) + feedBack(采用驼峰命名)
   - test文件夹（测试）已被标注为 "Test Resources Root" ,内容均是调试，不在项目代码范围内部，自行无视忽略
   
   

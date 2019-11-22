@@ -1,13 +1,9 @@
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import dao.BorrowDao;
 import dao.ReservationDao;
-import dao.impl.BorrowDaoImpl;
 import dao.impl.ReservationDaoImpl;
 import service.UserService;
 import service.impl.UserServiceImpl;
-
-import java.util.Date;
 
 public class Test {
     @org.junit.jupiter.api.Test
@@ -15,7 +11,7 @@ public class Test {
     public void test() {
 
         ReservationDao reservationDao = new ReservationDaoImpl();
-        System.out.println(reservationDao.getBorrowDate("201797689552",2));
+        System.out.println(reservationDao.getStartDate("201797689552",2));
         System.out.println(reservationDao.getReturnDate("201797689552",2));
     }
 

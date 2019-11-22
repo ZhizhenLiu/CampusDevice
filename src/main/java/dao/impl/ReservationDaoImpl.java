@@ -160,7 +160,7 @@ public class ReservationDaoImpl implements ReservationDao {
         return reservationList;
     }
 
-    public String getBorrowDate(String u_no, int d_no)
+    public String getStartDate(String u_no, int d_no)
     {
         //初始化
         m_con = null;
@@ -251,7 +251,7 @@ public class ReservationDaoImpl implements ReservationDao {
      * @Param u_no  d_no
      * @Return: int
      */
-    public int reserveSucceed(String u_no, int d_no)
+    public int confirmReserve(String u_no, int d_no)
     {
         //初始化
         m_con = null;
@@ -285,6 +285,45 @@ public class ReservationDaoImpl implements ReservationDao {
     }
 
     /*
+     * @Description: 预约中设备预约被拒绝：（0:预约中 -1：预约被拒绝 1：预约成功）
+     * @Param u_no  d_no  r_feedBack
+     * @Return: int
+     */
+    public int refuseReserve(String u_no, int d_no, String r_feedBack)
+    {
+        //初始化
+        m_con = null;
+        m_pStmt = null;
+        m_rs = null;
+
+        int flag = 0;
+        try
+        {
+            m_con = JDBCUtils.getM_connection();
+            m_sql = "UPDATE reservation SET r_state = -1, r_feedback = ?  " +
+                    "WHERE u_no = ? AND d_no = ? " +
+                    "AND r_state = 0";
+            m_pStmt = m_con.prepareStatement(m_sql);
+
+            //替换参数，从1开始
+            m_pStmt.setString(1,r_feedBack);
+            m_pStmt.setString(2, u_no);
+            m_pStmt.setInt(3, d_no);
+
+            flag = m_pStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
+        }
+        return flag;
+    }
+
+    /*
      * @Description: 用户查看我的预约
      * @Param userNo
      * @Return: java.util.List<bean.Reservation>
@@ -300,7 +339,10 @@ public class ReservationDaoImpl implements ReservationDao {
         try
         {
             m_con = JDBCUtils.getM_connection();
-            m_sql = "SELECT * FROM reservation WHERE u_no = ?";
+            m_sql = "SELECT r_reservation_date, r_start_date, r_return_date, d.d_no, d_name, d_main_use, r_state " +
+                    "FROM reservation r,device d " +
+                    "WHERE r.d_no = d.d_no " +
+                    "AND u_no = ? ";
             m_pStmt = m_con.prepareStatement(m_sql);
 
             //执行操作
@@ -309,12 +351,11 @@ public class ReservationDaoImpl implements ReservationDao {
             while(m_rs.next())
             {
                 Reservation reservation = new Reservation();
-                reservation.setM_Rno(m_rs.getInt("r_no"));
-                reservation.setM_Dno(m_rs.getInt("d_no"));
                 reservation.setM_RreservationDate(m_rs.getString("r_reservation_date"));
                 reservation.setM_RstartDate(m_rs.getString("r_start_date"));
                 reservation.setM_RreturnDate(m_rs.getString("r_return_date"));
-                reservation.setM_RfeedBack(m_rs.getString("r_feedback"));
+                reservation.setM_Dno(m_rs.getInt("d_no"));
+                reservation.setM_Dname(m_rs.getString("d_name"));
                 reservation.setM_Rstate(m_rs.getInt("r_state"));
                 reservationList.add(reservation);
             }

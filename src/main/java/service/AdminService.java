@@ -27,6 +27,13 @@ public interface AdminService {
     JSONObject confirmBorrow(String u_no, int d_no);
 
     /*
+     * @Description: 管理员拒绝租借给某个用户
+     * @Param u_no  d_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject refuseBorrow(String u_no, int d_no, String r_feedBack);
+
+    /*
      * @Description: 通过微信唯一标识获得对应管理范围设备外借预期信息
      * @Param wechatID
      * @Return: com.alibaba.fastjson.JSONObject

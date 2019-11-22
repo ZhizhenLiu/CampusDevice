@@ -19,6 +19,7 @@ public class AdminServiceImpl implements AdminService {
     private ReservationDao m_reservationDao = new ReservationDaoImpl();
     private BorrowDao m_borrowDao = new BorrowDaoImpl();
     private ReturnDeviceDao m_returnDeviceDao = new ReturnDeviceDaoImpl();
+    private MessageDao m_messageDao = new MessageDaoImpl();
     /*
      * @Description: 通过标识获取管理员管辖范围内的有人预约的设备
      * @Param wechatID
@@ -57,16 +58,45 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject confirmBorrow(String u_no, int d_no)
     {
         JSONObject info = new JSONObject();
-        String borrowDate = m_reservationDao.getBorrowDate(u_no, d_no);
+        String borrowDate = m_reservationDao.getStartDate(u_no, d_no);
         String returnDate = m_reservationDao.getReturnDate(u_no, d_no);
         System.out.println(d_no+"设备状态更改"+u_no+": "+ m_deviceDao.setDeviceState("外借", d_no));
-        System.out.println(m_reservationDao.reserveSucceed(u_no, d_no));
+        System.out.println(m_reservationDao.confirmReserve(u_no, d_no));
         int flag = m_borrowDao.confirmBorrow(u_no, d_no, borrowDate, returnDate);
         info.put("flag", flag);
         if (flag == 0)
         {
             info.put("errmsg", "确认设备归还失败");
         }
+        return info;
+    }
+
+    /*
+     * @Description: 管理员拒绝租借给某个用户
+     * @Param u_no  d_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject refuseBorrow(String u_no, int d_no, String r_feedBack)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errmsg = new JSONArray();
+        int flag = m_reservationDao.refuseReserve(u_no, d_no, r_feedBack);
+        info.put("flag", flag);
+        if (flag == 0)
+        {
+            errmsg.add("拒绝预约失败");
+        }
+        
+        //反馈不为空
+        if (r_feedBack != null)
+        {
+            flag = m_messageDao.sendMessage(u_no, r_feedBack);
+            if (flag == 0)
+            {
+                errmsg.add("发送消息给用户失败");
+            }
+        }
+        info.put("errmsg", errmsg);
         return info;
     }
 

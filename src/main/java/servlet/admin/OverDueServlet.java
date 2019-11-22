@@ -27,7 +27,7 @@ public class OverDueServlet extends HttpServlet {
 
         //向微信服务器接口发送code，获取管理员唯一标识openid, 返回参数
         JSONObject result = JSONObject.parseObject(HttpUtils.sendGet(code));
-        JSONObject returnData = null;
+        JSONObject info = null;
         PrintWriter printWriter = response.getWriter();
         AdminService adminService = new AdminServiceImpl();
         String wechatId = "";
@@ -41,8 +41,8 @@ public class OverDueServlet extends HttpServlet {
         //请求失败，返回错误信息
         else
         {
-            returnData.put("errmsg",result.get("errmsg"));
-            returnData.put("flag","0");
+            info.put("errmsg",result.get("errmsg"));
+            info.put("flag","0");
             printWriter.write(result.get("errmsg").toString());
         }
 

@@ -70,4 +70,11 @@ public interface UserService {
      * @Return: com.alibaba.fastjson.JSONObject
      */
     JSONObject getMessageByPage(String wechatID, int page, int count);
+
+    /*
+     * @Description: 用户查询已预约设备信息
+     * @Param wechatID
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject getReservation(String wechatID);
 }

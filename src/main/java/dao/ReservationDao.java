@@ -36,7 +36,7 @@ public interface ReservationDao {
      * @Param u_no  d_no
      * @Return: java.lang.String
      */
-    String getBorrowDate(String u_no, int d_no);
+    String getStartDate(String u_no, int d_no);
 
     /*
      * @Description: 获取某个用户预约设备的归还日期
@@ -50,7 +50,14 @@ public interface ReservationDao {
      * @Param u_no  d_no
      * @Return: int
      */
-    int reserveSucceed(String u_no, int d_no);
+    int confirmReserve(String u_no, int d_no);
+
+    /*
+     * @Description: 预约中设备预约被拒绝：（0:预约中 -1：预约被拒绝 1：预约成功）
+     * @Param u_no  d_no  r_feedBack
+     * @Return: int
+     */
+    int refuseReserve(String u_no, int d_no, String r_feedBack);
 
     /*
      * @Description: 用户查看我的预约

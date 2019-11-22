@@ -190,4 +190,19 @@ public class UserServiceImpl implements UserService {
         info.put("messages",JSONArray.parseArray(JSON.toJSONString(messageList)));
         return info;
     }
+
+    /*
+     * @Description: 用户查询已预约设备信息
+     * @Param wechatID
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject getReservation(String wechatID)
+    {
+        User user = m_userDao.getUserByWechatID(wechatID);
+        JSONObject info = new JSONObject();
+        String u_no = user.getM_Uno();
+        List<Reservation> reservationList = m_reservationDao.getReservation(u_no);
+        info.put("reservation",JSONArray.parseArray(JSON.toJSONString(reservationList)));
+        return info;
+    }
 }
