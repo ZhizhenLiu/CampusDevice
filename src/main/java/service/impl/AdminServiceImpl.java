@@ -41,7 +41,7 @@ public class AdminServiceImpl implements AdminService {
      * @Param deviceNo
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject getReservationDetail(String d_no)
+    public JSONObject getReservationDetail(int d_no)
     {
         JSONObject info = new JSONObject();
         List<Reservation> reservationList = m_reservationDao.getReservationDetail(d_no);
@@ -58,16 +58,28 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject confirmBorrow(String u_no, int d_no)
     {
         JSONObject info = new JSONObject();
-        String borrowDate = m_reservationDao.getStartDate(u_no, d_no);
-        String returnDate = m_reservationDao.getReturnDate(u_no, d_no);
-        System.out.println(d_no+"设备状态更改"+u_no+": "+ m_deviceDao.setDeviceState("外借", d_no));
-        System.out.println(m_reservationDao.confirmReserve(u_no, d_no));
-        int flag = m_borrowDao.confirmBorrow(u_no, d_no, borrowDate, returnDate);
-        info.put("flag", flag);
-        if (flag == 0)
+        JSONArray errmsg = new JSONArray();
+        String state = m_deviceDao.getDeviceState(d_no);
+        if (state.equals("在库"))
         {
-            info.put("errmsg", "确认设备归还失败");
+            String borrowDate = m_reservationDao.getStartDate(u_no, d_no);
+            String returnDate = m_reservationDao.getReturnDate(u_no, d_no);
+
+            int flag = m_borrowDao.confirmBorrow(u_no, d_no, borrowDate, returnDate);
+            flag += m_reservationDao.confirmReserve(u_no, d_no);
+            info.put("flag", flag == 2? 1: 0);
+
+            if (flag == 0)
+            {
+                errmsg.add("确认设备归还失败");
+            }
         }
+        else
+        {
+            info.put("flag", 0);
+            errmsg.add("设备当前状态为"+state+", 暂不可借用");
+        }
+        info.put("errmsg",errmsg);
         return info;
     }
 
@@ -133,21 +145,44 @@ public class AdminServiceImpl implements AdminService {
      * @Param wechatID  d_no
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject confirmReturn(String wechatID, int d_no)
+    public JSONObject confirmReturn(String u_no, int d_no)
     {
         JSONObject info = new JSONObject();
-        String u_no = m_userDao.getUserByWechatID(wechatID).getM_Uno();
+        JSONArray errmsg = new JSONArray();
 
         //获取用户借用记录的编号，唯一标识一条记录
         int b_no = m_borrowDao.getBorrowNo(u_no, d_no);
-
-        //归还设备
-        int flag= m_returnDeviceDao.ReturnDevice(u_no, d_no, b_no);
-        info.put("flag", flag);
-        if (flag == 0)
+        if (b_no == 0)
         {
-            info.put("errmsg","确认归还设备失败");
+            info.put("flag", 0);
+            errmsg.add("没有获取到设备借用记录");
         }
+        else
+        {
+            int flag = m_borrowDao.returnBorrow(b_no);
+            if (flag == 0)
+            {
+                errmsg.add("修改借用记录状态为归还失败");
+            }
+            //归还设备
+            flag = m_returnDeviceDao.returnDevice(u_no, d_no, b_no);
+            if (flag == 0)
+            {
+                errmsg.add("添加到已归还设备失败");
+            }
+            flag = m_deviceDao.setDeviceState("在库", d_no);
+            if (flag == 0)
+            {
+                errmsg.add("修改设备状态失败");
+            }
+            flag = m_deviceDao.addBorrowedTimes(d_no);
+            if (flag == 0)
+            {
+                errmsg.add("设备借用次数增长");
+            }
+            info.put("flag", flag);
+        }
+        info.put("errmsg", errmsg);
         return info;
     }
 }

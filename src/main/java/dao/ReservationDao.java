@@ -29,7 +29,7 @@ public interface ReservationDao {
      * @Param d_no
      * @Return: java.util.List<bean.Reservation>
      */
-    List<Reservation> getReservationDetail(String d_no);
+    List<Reservation> getReservationDetail(int d_no);
 
     /*
      * @Description: 获取某个用户预约设备的开始日期

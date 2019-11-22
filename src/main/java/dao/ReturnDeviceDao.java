@@ -9,5 +9,5 @@ public interface ReturnDeviceDao {
      * @Param u_no  d_no
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    int ReturnDevice(String u_no, int d_no, int b_no);
+    int returnDevice(String u_no, int d_no, int b_no);
 }

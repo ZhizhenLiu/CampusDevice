@@ -36,11 +36,11 @@ public interface BorrowDao {
     List<Borrow> getOverDueList(int a_no);
 
     /*
-     * @Description: 借用中设备归还 （0：借用中，1：归还）
-     * @Param u_no  d_no
+     * @Description: 借用中设备归还 （0：借用中，1：归还 -1:逾期）
+     * @Param b_no
      * @Return: int
      */
-    int returnBorrow(String u_no, int d_no);
+    int returnBorrow(int b_no);
 
     /*
      * @Description: 获取借用记录编号

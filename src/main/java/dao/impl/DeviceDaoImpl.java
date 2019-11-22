@@ -115,7 +115,7 @@ public class DeviceDaoImpl implements DeviceDao {
         m_pStmt = null;
         m_rs = null;
 
-        int result = 0;
+        int flag = 0;
         try
         {
             m_con = JDBCUtils.getM_connection();
@@ -125,7 +125,7 @@ public class DeviceDaoImpl implements DeviceDao {
             m_pStmt.setInt(2, d_no);
 
             //更新状态
-            result = m_pStmt.executeUpdate();
+            flag = m_pStmt.executeUpdate();
         }
         catch (SQLException e)
         {
@@ -135,7 +135,7 @@ public class DeviceDaoImpl implements DeviceDao {
         {
             JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
         }
-        return result;
+        return flag;
     }
 
     /*
@@ -178,5 +178,39 @@ public class DeviceDaoImpl implements DeviceDao {
             JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
         }
         return result;
+    }
+
+    /*
+     * @Description: 设备借用次数增长
+     * @Param d_no
+     * @Return: int
+     */
+    public int addBorrowedTimes(int d_no)
+    {
+        //初始化
+        m_con = null;
+        m_pStmt = null;
+        m_rs = null;
+
+        int flag = 0;
+        try
+        {
+            m_con = JDBCUtils.getM_connection();
+            m_sql = "UPDATE device SET d_borrowed_times = d_borrowed_times+1 WHERE d_no = ?";
+            m_pStmt = m_con.prepareStatement(m_sql);
+            m_pStmt.setInt(1, d_no);
+
+            //更新状态
+            flag = m_pStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
+        }
+        return flag;
     }
 }

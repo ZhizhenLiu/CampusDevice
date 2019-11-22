@@ -22,9 +22,10 @@ public class ConfirmReturnServlet extends HttpServlet {
 
         //获取参数
         String code = request.getParameter("code");
+        String u_no =request.getParameter("u_no");
         int d_no = Integer.parseInt(request.getParameter("d_no"));
 
-        //向微信服务器接口发送code，获取用户唯一标识openid, 返回参数
+        //向微信服务器接口发送code，获取管理员唯一标识openid, 返回参数
         JSONObject result = JSONObject.parseObject(HttpUtils.sendGet(code));
         System.out.println(result);
         JSONObject info = null;
@@ -35,7 +36,7 @@ public class ConfirmReturnServlet extends HttpServlet {
         if (result.containsKey("openid"))
         {
             wechatId = (String) result.get("openid");
-            adminService.confirmReturn(wechatId, d_no);
+            adminService.confirmReturn(u_no, d_no);
             printWriter.write(info.toJSONString());
         }
         //请求失败，返回错误信息

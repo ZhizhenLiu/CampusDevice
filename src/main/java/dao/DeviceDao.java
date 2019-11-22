@@ -34,4 +34,10 @@ public interface DeviceDao {
      */
     String getDeviceState(int d_no);
 
+    /*
+     * @Description: 设备借用次数增长
+     * @Param d_no
+     * @Return: int
+     */
+    int addBorrowedTimes(int d_no);
 }

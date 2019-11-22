@@ -114,7 +114,7 @@ public class ReservationDaoImpl implements ReservationDao {
      * @Param deviceNo
      * @Return: java.util.List<bean.Reservation>
      */
-    public List<Reservation> getReservationDetail(String d_no)
+    public List<Reservation> getReservationDetail(int d_no)
     {
         //初始化
         m_con = null;
@@ -125,7 +125,7 @@ public class ReservationDaoImpl implements ReservationDao {
         try
         {
             m_con = JDBCUtils.getM_connection();
-            m_sql = "SELECT u_name, u_type, r_reservation_date, r_start_date, r_return_date, r_reservation_date, u_credit_grade " +
+            m_sql = "SELECT user.u_no, u_name, u_type, r_reservation_date, r_start_date, r_return_date, r_reservation_date, u_credit_grade " +
                     "FROM user, reservation " +
                     "WHERE user.u_no = reservation.u_no " +
                     "AND d_no = ? " +
@@ -134,12 +134,13 @@ public class ReservationDaoImpl implements ReservationDao {
             m_pStmt = m_con.prepareStatement(m_sql);
 
             //替换参数，从1开始
-            m_pStmt.setString(1, d_no);
+            m_pStmt.setInt(1, d_no);
             m_rs = m_pStmt.executeQuery();
 
             while (m_rs.next())
             {
                 Reservation reservation = new Reservation();
+                reservation.setM_Uno(m_rs.getString("u_no"));
                 reservation.setM_Uname(m_rs.getString("u_name"));
                 reservation.setM_Utype(m_rs.getString("u_type"));
                 reservation.setM_RstartDate(m_rs.getString("r_start_date"));

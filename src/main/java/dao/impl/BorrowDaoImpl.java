@@ -86,7 +86,7 @@ public class BorrowDaoImpl implements BorrowDao {
         int flag = 0;
         m_con = JDBCUtils.getM_connection();
         m_sql = "INSERT INTO borrow(d_no, u_no, b_borrow_date, b_return_date) " +
-              "VALUES (?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?)";
         try
         {
             m_pStmt = m_con.prepareStatement(m_sql);
@@ -194,11 +194,11 @@ public class BorrowDaoImpl implements BorrowDao {
     }
 
     /*
-     * @Description: 借用中设备归还 （0：借用中，1：归还）
-     * @Param u_no  d_no
+     * @Description: 借用中设备归还 （0：借用中，1：归还 -1:逾期）
+     * @Param b_no
      * @Return: int
      */
-    public int returnBorrow(String u_no, int d_no)
+    public int returnBorrow(int b_no)
     {
         //初始化
         m_con = null;
@@ -210,14 +210,12 @@ public class BorrowDaoImpl implements BorrowDao {
         {
             m_con = JDBCUtils.getM_connection();
             m_sql = "UPDATE borrow SET b_state = 1 " +
-                    "WHERE u_no = ? "+
-                    "AND d_no = ? " +
-                    "AND b_state = 0";
+                    "WHERE b_no = ? "+
+                    "AND b_state <> 1";
             m_pStmt = m_con.prepareStatement(m_sql);
 
             //替换参数，从1开始
-            m_pStmt.setString(1, u_no);
-            m_pStmt.setInt(2, d_no);
+            m_pStmt.setInt(1, b_no);
 
             flag = m_pStmt.executeUpdate();
         }
@@ -225,14 +223,15 @@ public class BorrowDaoImpl implements BorrowDao {
         {
             e.printStackTrace();
         }
-        finally {
+        finally
+        {
             JDBCUtils.closeAll(m_rs, m_pStmt, m_con);
         }
         return flag;
     }
 
     /*
-     * @Description: 获取借用记录编号
+     * @Description: 获取正在借用记录编号：
      * @Param u_no  d_no
      * @Return: int
      */
@@ -248,8 +247,9 @@ public class BorrowDaoImpl implements BorrowDao {
         {
             m_con = JDBCUtils.getM_connection();
             m_sql = "SELECT b_no FROM borrow " +
-                    "WHERE u_no = ? " +
-                    "AND d_no = ? ";
+                    "WHERE u_no = ? AND d_no = ? " +
+                    "AND b_state <> 1 " +
+                    "ORDER BY b_borrow_date DESC";
             m_pStmt = m_con.prepareStatement(m_sql);
 
             //替换参数，从1开始
@@ -272,4 +272,5 @@ public class BorrowDaoImpl implements BorrowDao {
         }
         return b_no;
     }
+
 }

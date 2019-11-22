@@ -20,7 +20,7 @@ public class ReservationDetailServlet extends HttpServlet {
 
         //获取参数
         AdminService adminService = new AdminServiceImpl();
-        String d_no = request.getParameter("d_no");
+        int d_no = Integer.parseInt(request.getParameter("d_no"));
 
         PrintWriter printWriter = response.getWriter();
         printWriter.write(adminService.getReservationDetail(d_no).toJSONString());

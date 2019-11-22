@@ -17,7 +17,7 @@ public interface AdminService {
      * @Param d_no
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject getReservationDetail(String d_no);
+    JSONObject getReservationDetail(int d_no);
 
     /*
      * @Description: 管理员确认设备租借给某个用户
@@ -45,6 +45,6 @@ public interface AdminService {
      * @Param wechatID  d_no
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject confirmReturn(String wechatID, int d_no);
+    JSONObject confirmReturn(String u_no, int d_no);
 
 }
