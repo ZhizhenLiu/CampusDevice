@@ -34,13 +34,14 @@ public class CreditRuleDaoImpl implements CreditRuleDao
             ps.setString(2, cr.getCr_content());
             ps.setInt(3, cr.getCr_score());
             ps.executeUpdate();
-
-            conn.close();
-
         }
         catch (Exception e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
         }
     }
 
