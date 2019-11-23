@@ -4,7 +4,8 @@ import bean.Message;
 
 import java.util.List;
 
-public interface MessageDao {
+public interface MessageDao
+{
 
     /*
      * @Description: 用户查看消息栏信息 分页查询

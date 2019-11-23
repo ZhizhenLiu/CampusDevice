@@ -12,8 +12,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @WebServlet(name = "RefuseReservationServlet", urlPatterns = "/admin/rejectReservation")
-public class RefuseReservationServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+public class RefuseReservationServlet extends HttpServlet
+{
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
         //设置编码
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
@@ -21,15 +23,16 @@ public class RefuseReservationServlet extends HttpServlet {
         //获取参数
         String u_no = request.getParameter("u_no");
         int d_no = Integer.parseInt(request.getParameter("d_no"));
-        String r_feedBack =request.getParameter("r_feedBack");
+        String r_feedBack = request.getParameter("r_feedBack");
 
         //返回参数
         AdminService adminService = new AdminServiceImpl();
         PrintWriter printWriter = response.getWriter();
-        printWriter.write(adminService.refuseBorrow(u_no, d_no ,r_feedBack).toJSONString());
+        printWriter.write(adminService.refuseBorrow(u_no, d_no, r_feedBack).toJSONString());
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
 
     }
 }

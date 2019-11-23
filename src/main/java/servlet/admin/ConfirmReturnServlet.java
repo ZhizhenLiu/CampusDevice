@@ -14,15 +14,17 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @WebServlet(name = "ConfirmReturnServlet", urlPatterns = "/admin/confirmReturn")
-public class ConfirmReturnServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+public class ConfirmReturnServlet extends HttpServlet
+{
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
         //设置编码
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
 
         //获取参数
         String code = request.getParameter("code");
-        String u_no =request.getParameter("u_no");
+        String u_no = request.getParameter("u_no");
         int d_no = Integer.parseInt(request.getParameter("d_no"));
 
         //向微信服务器接口发送code，获取管理员唯一标识openid, 返回参数
@@ -42,13 +44,14 @@ public class ConfirmReturnServlet extends HttpServlet {
         //请求失败，返回错误信息
         else
         {
-            info.put("errms",result.get("errmsg"));
-            info.put("flag","0");
+            info.put("errms", result.get("errmsg"));
+            info.put("flag", "0");
             printWriter.write(info.toJSONString());
         }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
         doPost(request, response);
     }
 }

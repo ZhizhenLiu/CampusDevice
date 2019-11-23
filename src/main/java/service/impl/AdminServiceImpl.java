@@ -14,7 +14,8 @@ import utils.MessageUtils;
 
 import java.util.List;
 
-public class AdminServiceImpl implements AdminService {
+public class AdminServiceImpl implements AdminService
+{
     private AdminDao adminDao = new AdminDaoImpl();
     private UserDao userDao = new UserDaoImpl();
     private DeviceDao deviceDao = new DeviceDaoImpl();
@@ -22,6 +23,7 @@ public class AdminServiceImpl implements AdminService {
     private BorrowDao borrowDao = new BorrowDaoImpl();
     private ReturnDeviceDao returnDeviceDao = new ReturnDeviceDaoImpl();
     private MessageDao messageDao = new MessageDaoImpl();
+
     /*
      * @Description: 通过标识获取管理员管辖范围内的有人预约的设备
      * @Param wechatID
@@ -69,7 +71,7 @@ public class AdminServiceImpl implements AdminService {
 
             int flag = borrowDao.confirmBorrow(u_no, d_no, borrowDate, returnDate);
             flag += reservationDao.confirmReserve(u_no, d_no);
-            info.put("flag", flag == 2? 1: 0);
+            info.put("flag", flag == 2 ? 1 : 0);
 
             if (flag == 0)
             {
@@ -79,9 +81,9 @@ public class AdminServiceImpl implements AdminService {
         else
         {
             info.put("flag", 0);
-            errmsg.add("设备当前状态为"+state+", 暂不可借用");
+            errmsg.add("设备当前状态为" + state + ", 暂不可借用");
         }
-        info.put("errmsg",errmsg);
+        info.put("errmsg", errmsg);
         return info;
     }
 
@@ -100,7 +102,7 @@ public class AdminServiceImpl implements AdminService {
         {
             errmsg.add("拒绝预约失败");
         }
-        
+
         //反馈不为空
         if (r_feedBack != null)
         {
@@ -131,8 +133,8 @@ public class AdminServiceImpl implements AdminService {
         List<Borrow> borrowList = borrowDao.getOverDueList(a_no);
         if (borrowList.isEmpty())
         {
-            info.put("flag", 0 );
-            info.put("errmsg","没有逾期未还设备");
+            info.put("flag", 0);
+            info.put("errmsg", "没有逾期未还设备");
         }
         else
         {
@@ -198,7 +200,7 @@ public class AdminServiceImpl implements AdminService {
         JSONObject info = new JSONObject();
         User user = userDao.getUserByNo(u_no);
         Device device = deviceDao.getDeviceByNo(d_no);
-        MessageUtils.sendRemindMessage(user.getU_phone(),user.getU_name(),device.getD_name());
+        MessageUtils.sendRemindMessage(user.getU_phone(), user.getU_name(), device.getD_name());
         info.put("flag", 1);
         return info;
     }

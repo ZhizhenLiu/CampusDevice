@@ -47,6 +47,7 @@ public class Test {
        /*
        System.out.println(adminService.confirmBorrow("201726010310",5));*/
 //       System.out.println(adminService.refuseBorrow());
-       System.out.println(adminService.getOverDue("o0ug241yqbsjM0N5xR5qhLxi8gH0"));
+//       System.out.println(adminService.getOverDue("o0ug241yqbsjM0N5xR5qhLxi8gH0"));
+       System.out.println(userService.getJSONUserByWechatID("o0ug241yqbsjM0N5xR5qhLxi8gH0"));
    }
 }

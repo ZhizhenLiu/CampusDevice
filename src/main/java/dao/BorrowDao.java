@@ -5,7 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
 
-public interface BorrowDao {
+public interface BorrowDao
+{
 
     /*
      * @Description: 查询用户借用的记录(借用中b_state=0，归还b_state=1,逾期未还b_state= -1)

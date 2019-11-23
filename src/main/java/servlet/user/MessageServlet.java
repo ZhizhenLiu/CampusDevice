@@ -13,9 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "MessageServlet",urlPatterns = "/user/getMessage")
-public class MessageServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+@WebServlet(name = "MessageServlet", urlPatterns = "/user/getMessage")
+public class MessageServlet extends HttpServlet
+{
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
         //设置编码
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
@@ -40,8 +42,8 @@ public class MessageServlet extends HttpServlet {
         //请求失败，返回错误信息
         else
         {
-            info.put("errmsg",result.get("errmsg"));
-            info.put("flag","0");
+            info.put("errmsg", result.get("errmsg"));
+            info.put("flag", "0");
             printWriter.write(info.toJSONString());
         }
 
@@ -49,7 +51,8 @@ public class MessageServlet extends HttpServlet {
         printWriter.close();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
         doPost(request, response);
     }
 }

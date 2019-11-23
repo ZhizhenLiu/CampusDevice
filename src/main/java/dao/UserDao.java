@@ -5,7 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.util.Date;
 
-public interface UserDao {
+public interface UserDao
+{
 
     /*
      * @Description: 通过用户wechatId获取用户对象

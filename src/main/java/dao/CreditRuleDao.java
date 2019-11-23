@@ -4,7 +4,8 @@ import bean.CreditRule;
 
 import java.util.List;
 
-public interface CreditRuleDao {
+public interface CreditRuleDao
+{
 
     //添加规则
     void addCreditRule(CreditRule cr);

@@ -4,7 +4,8 @@ import bean.CreditRecord;
 
 import java.util.List;
 
-public interface CreditRecordDao {
+public interface CreditRecordDao
+{
 
     //初始化信用积分
     void initCredit(String u_no);

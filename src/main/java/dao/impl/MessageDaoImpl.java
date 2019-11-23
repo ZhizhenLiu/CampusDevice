@@ -11,7 +11,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessageDaoImpl implements MessageDao {
+public class MessageDaoImpl implements MessageDao
+{
     private Connection con;
     private PreparedStatement pStmt;
     private ResultSet rs;
@@ -37,16 +38,16 @@ public class MessageDaoImpl implements MessageDao {
             pStmt = con.prepareStatement(sql);
             //执行操作
             pStmt.setString(1, u_no);
-            pStmt.setInt(2, (page-1)*count);
+            pStmt.setInt(2, (page - 1) * count);
             pStmt.setInt(3, count);
             rs = pStmt.executeQuery();
-            while(rs.next())
+            while (rs.next())
             {
                 messageList.add(new Message(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));
             }
 
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -78,7 +79,7 @@ public class MessageDaoImpl implements MessageDao {
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
-            pStmt.setString(1,u_no);
+            pStmt.setString(1, u_no);
             pStmt.setString(2, m_content);
 
             flag = pStmt.executeUpdate();
@@ -117,13 +118,13 @@ public class MessageDaoImpl implements MessageDao {
             pStmt.setString(1, u_no);
             rs = pStmt.executeQuery();
 
-            if(rs.next())
+            if (rs.next())
             {
                 num = rs.getInt(1);
             }
 
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }

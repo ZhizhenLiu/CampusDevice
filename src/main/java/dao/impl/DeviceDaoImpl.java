@@ -11,7 +11,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeviceDaoImpl implements DeviceDao {
+public class DeviceDaoImpl implements DeviceDao
+{
     private Connection con;
     private PreparedStatement pStmt;
     private ResultSet rs;
@@ -35,7 +36,7 @@ public class DeviceDaoImpl implements DeviceDao {
         try
         {
             pStmt = con.prepareStatement(sql);
-            pStmt.setInt(1, (page-1)*count);
+            pStmt.setInt(1, (page - 1) * count);
             pStmt.setInt(2, count);
             rs = pStmt.executeQuery();
 
@@ -75,9 +76,9 @@ public class DeviceDaoImpl implements DeviceDao {
         {
             con = JDBCUtils.getConnection();
             String sql = "SELECT d_no,d_name,d_main_use,d_important_param,d_save_site,d_state," +
-                         "(SELECT a_name FROM administrator a1 WHERE a1.a_no = d.a_no ) a_name, " +
-                         "(SELECT a_phone FROM administrator a2 WHERE a2.a_no = d.a_no ) a_phone  " +
-                         "FROM device d WHERE d_no = ? ";
+                    "(SELECT a_name FROM administrator a1 WHERE a1.a_no = d.a_no ) a_name, " +
+                    "(SELECT a_phone FROM administrator a2 WHERE a2.a_no = d.a_no ) a_phone  " +
+                    "FROM device d WHERE d_no = ? ";
             pStmt = con.prepareStatement(sql);
             pStmt.setInt(1, d_no);
             rs = pStmt.executeQuery();
@@ -97,7 +98,8 @@ public class DeviceDaoImpl implements DeviceDao {
         {
             e.printStackTrace();
         }
-        finally {
+        finally
+        {
             JDBCUtils.closeAll(rs, pStmt, con);
         }
         return device;
@@ -240,8 +242,8 @@ public class DeviceDaoImpl implements DeviceDao {
             if (rs.next())
             {
                 device = new Device(rs.getInt("d_no"), rs.getString("a_no"), rs.getString("d_state"),
-                         rs.getInt("d_borrowed_times"), rs.getString("d_name"), rs.getString("d_important_param"),
-                         rs.getString("d_main_use"), rs.getString("d_save_site"));
+                        rs.getInt("d_borrowed_times"), rs.getString("d_name"), rs.getString("d_important_param"),
+                        rs.getString("d_main_use"), rs.getString("d_save_site"));
             }
         }
         catch (SQLException e)
@@ -252,7 +254,7 @@ public class DeviceDaoImpl implements DeviceDao {
         {
             JDBCUtils.closeAll(rs, pStmt, con);
         }
-        return  device;
+        return device;
     }
 
     /*
@@ -261,7 +263,8 @@ public class DeviceDaoImpl implements DeviceDao {
      * @Return: List<String>
      */
     @Override
-    public List<String> getDevice() {
+    public List<String> getDevice()
+    {
         //初始化
         con = null;
         pStmt = null;
@@ -277,7 +280,7 @@ public class DeviceDaoImpl implements DeviceDao {
             //替换参数，从1开始
             rs = pStmt.executeQuery();
 
-            while(rs.next())
+            while (rs.next())
             {
                 list.add(String.valueOf(rs.getInt("d_no")));
                 list.add(rs.getString("a_no"));
@@ -308,7 +311,8 @@ public class DeviceDaoImpl implements DeviceDao {
      * @Return: List<Device>
      */
     @Override
-    public List<Device> getDeviceByKeyword(String keyword) {
+    public List<Device> getDeviceByKeyword(String keyword)
+    {
         //初始化
         con = null;
         pStmt = null;
@@ -319,13 +323,13 @@ public class DeviceDaoImpl implements DeviceDao {
         {
             con = JDBCUtils.getConnection();
             //参数不太好用setString替换，直接字符串代替也没错
-            sql = "select * from device where d_name like '%"+keyword+"%' or d_important_param like '%"+keyword+"%' or d_main_use like '%"+keyword+"%'";
+            sql = "select * from device where d_name like '%" + keyword + "%' or d_important_param like '%" + keyword + "%' or d_main_use like '%" + keyword + "%'";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
             rs = pStmt.executeQuery();
 
-            while(rs.next())
+            while (rs.next())
             {
                 Device device = new Device(rs.getInt("d_no"), rs.getString("a_no"), rs.getString("d_state"),
                         rs.getInt("d_borrowed_times"), rs.getString("d_name"), rs.getString("d_important_param"),

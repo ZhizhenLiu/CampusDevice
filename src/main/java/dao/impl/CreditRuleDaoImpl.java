@@ -10,7 +10,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreditRuleDaoImpl implements CreditRuleDao {
+public class CreditRuleDaoImpl implements CreditRuleDao
+{
     private Connection con;
     private PreparedStatement pStmt;
     private ResultSet rs;
@@ -29,15 +30,15 @@ public class CreditRuleDaoImpl implements CreditRuleDao {
             PreparedStatement ps = conn.prepareStatement(sql);
 
             //执行操作
-            ps.setInt(1,cr.getCr_no());
-            ps.setString(2,cr.getCr_content());
-            ps.setInt(3,cr.getCr_score());
+            ps.setInt(1, cr.getCr_no());
+            ps.setString(2, cr.getCr_content());
+            ps.setInt(3, cr.getCr_score());
             ps.executeUpdate();
 
             conn.close();
 
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -60,17 +61,18 @@ public class CreditRuleDaoImpl implements CreditRuleDao {
             //执行操作
             rs = pStmt.executeQuery();
 
-            while(rs.next())
+            while (rs.next())
             {
                 creditRuleList.add(new CreditRule(rs.getInt(1), rs.getString(2), rs.getInt(3)));
             }
 
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
-        finally {
+        finally
+        {
             JDBCUtils.closeAll(rs, pStmt, con);
         }
         return creditRuleList;
@@ -92,19 +94,20 @@ public class CreditRuleDaoImpl implements CreditRuleDao {
             pStmt = con.prepareStatement(sql);
 
             //执行操作
-            pStmt.setInt(1,cr_no);
+            pStmt.setInt(1, cr_no);
             ResultSet rs = pStmt.executeQuery();
-            if(rs.next())
+            if (rs.next())
             {
-                creditRule = new CreditRule(rs.getInt(1),rs.getString(2),rs.getInt(3));
+                creditRule = new CreditRule(rs.getInt(1), rs.getString(2), rs.getInt(3));
             }
 
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
-        finally {
+        finally
+        {
             JDBCUtils.closeAll(rs, pStmt, con);
         }
         return creditRule;
@@ -119,19 +122,20 @@ public class CreditRuleDaoImpl implements CreditRuleDao {
         rs = null;
         int num = 0;
 
-        try{
+        try
+        {
             con = JDBCUtils.getConnection();
             sql = "SELECT count(cr_no) FROM credit_rule ";
             pStmt = con.prepareStatement(sql);
 
             rs = pStmt.executeQuery();
-            if(rs.next())
+            if (rs.next())
             {
                 num = rs.getInt(1);
             }
 
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -157,13 +161,13 @@ public class CreditRuleDaoImpl implements CreditRuleDao {
             pStmt = con.prepareStatement(sql);
 
             //执行操作
-            pStmt.setString(1,cr.getCr_content());
-            pStmt.setInt(2,cr.getCr_score());
-            pStmt.setInt(3,cr.getCr_no());
+            pStmt.setString(1, cr.getCr_content());
+            pStmt.setInt(2, cr.getCr_score());
+            pStmt.setInt(3, cr.getCr_no());
             pStmt.executeUpdate();
 
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }

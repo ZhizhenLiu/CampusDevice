@@ -8,7 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ReturnDeviceDaoImpl implements ReturnDeviceDao {
+public class ReturnDeviceDaoImpl implements ReturnDeviceDao
+{
     private Connection con;
     private PreparedStatement pStmt;
     private ResultSet rs;

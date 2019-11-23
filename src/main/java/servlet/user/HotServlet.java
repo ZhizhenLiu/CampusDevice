@@ -12,8 +12,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @WebServlet(name = "HotServlet", urlPatterns = "/user/hot")
-public class HotServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+public class HotServlet extends HttpServlet
+{
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
         //设置编码
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
@@ -21,13 +23,14 @@ public class HotServlet extends HttpServlet {
         //返回参数
         UserService userService = new UserServiceImpl();
         PrintWriter printWriter = response.getWriter();
-        printWriter.write(userService.getHotDeviceByPage(1,10).toJSONString());
+        printWriter.write(userService.getHotDeviceByPage(1, 10).toJSONString());
 
         printWriter.flush();
         printWriter.close();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
         doPost(request, response);
     }
 }

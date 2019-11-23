@@ -9,7 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class AdminDaoImpl implements AdminDao {
+public class AdminDaoImpl implements AdminDao
+{
     private Connection con;
     private PreparedStatement pStmt;
     private ResultSet rs;
@@ -40,7 +41,7 @@ public class AdminDaoImpl implements AdminDao {
             if (rs.next())
             {
                 return new Admin(rs.getInt("a_no"), rs.getString("a_name"), rs.getString("a_wechatid"),
-                    rs.getString("a_type"), rs.getString("a_phone"), rs.getString("a_emial"));
+                        rs.getString("a_type"), rs.getString("a_phone"), rs.getString("a_emial"));
             }
         }
         catch (SQLException e)
@@ -51,7 +52,7 @@ public class AdminDaoImpl implements AdminDao {
         {
             JDBCUtils.closeAll(rs, pStmt, con);
         }
-        return  null;
+        return null;
     }
 
 

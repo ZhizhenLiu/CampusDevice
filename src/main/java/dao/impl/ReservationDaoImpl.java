@@ -13,7 +13,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ReservationDaoImpl implements ReservationDao {
+public class ReservationDaoImpl implements ReservationDao
+{
     private Connection con;
     private PreparedStatement pStmt;
     private ResultSet rs;
@@ -75,12 +76,12 @@ public class ReservationDaoImpl implements ReservationDao {
         {
             con = JDBCUtils.getConnection();
             sql = "SELECT d.d_no, d.d_name, d.d_main_use, COUNT(*) r_sum " +
-                  "FROM reservation r, device d " +
-                  "WHERE " +
-                  "r.d_no = d.d_no " +
-                  "AND d.a_no = ? " +
-                  "GROUP BY d.d_no, d.d_name, d.d_main_use " +
-                  "ORDER BY r_sum DESC";
+                    "FROM reservation r, device d " +
+                    "WHERE " +
+                    "r.d_no = d.d_no " +
+                    "AND d.a_no = ? " +
+                    "GROUP BY d.d_no, d.d_name, d.d_main_use " +
+                    "ORDER BY r_sum DESC";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
@@ -307,7 +308,7 @@ public class ReservationDaoImpl implements ReservationDao {
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
-            pStmt.setString(1,r_feedBack);
+            pStmt.setString(1, r_feedBack);
             pStmt.setString(2, u_no);
             pStmt.setInt(3, d_no);
 
@@ -349,7 +350,7 @@ public class ReservationDaoImpl implements ReservationDao {
             //执行操作
             pStmt.setString(1, u_no);
             rs = pStmt.executeQuery();
-            while(rs.next())
+            while (rs.next())
             {
                 Reservation reservation = new Reservation();
                 reservation.setR_reservationDate(rs.getString("r_reservation_date"));
@@ -362,7 +363,7 @@ public class ReservationDaoImpl implements ReservationDao {
             }
 
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -391,12 +392,12 @@ public class ReservationDaoImpl implements ReservationDao {
             //执行操作
             pStmt.setString(1, u_no);
             ResultSet m_rs = pStmt.executeQuery();
-            if(m_rs.next())
+            if (m_rs.next())
             {
                 num = m_rs.getInt(1);
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }

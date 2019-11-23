@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 //信用积分变化
-public class CreditRecordDaoImpl implements CreditRecordDao {
+public class CreditRecordDaoImpl implements CreditRecordDao
+{
     private Connection con;
     private PreparedStatement pStmt;
     private ResultSet rs;
@@ -67,7 +68,7 @@ public class CreditRecordDaoImpl implements CreditRecordDao {
         {
             con = JDBCUtils.getConnection();
             sql = "INSERT INTO credit_record(u_no, cr_change_score, cr_change_reason, cr_date, cr_after_grade) " +
-                  "VALUES (?,?,?, CURRENT_DATE ,?)";
+                    "VALUES (?,?,?, CURRENT_DATE ,?)";
             PreparedStatement pStmt = con.prepareStatement(sql);
             pStmt.setString(1, u_no);
             pStmt.setInt(2, changeScore);
@@ -84,7 +85,7 @@ public class CreditRecordDaoImpl implements CreditRecordDao {
         }
         finally
         {
-            JDBCUtils.closeAll(null , pStmt, con);
+            JDBCUtils.closeAll(null, pStmt, con);
         }
         return flag;
     }
@@ -106,8 +107,8 @@ public class CreditRecordDaoImpl implements CreditRecordDao {
         {
             con = JDBCUtils.getConnection();
             sql = "SELECT * FROM credit_record WHERE u_no = ?  " +
-                  "ORDER BY cr_date " +
-                  "LIMIT ? ,?";
+                    "ORDER BY cr_date " +
+                    "LIMIT ? ,?";
             pStmt = con.prepareStatement(sql);
             pStmt.setString(1, u_no);
             pStmt.setInt(2, (page - 1) * count);
@@ -142,7 +143,8 @@ public class CreditRecordDaoImpl implements CreditRecordDao {
      * @Param userNo
      * @Return: java.util.List<bean.CreditRecord>
      */
-    public List<CreditRecord> getAllCreditRecord(String u_no) {
+    public List<CreditRecord> getAllCreditRecord(String u_no)
+    {
         //初始化
         con = null;
         pStmt = null;

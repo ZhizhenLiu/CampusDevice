@@ -5,7 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
 
-public interface DeviceDao {
+public interface DeviceDao
+{
     /*
      * @Description: 分页查询首页热门设备
      * @Param  page: 页数，第几页  count：每页设备数量

@@ -11,7 +11,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BorrowDaoImpl implements BorrowDao {
+public class BorrowDaoImpl implements BorrowDao
+{
     private Connection con;
     private PreparedStatement pStmt;
     private ResultSet rs;
@@ -30,24 +31,25 @@ public class BorrowDaoImpl implements BorrowDao {
         rs = null;
         List<Borrow> borrowList = new ArrayList<>();
 
-        try {
+        try
+        {
             con = JDBCUtils.getConnection();
             sql = "SELECT " +
-                  "b_borrow_date," +
-                  "b_return_date," +
-                  "d_save_site," +
-                  "device.d_no," +
-                  "d_name," +
-                  "d_main_use," +
-                  "b_state " +
-                  "FROM borrow, device " +
-                  "WHERE u_no = ?";
+                    "b_borrow_date," +
+                    "b_return_date," +
+                    "d_save_site," +
+                    "device.d_no," +
+                    "d_name," +
+                    "d_main_use," +
+                    "b_state " +
+                    "FROM borrow, device " +
+                    "WHERE u_no = ?";
             pStmt = con.prepareStatement(sql);
 
             //执行操作
             pStmt.setString(1, u_no);
             rs = pStmt.executeQuery();
-            while(rs.next())
+            while (rs.next())
             {
                 Borrow borrow = new Borrow();
                 borrow.setB_borrowDate(rs.getString("b_borrow_date"));
@@ -109,6 +111,7 @@ public class BorrowDaoImpl implements BorrowDao {
         }
         return flag;
     }
+
     /*
      * @Description: 设置所有逾期设备状态为 -1 表示逾期未还
      * @Param
@@ -126,7 +129,7 @@ public class BorrowDaoImpl implements BorrowDao {
         {
             con = JDBCUtils.getConnection();
             sql = "UPDATE borrow SET b_state = -1 " +
-                    "WHERE b_return_date < CURRENT_DATE "+
+                    "WHERE b_return_date < CURRENT_DATE " +
                     "AND b_state = 0";
             pStmt = con.prepareStatement(sql);
 
@@ -211,7 +214,7 @@ public class BorrowDaoImpl implements BorrowDao {
         {
             con = JDBCUtils.getConnection();
             sql = "UPDATE borrow SET b_state = 1 " +
-                    "WHERE b_no = ? "+
+                    "WHERE b_no = ? " +
                     "AND b_state <> 1";
             pStmt = con.prepareStatement(sql);
 

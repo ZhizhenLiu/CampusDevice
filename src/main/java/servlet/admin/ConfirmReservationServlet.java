@@ -12,8 +12,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @WebServlet(name = "ConfirmReservationServlet", urlPatterns = "/admin/confirmReservation")
-public class ConfirmReservationServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+public class ConfirmReservationServlet extends HttpServlet
+{
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
         //设置编码
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
@@ -28,7 +30,8 @@ public class ConfirmReservationServlet extends HttpServlet {
         printWriter.write(adminService.confirmBorrow(u_no, d_no).toJSONString());
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
         doPost(request, response);
     }
 }

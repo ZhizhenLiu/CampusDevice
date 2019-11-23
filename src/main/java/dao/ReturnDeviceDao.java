@@ -2,7 +2,8 @@ package dao;
 
 import com.alibaba.fastjson.JSONObject;
 
-public interface ReturnDeviceDao {
+public interface ReturnDeviceDao
+{
 
     /*
      * @Description: 归还设备

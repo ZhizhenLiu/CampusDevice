@@ -3,7 +3,8 @@ package service;
 import bean.Admin;
 import com.alibaba.fastjson.JSONObject;
 
-public interface AdminService {
+public interface AdminService
+{
 
     /*
      * @Description: 通过标识获取管理员管辖范围内的有人预约的设备

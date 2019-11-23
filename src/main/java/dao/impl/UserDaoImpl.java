@@ -9,11 +9,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserDaoImpl implements UserDao {
+public class UserDaoImpl implements UserDao
+{
     private Connection con;
     private PreparedStatement pStmt;
     private ResultSet rs;
     private String sql;
+
     /*
      * @Description: select:通过用户编号获取用户对象
      * @Param userNo
@@ -40,8 +42,8 @@ public class UserDaoImpl implements UserDao {
             if (rs.next())
             {
                 user = new User(rs.getString("u_no"), rs.getString("u_name"), rs.getString("u_wechatid"), rs.getString("u_email"),
-                       rs.getString("u_phone"), rs.getInt("u_credit_grade"), rs.getString("u_type"), rs.getString("u_mentor_name"),
-                       rs.getString("u_mentor_phone"), rs.getString("u_major_class"));
+                        rs.getString("u_phone"), rs.getInt("u_credit_grade"), rs.getString("u_type"), rs.getString("u_mentor_name"),
+                        rs.getString("u_mentor_phone"), rs.getString("u_major_class"));
             }
         }
         catch (SQLException e)
@@ -52,7 +54,7 @@ public class UserDaoImpl implements UserDao {
         {
             JDBCUtils.closeAll(rs, pStmt, con);
         }
-        return  user;
+        return user;
     }
 
 
@@ -75,16 +77,16 @@ public class UserDaoImpl implements UserDao {
             sql = "INSERT INT user VALUES (?,?,?,?,?,?,?,?,?,?)";
             pStmt = con.prepareStatement(sql);
 
-            pStmt.setString(1,user.getU_no());
-            pStmt.setString(2,user.getU_name());
-            pStmt.setString(3,user.getU_wechatID());
-            pStmt.setString(4,user.getU_email());
-            pStmt.setString(5,user.getU_phone());
-            pStmt.setInt(6,user.getU_creditGrade());
-            pStmt.setString(7,user.getU_type());
-            pStmt.setString(8,user.getU_mentorName());
-            pStmt.setString(9,user.getU_mentorPhone());
-            pStmt.setString(10,user.getU_majorClass());
+            pStmt.setString(1, user.getU_no());
+            pStmt.setString(2, user.getU_name());
+            pStmt.setString(3, user.getU_wechatID());
+            pStmt.setString(4, user.getU_email());
+            pStmt.setString(5, user.getU_phone());
+            pStmt.setInt(6, user.getU_creditGrade());
+            pStmt.setString(7, user.getU_type());
+            pStmt.setString(8, user.getU_mentorName());
+            pStmt.setString(9, user.getU_mentorPhone());
+            pStmt.setString(10, user.getU_majorClass());
 
             flag = pStmt.executeUpdate();
 
@@ -105,7 +107,7 @@ public class UserDaoImpl implements UserDao {
      * @Param user
      * @Return: void
      */
-    public int changeUserInfo( User user)
+    public int changeUserInfo(User user)
     {
         //初始化
         con = null;
@@ -113,21 +115,22 @@ public class UserDaoImpl implements UserDao {
         rs = null;
 
         int flag = 0;
-        try {
+        try
+        {
             con = JDBCUtils.getConnection();
             String sql = "UPDATE user SET u_name=?, u_email=?, u_phone=?, u_credit_grade=?, u_mentor_name=?, u_mentor_phone=?, u_major_class=? " +
-                         "WHERE u_no = ?";
+                    "WHERE u_no = ?";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
-            pStmt.setString(1,user.getU_name());
-            pStmt.setString(2,user.getU_email());
-            pStmt.setString(3,user.getU_phone());
-            pStmt.setInt(4,user.getU_creditGrade());
-            pStmt.setString(5,user.getU_mentorName());
-            pStmt.setString(6,user.getU_phone());
-            pStmt.setString(7,user.getU_majorClass());
-            pStmt.setString(8,user.getU_no());
+            pStmt.setString(1, user.getU_name());
+            pStmt.setString(2, user.getU_email());
+            pStmt.setString(3, user.getU_phone());
+            pStmt.setInt(4, user.getU_creditGrade());
+            pStmt.setString(5, user.getU_mentorName());
+            pStmt.setString(6, user.getU_phone());
+            pStmt.setString(7, user.getU_majorClass());
+            pStmt.setString(8, user.getU_no());
 
             flag = pStmt.executeUpdate();
 
@@ -181,7 +184,7 @@ public class UserDaoImpl implements UserDao {
         {
             JDBCUtils.closeAll(rs, pStmt, con);
         }
-        return  user;
+        return user;
 
     }
 }

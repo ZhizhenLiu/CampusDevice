@@ -5,13 +5,14 @@ import java.sql.*;
 /*
    JDBC工具类：将常用的函数/重复调用代码量大 封装到此，方便调用
  */
-public class JDBCUtils {
+public class JDBCUtils
+{
 
     private static String c_url = "jdbc:mysql://49.235.73.29:3306/testdb?serverTimezone=UTC";
     private static String c_user = "root";
     private static String c_password = "skplroot";
     private static Connection connection;
-    
+
     /*
      * @Description: 创建连接：连接mytest数据库
      * @Param
@@ -20,7 +21,8 @@ public class JDBCUtils {
     public static Connection getConnection()
     {
         connection = null;
-        try{
+        try
+        {
             //选择加载驱动
             Class.forName("com.mysql.cj.jdbc.Driver");
             //建立连接
@@ -46,22 +48,28 @@ public class JDBCUtils {
         不能放到同一个try、catch语句中：
         如果某一个在close过程中出现异常抛出，后面的将无法关闭资源
          */
-        try{
+        try
+        {
             if (resultSet != null) resultSet.close();
         }
-        catch (SQLException e){
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
-        try{
+        try
+        {
             if (statement != null) statement.close();
         }
-        catch (SQLException e){
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
-        try{
+        try
+        {
             if (connection != null) connection.close();
         }
-        catch (SQLException e){
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
     }

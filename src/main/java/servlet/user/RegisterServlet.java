@@ -15,11 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "RegisterServlet",urlPatterns = "/user/register")
-public class RegisterServlet extends HttpServlet {
+@WebServlet(name = "RegisterServlet", urlPatterns = "/user/register")
+public class RegisterServlet extends HttpServlet
+{
     private UserService userService;
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
         //设置编码
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
@@ -35,8 +37,8 @@ public class RegisterServlet extends HttpServlet {
         String code = request.getParameter("code");
 
         //向微信服务器接口发送code，获取用户唯一标识openid, 返回参数
-        System.out.println( "code: " +  code);
-        System.out.println( "u_email: " +  u_email);
+        System.out.println("code: " + code);
+        System.out.println("u_email: " + u_email);
         JSONObject result = JSONObject.parseObject(HttpUtils.sendGet(code));
         System.out.println(result);
         JSONObject info = null;
@@ -48,7 +50,7 @@ public class RegisterServlet extends HttpServlet {
         {
             wechatId = (String) result.get("openid");
             System.out.println(result);
-            User user = new User(u_no, u_name, wechatId, u_email, u_phone, 100, u_type, u_mentor_name, u_mentor_phone,u_class_major);
+            User user = new User(u_no, u_name, wechatId, u_email, u_phone, 100, u_type, u_mentor_name, u_mentor_phone, u_class_major);
             System.out.println(user);
             info = userService.registerUser(user);
             printWriter.write(info.toJSONString());
@@ -56,15 +58,16 @@ public class RegisterServlet extends HttpServlet {
         //请求失败，返回错误信息
         else
         {
-            info.put("errms",result.get("errmsg"));
-            info.put("flag","0");
+            info.put("errms", result.get("errmsg"));
+            info.put("flag", "0");
             printWriter.write(info.toJSONString());
         }
         printWriter.flush();
         printWriter.close();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
 
     }
 }

@@ -11,9 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "ReservationDetailServlet",urlPatterns = "/admin/reservationDetail")
-public class ReservationDetailServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+@WebServlet(name = "ReservationDetailServlet", urlPatterns = "/admin/reservationDetail")
+public class ReservationDetailServlet extends HttpServlet
+{
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
         //设置编码
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
@@ -26,7 +28,8 @@ public class ReservationDetailServlet extends HttpServlet {
         printWriter.write(adminService.getReservationDetail(d_no).toJSONString());
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
         doPost(request, response);
     }
 }

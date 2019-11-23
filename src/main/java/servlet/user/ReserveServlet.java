@@ -18,8 +18,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @WebServlet(name = "ReserveServlet", urlPatterns = "/user/reserve")
-public class ReserveServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+public class ReserveServlet extends HttpServlet
+{
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
         //设置编码
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
@@ -34,9 +36,9 @@ public class ReserveServlet extends HttpServlet {
         Date startDate = null, returnDate = null;
         try
         {
-             System.out.println(start+" "+end);
-             startDate = format.parse(start);
-             returnDate = format.parse(end);
+            System.out.println(start + " " + end);
+            startDate = format.parse(start);
+            returnDate = format.parse(end);
         }
         catch (ParseException e)
         {
@@ -63,15 +65,16 @@ public class ReserveServlet extends HttpServlet {
         //请求失败，返回错误信息
         else
         {
-            info.put("errms",result.get("errmsg"));
-            info.put("flag","0");
+            info.put("errms", result.get("errmsg"));
+            info.put("flag", "0");
             printWriter.write(result.get("errmsg").toString());
         }
         printWriter.flush();
         printWriter.close();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
         doPost(request, response);
     }
 }

@@ -5,7 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.util.Date;
 
-public interface UserService {
+public interface UserService
+{
 
     /*
      * @Description: 通过用户编号获取用户对象

@@ -7,7 +7,8 @@ import java.net.URLConnection;
 import java.util.List;
 import java.util.Map;
 
-public class HttpUtils {
+public class HttpUtils
+{
     private static String c_url = "https://api.weixin.qq.com/sns/jscode2session";
     private static String c_appid = "wxd761f924887cb306";
     private static String c_secret = "14d621bffc3a04069b198a2651c61d78";
@@ -18,8 +19,9 @@ public class HttpUtils {
      * @Param code
      * @Return: java.lang.String
      */
-    public static String  sendGet(String code) {
-        String param = "appid=" + c_appid + "&secret=" + c_secret + "&js_code="+ code +"&grant_type="  + c_grantType;
+    public static String sendGet(String code)
+    {
+        String param = "appid=" + c_appid + "&secret=" + c_secret + "&js_code=" + code + "&grant_type=" + c_grantType;
         String result = "";
         BufferedReader in = null;
         try

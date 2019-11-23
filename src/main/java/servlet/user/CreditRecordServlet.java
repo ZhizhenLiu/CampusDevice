@@ -13,9 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "CreditRecordServlet",urlPatterns = "/user/getCredit")
-public class CreditRecordServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+@WebServlet(name = "CreditRecordServlet", urlPatterns = "/user/getCredit")
+public class CreditRecordServlet extends HttpServlet
+{
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
         //设置编码
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
@@ -34,14 +36,14 @@ public class CreditRecordServlet extends HttpServlet {
         if (result.containsKey("openid"))
         {
             wechatID = (String) result.get("openid");
-            info = userService.getCreditRecordByPage(wechatID,1,10);
+            info = userService.getCreditRecordByPage(wechatID, 1, 10);
             printWriter.write(info.toJSONString());
         }
         //请求失败，返回错误信息
         else
         {
-            info.put("errms",result.get("errmsg"));
-            info.put("flag","0");
+            info.put("errms", result.get("errmsg"));
+            info.put("flag", "0");
             printWriter.write(info.toJSONString());
         }
 
@@ -49,7 +51,8 @@ public class CreditRecordServlet extends HttpServlet {
         printWriter.close();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
         doPost(request, response);
     }
 }

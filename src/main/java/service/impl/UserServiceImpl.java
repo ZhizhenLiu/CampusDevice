@@ -11,7 +11,8 @@ import service.UserService;
 import java.util.Date;
 import java.util.List;
 
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService
+{
     private UserDao userDao = new UserDaoImpl();
     private ReservationDao reservationDao = new ReservationDaoImpl();
     private DeviceDao deviceDao = new DeviceDaoImpl();
@@ -40,13 +41,13 @@ public class UserServiceImpl implements UserService {
         JSONObject info = new JSONObject();
         if (user == null)
         {
-            info.put("flag",0);
-            info.put("errmsg","通过wechatID获取用户失败");
+            info.put("flag", 0);
+            info.put("errmsg", "通过wechatID获取用户失败");
         }
         else
         {
-            info.put("flag",1);
-            info.put("user",user);
+            info.put("flag", 1);
+            info.put("user", user);
         }
         return info;
     }
@@ -63,7 +64,7 @@ public class UserServiceImpl implements UserService {
         info.put("flag", flag);
         if (flag == 0)
         {
-            info.put("errmsg","注册用户失败");
+            info.put("errmsg", "注册用户失败");
         }
         return info;
     }
@@ -84,7 +85,7 @@ public class UserServiceImpl implements UserService {
         }
         else
         {
-            info.put("flag", 1 );
+            info.put("flag", 1);
             info.put("device", JSONArray.parseArray(JSON.toJSONString(deviceList)));
         }
         return info;
@@ -108,7 +109,7 @@ public class UserServiceImpl implements UserService {
         else
         {
             info.put("flag", 1);
-            info.put("device",device);
+            info.put("device", device);
         }
         return info;
     }
@@ -130,7 +131,7 @@ public class UserServiceImpl implements UserService {
         {
             int flag = reservationDao.reserveDevice(d_no, u_no, startDate, returnDate);
             info.put("flag", flag);
-            if (flag == 0 )
+            if (flag == 0)
             {
                 errmsg.add("用户预约设备失败");
             }
@@ -138,10 +139,10 @@ public class UserServiceImpl implements UserService {
         else
         {
             //设备当前不在库，返回错误信息
-            info.put("flag",0);
+            info.put("flag", 0);
             errmsg.add("设备当前不可借用");
         }
-        info.put("errmsg",errmsg);
+        info.put("errmsg", errmsg);
         return info;
     }
 
@@ -155,7 +156,7 @@ public class UserServiceImpl implements UserService {
         String u_no = userDao.getUserByWechatID(wechatID).getU_no();
         JSONObject info = new JSONObject();
         List<Borrow> borrowList = borrowDao.getBorrowRecord(u_no);
-        info.put("borrowed_item",JSONArray.parseArray(JSON.toJSONString(borrowList)));
+        info.put("borrowed_item", JSONArray.parseArray(JSON.toJSONString(borrowList)));
         return info;
     }
 
@@ -187,7 +188,7 @@ public class UserServiceImpl implements UserService {
         String u_no = user.getU_no();
         JSONObject info = new JSONObject();
         List<Message> messageList = messageDao.getMessageByPage(u_no, page, count);
-        info.put("messages",JSONArray.parseArray(JSON.toJSONString(messageList)));
+        info.put("messages", JSONArray.parseArray(JSON.toJSONString(messageList)));
         return info;
     }
 
@@ -202,7 +203,7 @@ public class UserServiceImpl implements UserService {
         JSONObject info = new JSONObject();
         String u_no = user.getU_no();
         List<Reservation> reservationList = reservationDao.getReservation(u_no);
-        info.put("reservation",JSONArray.parseArray(JSON.toJSONString(reservationList)));
+        info.put("reservation", JSONArray.parseArray(JSON.toJSONString(reservationList)));
         return info;
     }
 }
