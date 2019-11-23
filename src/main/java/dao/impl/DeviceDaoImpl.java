@@ -254,4 +254,94 @@ public class DeviceDaoImpl implements DeviceDao {
         }
         return  device;
     }
+
+    /*
+     * @Description: 获取所有的设备信息
+     * @Param
+     * @Return: List<String>
+     */
+    @Override
+    public List<String> getDevice() {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+        List<String> list = new ArrayList<>();
+
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "SELECT * FROM device";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            rs = pStmt.executeQuery();
+
+            while(rs.next())
+            {
+                list.add(String.valueOf(rs.getInt("d_no")));
+                list.add(rs.getString("a_no"));
+                list.add(rs.getString("d_state"));
+                list.add(String.valueOf(rs.getInt("d_borrowed_times")));
+                list.add(rs.getString("d_name"));
+                list.add(rs.getString("d_important_param"));
+                list.add(rs.getString("d_main_use"));
+                list.add(rs.getString("d_save_site"));
+            }
+
+            return list;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return null;
+    }
+
+    /*
+     * @Description: 通过关键词获取设备信息
+     * @Param keyword
+     * @Return: List<Device>
+     */
+    @Override
+    public List<Device> getDeviceByKeyword(String keyword) {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+        List<Device> list = new ArrayList<>();
+
+        try
+        {
+            con = JDBCUtils.getConnection();
+            //参数不太好用setString替换，直接字符串代替也没错
+            sql = "select * from device where d_name like '%"+keyword+"%' or d_important_param like '%"+keyword+"%' or d_main_use like '%"+keyword+"%'";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            rs = pStmt.executeQuery();
+
+            while(rs.next())
+            {
+                Device device = new Device(rs.getInt("d_no"), rs.getString("a_no"), rs.getString("d_state"),
+                        rs.getInt("d_borrowed_times"), rs.getString("d_name"), rs.getString("d_important_param"),
+                        rs.getString("d_main_use"), rs.getString("d_save_site"));
+                list.add(device);
+            }
+            return list;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return null;
+    }
 }

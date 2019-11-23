@@ -47,4 +47,20 @@ public interface DeviceDao {
      * @Return: bean.Device
      */
     Device getDeviceByNo(int d_no);
+
+    /*
+     * @Description: 获取所有的设备信息
+     * @Param
+     * @Return: List<String>
+     */
+    List<String> getDevice();
+
+    //修改自增编号的信息：alter table device auto_increment = 11;
+
+    /*
+     * @Description: 通过关键词获取设备信息
+     * @Param keyword
+     * @Return: List<Device>
+     */
+    List<Device> getDeviceByKeyword(String keyword);
 }
