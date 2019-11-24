@@ -317,7 +317,7 @@ public class DeviceDaoImpl implements DeviceDao
         con = null;
         pStmt = null;
         rs = null;
-        List<Device> list = new ArrayList<>();
+        List<Device> deviceList = new ArrayList<>();
 
         try
         {
@@ -334,9 +334,8 @@ public class DeviceDaoImpl implements DeviceDao
                 Device device = new Device(rs.getInt("d_no"), rs.getString("a_no"), rs.getString("d_state"),
                         rs.getInt("d_borrowed_times"), rs.getString("d_name"), rs.getString("d_important_param"),
                         rs.getString("d_main_use"), rs.getString("d_save_site"));
-                list.add(device);
+                deviceList.add(device);
             }
-            return list;
         }
         catch (SQLException e)
         {
@@ -346,6 +345,6 @@ public class DeviceDaoImpl implements DeviceDao
         {
             JDBCUtils.closeAll(rs, pStmt, con);
         }
-        return null;
+        return deviceList;
     }
 }

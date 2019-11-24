@@ -206,4 +206,26 @@ public class UserServiceImpl implements UserService
         info.put("reservation", JSONArray.parseArray(JSON.toJSONString(reservationList)));
         return info;
     }
+
+    /*
+     * @Description: 通过关键字检索查找设备
+     * @Param keyword
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject getDeviceByKeyword(String keyword)
+    {
+        JSONObject info = new JSONObject();
+        List<Device> deviceList = deviceDao.getDeviceByKeyword(keyword);
+        if (deviceList.isEmpty())
+        {
+            info.put("flag", 0);
+            info.put("errmsg", "没有查询到对应关键字的设备");
+        }
+        else
+        {
+            info.put("flag", 1);
+            info.put("device", JSONArray.parseArray(JSON.toJSONString(deviceList)));
+        }
+        return info;
+    }
 }

@@ -78,4 +78,11 @@ public interface UserService
      * @Return: com.alibaba.fastjson.JSONObject
      */
     JSONObject getReservation(String wechatID);
+
+    /*
+     * @Description: 通过关键字检索查找设备
+     * @Param keyword
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject getDeviceByKeyword(String keyword);
 }

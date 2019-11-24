@@ -14,6 +14,13 @@ public interface AdminService
     JSONObject getReservedDevice(String wechatID);
 
     /*
+     * @Description: 通过标识获取管理员管辖范围内外借设备
+     * @Param wechatID
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject getBorrowedDevice(String wechatID);
+
+    /*
      * @Description: 获取某一个设备的预约队列
      * @Param d_no
      * @Return: com.alibaba.fastjson.JSONObject
@@ -43,15 +50,15 @@ public interface AdminService
 
     /*
      * @Description: 管理员确认用户归还设备
-     * @Param wechatID  d_no
+     * @Param b_no
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject confirmReturn(String u_no, int d_no);
+    JSONObject confirmReturn(int b_no);
 
     /*
      * @Description: 管理员主动提醒逾期未还用户
-     * @Param u_no  d_no
+     * @Param b_no
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject remindOverDue(String u_no, int d_no);
+    JSONObject remindOverDue(int b_no);
 }

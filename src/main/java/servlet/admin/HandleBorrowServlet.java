@@ -2,7 +2,9 @@ package servlet.admin;
 
 import com.alibaba.fastjson.JSONObject;
 import service.AdminService;
+import service.UserService;
 import service.impl.AdminServiceImpl;
+import service.impl.UserServiceImpl;
 import utils.HttpUtils;
 
 import javax.servlet.ServletException;
@@ -13,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "ConfirmReturnServlet", urlPatterns = "/admin/confirmReturn")
-public class ConfirmReturnServlet extends HttpServlet
+@WebServlet(name = "HandleBorrowServlet")
+public class HandleBorrowServlet extends HttpServlet
 {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -24,33 +26,34 @@ public class ConfirmReturnServlet extends HttpServlet
 
         //获取参数
         String code = request.getParameter("code");
-        int d_no = Integer.parseInt(request.getParameter("d_no"));
+        System.out.println(code);
 
-        //向微信服务器接口发送code，获取管理员唯一标识openid, 返回参数
+        //向微信服务器接口发送code，获取用户唯一标识openid, 返回参数
+        AdminService adminService = new AdminServiceImpl();
         JSONObject result = JSONObject.parseObject(HttpUtils.sendGet(code));
-        System.out.println(result);
         JSONObject info = null;
         PrintWriter printWriter = response.getWriter();
-        AdminService adminService = new AdminServiceImpl();
         String wechatId = "";
-        //请求成功
+
+        //请求成功,获取管理员openid
         if (result.containsKey("openid"))
         {
             wechatId = (String) result.get("openid");
-            adminService.confirmReturn(d_no);
-            printWriter.write(info.toJSONString());
+            printWriter.write(adminService.getBorrowedDevice(wechatId).toJSONString());
         }
         //请求失败，返回错误信息
         else
         {
-            info.put("errms", result.get("errmsg"));
+            info.put("errmsg", result.get("errmsg"));
             info.put("flag", "0");
-            printWriter.write(info.toJSONString());
+            printWriter.write(result.get("errmsg").toString());
         }
+        printWriter.flush();
+        printWriter.close();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        doPost(request, response);
+
     }
 }

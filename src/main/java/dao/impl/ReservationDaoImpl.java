@@ -79,7 +79,7 @@ public class ReservationDaoImpl implements ReservationDao
                     "FROM reservation r, device d " +
                     "WHERE " +
                     "r.d_no = d.d_no " +
-                    "AND d.a_no = ? " +
+                    "AND d.a_no = ? AND r_state = 0 " +
                     "GROUP BY d.d_no, d.d_name, d.d_main_use " +
                     "ORDER BY r_sum DESC";
             pStmt = con.prepareStatement(sql);
@@ -126,12 +126,13 @@ public class ReservationDaoImpl implements ReservationDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT user.u_no, u_name, u_type, r_reservation_date, r_start_date, r_return_date, r_reservation_date, u_credit_grade " +
-                    "FROM user, reservation " +
-                    "WHERE user.u_no = reservation.u_no " +
+            sql = "SELECT u.u_no, u_name, u_type, r_no, r_start_date, r_return_date, r_reservation_date, u_credit_grade " +
+                    "FROM user u, reservation r " +
+                    "WHERE " +
+                    "u.u_no = r.u_no " +
                     "AND d_no = ? " +
                     "AND r_state = 0 " +
-                    "ORDER BY r_reservation_date";
+                    "ORDER BY r_reservation_date DESC,u_credit_grade DESC";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
@@ -144,6 +145,7 @@ public class ReservationDaoImpl implements ReservationDao
                 reservation.setU_no(rs.getString("u_no"));
                 reservation.setU_name(rs.getString("u_name"));
                 reservation.setU_type(rs.getString("u_type"));
+                reservation.setR_no(rs.getInt("r_no"));
                 reservation.setR_startDate(rs.getString("r_start_date"));
                 reservation.setR_returnDate(rs.getString("r_return_date"));
                 reservation.setR_reservationDate(rs.getString("r_reservation_date"));

@@ -33,7 +33,6 @@ public class HandleReservationServlet extends HttpServlet
         JSONObject result = JSONObject.parseObject(HttpUtils.sendGet(code));
         JSONObject info = null;
         PrintWriter printWriter = response.getWriter();
-        UserService userService = new UserServiceImpl();
         String wechatId = "";
 
         //请求成功,获取管理员openid
@@ -49,6 +48,8 @@ public class HandleReservationServlet extends HttpServlet
             info.put("flag", "0");
             printWriter.write(result.get("errmsg").toString());
         }
+        printWriter.flush();
+        printWriter.close();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

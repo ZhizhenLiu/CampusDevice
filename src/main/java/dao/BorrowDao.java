@@ -16,6 +16,13 @@ public interface BorrowDao
     List<Borrow> getBorrowRecord(String u_no);
 
     /*
+     * @Description: 管理员查看管辖范围内外借中记录
+     * @Param a_no
+     * @Return: java.util.List<bean.Borrow>
+     */
+    List<Borrow> getBorrowList(int a_no);
+
+    /*
      * @Description: 管理员确认设备租借给某个用户
      * @Param u_no  d_no  borrowDate  returnDate
      * @Return: int
@@ -44,10 +51,11 @@ public interface BorrowDao
     int returnBorrow(int b_no);
 
     /*
-     * @Description: 获取借用记录编号
-     * @Param u_no  d_no
-     * @Return: int
+     * @Description: 根据借用编号查询借用记录
+     * @Param b_no
+     * @Return: bean.Borrow
      */
-    int getBorrowNo(String u_no, int d_no);
+    Borrow getBorrowByNo(int b_no);
+
 
 }

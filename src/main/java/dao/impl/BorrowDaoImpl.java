@@ -74,6 +74,57 @@ public class BorrowDaoImpl implements BorrowDao
     }
 
     /*
+     * @Description: 管理员查看管辖范围内外借中记录
+     * @Param a_no
+     * @Return: java.util.List<bean.Borrow>
+     */
+    public List<Borrow> getBorrowList(int a_no)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+        List<Borrow> borrowList = new ArrayList<>();
+
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "SELECT b.b_state,b.b_no, d.d_name, d.d_no, u.u_no, u.u_name, b_borrow_date, b_return_date " +
+                    "FROM borrow b, administrator a, user u ,device d  " +
+                    "WHERE a.a_no = ? " +
+                    "AND b.u_no = u.u_no " +
+                    "AND b.d_no = d.d_no " +
+                    "AND b_state = 0 " +
+                    "ORDER BY b_return_date";
+            pStmt = con.prepareStatement(sql);
+
+            //执行操作
+            pStmt.setInt(1, a_no);
+            rs = pStmt.executeQuery();
+            while (rs.next())
+            {
+                Borrow borrow = new Borrow();
+                borrow.setD_name(rs.getString("d_name"));
+                borrow.setD_no(rs.getInt("d_no"));
+                borrow.setU_no(rs.getString("u_no"));
+                borrow.setU_name(rs.getString("u_name"));
+                borrow.setB_borrowDate(rs.getString("b_borrow_date"));
+                borrow.setB_returnDate(rs.getString("b_return_date"));
+                borrowList.add(borrow);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return borrowList;
+    }
+
+    /*
      * @Description: 管理员确认设备租借给某个用户
      * @Param u_no  d_no  borrowDate  returnDate
      * @Return: int
@@ -234,36 +285,45 @@ public class BorrowDaoImpl implements BorrowDao
         return flag;
     }
 
+
     /*
-     * @Description: 获取正在借用记录编号：
-     * @Param u_no  d_no
-     * @Return: int
+     * @Description: 根据借用编号查询借用记录
+     * @Param b_no
+     * @Return: bean.Borrow
      */
-    public int getBorrowNo(String u_no, int d_no)
+    public Borrow getBorrowByNo(int b_no)
     {
         //初始化
         con = null;
         pStmt = null;
         rs = null;
 
-        int b_no = 0;
+        Borrow borrow = new Borrow();
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT b_no FROM borrow " +
-                    "WHERE u_no = ? AND d_no = ? " +
-                    "AND b_state <> 1 " +
-                    "ORDER BY b_borrow_date DESC";
+            sql = "SELECT * FROM borrow b, device d, user u " +
+                    "WHERE b.d_no = d.d_no " +
+                    "AND b.u_no = u.u_no " +
+                    "AND b_no = ?";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
-            pStmt.setString(1, u_no);
-            pStmt.setInt(2, d_no);
-
+            pStmt.setInt(1, b_no);
             rs = pStmt.executeQuery();
             if (rs.next())
             {
-                b_no = rs.getInt("b_no");
+                borrow.setB_no(rs.getInt("b_no"));
+                borrow.setD_no(rs.getInt("d_no"));
+                borrow.setU_no(rs.getString("u_no"));
+                borrow.setB_borrowDate(rs.getString("b_borrow_date"));
+                borrow.setB_returnDate(rs.getString("b_return_date"));
+                borrow.setB_state(rs.getInt("b_state"));
+                borrow.setU_name(rs.getString("u_name"));
+                borrow.setU_type(rs.getString("u_type"));
+                borrow.setU_phone(rs.getString("u_phone"));
+                borrow.setD_name(rs.getString("d_name"));
+                borrow.setD_saveSite(rs.getString("d_save_site"));
             }
         }
         catch (SQLException e)
@@ -274,7 +334,6 @@ public class BorrowDaoImpl implements BorrowDao
         {
             JDBCUtils.closeAll(rs, pStmt, con);
         }
-        return b_no;
+        return borrow;
     }
-
 }

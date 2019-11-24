@@ -21,13 +21,12 @@ public class RemindOverDueServlet extends HttpServlet
         response.setCharacterEncoding("UTF-8");
 
         //获取参数
-        String u_no = request.getParameter("u_no");
-        int d_no = Integer.parseInt(request.getParameter("d_no"));
+        int b_no = Integer.parseInt(request.getParameter("b_no"));
 
         //返回信息
         AdminService adminService = new AdminServiceImpl();
         PrintWriter printWriter = response.getWriter();
-        printWriter.write(adminService.remindOverDue(u_no, d_no).toJSONString());
+        printWriter.write(adminService.remindOverDue(b_no).toJSONString());
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

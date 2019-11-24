@@ -41,6 +41,22 @@ public class AdminServiceImpl implements AdminService
     }
 
     /*
+     * @Description: 通过标识获取管理员管辖范围内外借设备
+     * @Param wechatID
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject getBorrowedDevice(String wechatID)
+    {
+        //获取主键，通过主键查询
+        int a_no = adminDao.getAdminByWechatID(wechatID).getA_no();
+        JSONObject info = new JSONObject();
+        List<Borrow> borrowList = borrowDao.getBorrowList(a_no);
+        info.put("flag", 1);
+        info.put("borrow", borrowList);
+        return info;
+    }
+
+    /*
      * @Description: 获取某一个设备的预约队列
      * @Param deviceNo
      * @Return: com.alibaba.fastjson.JSONObject
@@ -69,13 +85,16 @@ public class AdminServiceImpl implements AdminService
             String borrowDate = reservationDao.getStartDate(u_no, d_no);
             String returnDate = reservationDao.getReturnDate(u_no, d_no);
 
-            int flag = borrowDao.confirmBorrow(u_no, d_no, borrowDate, returnDate);
-            flag += reservationDao.confirmReserve(u_no, d_no);
+            // 预约状态置为1（成功）-> 设备状态修改外借 -> 借用表中插入记录
+            int flag = reservationDao.confirmReserve(u_no, d_no);
+            flag += deviceDao.setDeviceState("外借", d_no);
+            flag += borrowDao.confirmBorrow(u_no, d_no, borrowDate, returnDate);
+
             info.put("flag", flag == 2 ? 1 : 0);
 
             if (flag == 0)
             {
-                errmsg.add("确认设备归还失败");
+                errmsg.add("确认设备借用失败，出现异常");
             }
         }
         else
@@ -149,58 +168,53 @@ public class AdminServiceImpl implements AdminService
      * @Param wechatID  d_no
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject confirmReturn(String u_no, int d_no)
+    public JSONObject confirmReturn(int b_no)
     {
         JSONObject info = new JSONObject();
         JSONArray errmsg = new JSONArray();
+        Borrow borrow = borrowDao.getBorrowByNo(b_no);
+        String u_no = borrow.getU_no();
+        int d_no = borrow.getD_no();
 
-        //获取用户借用记录的编号，唯一标识一条记录
-        int b_no = borrowDao.getBorrowNo(u_no, d_no);
-        if (b_no == 0)
+        int flag = borrowDao.returnBorrow(b_no);
+        if (flag == 0)
         {
-            info.put("flag", 0);
-            errmsg.add("没有获取到设备借用记录");
+            errmsg.add("修改借用记录状态为归还失败");
         }
-        else
+        //归还设备
+        flag = returnDeviceDao.returnDevice(u_no, d_no, b_no);
+        if (flag == 0)
         {
-            int flag = borrowDao.returnBorrow(b_no);
-            if (flag == 0)
-            {
-                errmsg.add("修改借用记录状态为归还失败");
-            }
-            //归还设备
-            flag = returnDeviceDao.returnDevice(u_no, d_no, b_no);
-            if (flag == 0)
-            {
-                errmsg.add("添加到已归还设备失败");
-            }
-            flag = deviceDao.setDeviceState("在库", d_no);
-            if (flag == 0)
-            {
-                errmsg.add("修改设备状态失败");
-            }
-            flag = deviceDao.addBorrowedTimes(d_no);
-            if (flag == 0)
-            {
-                errmsg.add("设备借用次数增长");
-            }
-            info.put("flag", flag);
+            errmsg.add("添加到已归还设备失败");
         }
+        flag = deviceDao.setDeviceState("在库", d_no);
+        if (flag == 0)
+        {
+            errmsg.add("修改设备状态失败");
+        }
+        flag = deviceDao.addBorrowedTimes(d_no);
+        if (flag == 0)
+        {
+            errmsg.add("设备借用次数增长失败");
+        }
+
+        info.put("flag", flag);
         info.put("errmsg", errmsg);
         return info;
     }
 
     /*
      * @Description: 管理员主动提醒逾期未还用户
-     * @Param u_no  d_no
+     * @Param b_no
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject remindOverDue(String u_no, int d_no)
+    public JSONObject remindOverDue(int b_no)
     {
         JSONObject info = new JSONObject();
-        User user = userDao.getUserByNo(u_no);
-        Device device = deviceDao.getDeviceByNo(d_no);
-        MessageUtils.sendRemindMessage(user.getU_phone(), user.getU_name(), device.getD_name());
+
+        //根据借用记录查找借用记录
+        Borrow borrow = borrowDao.getBorrowByNo(b_no);
+        MessageUtils.sendRemindMessage(borrow);
         info.put("flag", 1);
         return info;
     }

@@ -1,8 +1,10 @@
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import dao.BorrowDao;
 import dao.DeviceDao;
 import dao.ReservationDao;
 import dao.UserDao;
+import dao.impl.BorrowDaoImpl;
 import dao.impl.DeviceDaoImpl;
 import dao.impl.ReservationDaoImpl;
 import dao.impl.UserDaoImpl;
@@ -44,10 +46,14 @@ public class Test {
        AdminService adminService = new AdminServiceImpl();
        UserDao userDao = new UserDaoImpl();
        DeviceDao deviceDao = new DeviceDaoImpl();
+       BorrowDao borrowDao = new BorrowDaoImpl();
        /*
        System.out.println(adminService.confirmBorrow("201726010310",5));*/
 //       System.out.println(adminService.refuseBorrow());
 //       System.out.println(adminService.getOverDue("o0ug241yqbsjM0N5xR5qhLxi8gH0"));
-       System.out.println(userService.getJSONUserByWechatID("o0ug241yqbsjM0N5xR5qhLxi8gH0"));
+//       System.out.println(userService.getJSONUserByWechatID("o0ug241yqbsjM0N5xR5qhLxi8gH0"));
+//       System.out.println(adminService.getReservedDevice("o0ug241yqbsjM0N5xR5qhLxi8gH0"));
+//       System.out.println(adminService.getReservationDetail(1));
+       System.out.println(borrowDao.getOverDueList(3));
    }
 }
