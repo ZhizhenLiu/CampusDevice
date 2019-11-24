@@ -24,33 +24,33 @@ public class ExcelUtils
     private static Device device;
 
     //读取excel的内容
-    public static List<String> ReadExcel(String filePath)
+    public static List<String> readExcel(String filePath)
     {
         try
         {
             List<String> list = new ArrayList<>();
             //将excel加载到内存
             File file = new File(filePath);
-            String filename = file.getName();
-            InputStream is = new FileInputStream(file);
+            String fileName = file.getName();
+            InputStream inputStream = new FileInputStream(file);
 
-            Workbook workbook = null;
+            Workbook workBook = null;
             //判断excel是2003版还是2007版
-            if (filename.endsWith("xlsx"))
+            if (fileName.endsWith("xlsx"))
             {
-                workbook = new XSSFWorkbook(is);  //Excel 2007
+                workBook = new XSSFWorkbook(inputStream);  //Excel 2007
             }
-            else if (filename.endsWith("xls"))
+            else if (fileName.endsWith("xls"))
             {
-                workbook = new HSSFWorkbook(is);  //Excel 2003
+                workBook = new HSSFWorkbook(inputStream);  //Excel 2003
             }
 
             //将导入的仪器放在device表中
             //通过循环工作表Sheet
-            for (int i = 0; i < workbook.getNumberOfSheets(); i++)
+            for (int i = 0; i < workBook.getNumberOfSheets(); i++)
             {
                 //获取第i页
-                Sheet workSheet = workbook.getSheetAt(i);
+                Sheet workSheet = workBook.getSheetAt(i);
                 if (workSheet == null)
                 {
                     continue;
@@ -100,7 +100,7 @@ public class ExcelUtils
     }
 
     //从数据库中导出excel，注意这里生成的文件是.xlsx格式的
-    public static void DbToExcel(String filePath)
+    public static void dbToExcel(String filePath)
     {
 
         //创建HSSFWorkbook对象
@@ -108,8 +108,8 @@ public class ExcelUtils
         //创建Sheet对象
         XSSFSheet sheet = workbook.createSheet("设备表");
         //获取Device表中的内容
-        DeviceDao dd = new DeviceDaoImpl();
-        List<String> list = dd.getDevice();
+        DeviceDao deviceDao = new DeviceDaoImpl();
+        List<String> list = deviceDao.getDevice();
         for (int i = 0; i < list.size(); i++)
         {
             System.out.println(list.get(i));
@@ -131,9 +131,9 @@ public class ExcelUtils
         File file = new File(filePath);
         try
         {
-            FileOutputStream fos = new FileOutputStream(file);
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
             //将workbook的内容写入file
-            workbook.write(fos);
+            workbook.write(fileOutputStream);
             workbook.close();
 
         }
@@ -145,10 +145,10 @@ public class ExcelUtils
     }
 
     //导入excel，这里照片不通过excel导入数据库
-    public static void ExcelToDb(String filePath)
+    public static void excelToDb(String filePath)
     {
         List<String> list = new ArrayList<>();
-        list = ReadExcel(filePath);
+        list = readExcel(filePath);
 
         TransformUtils t = new TransformUtils();
         try

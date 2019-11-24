@@ -78,7 +78,7 @@ public class AdminServiceImpl implements AdminService
     public JSONObject confirmBorrow(String u_no, int d_no)
     {
         JSONObject info = new JSONObject();
-        JSONArray errmsg = new JSONArray();
+        JSONArray errMsg = new JSONArray();
         String state = deviceDao.getDeviceState(d_no);
         if (state.equals("在库"))
         {
@@ -94,15 +94,15 @@ public class AdminServiceImpl implements AdminService
 
             if (flag == 0)
             {
-                errmsg.add("确认设备借用失败，出现异常");
+                errMsg.add("确认设备借用失败，出现异常");
             }
         }
         else
         {
             info.put("flag", 0);
-            errmsg.add("设备当前状态为" + state + ", 暂不可借用");
+            errMsg.add("设备当前状态为" + state + ", 暂不可借用");
         }
-        info.put("errmsg", errmsg);
+        info.put("errMsg", errMsg);
         return info;
     }
 
@@ -114,12 +114,12 @@ public class AdminServiceImpl implements AdminService
     public JSONObject refuseBorrow(String u_no, int d_no, String r_feedBack)
     {
         JSONObject info = new JSONObject();
-        JSONArray errmsg = new JSONArray();
+        JSONArray errMsg = new JSONArray();
         int flag = reservationDao.refuseReserve(u_no, d_no, r_feedBack);
         info.put("flag", flag);
         if (flag == 0)
         {
-            errmsg.add("拒绝预约失败");
+            errMsg.add("拒绝预约失败");
         }
 
         //反馈不为空
@@ -128,10 +128,10 @@ public class AdminServiceImpl implements AdminService
             flag = messageDao.sendMessage(u_no, r_feedBack);
             if (flag == 0)
             {
-                errmsg.add("发送消息给用户失败");
+                errMsg.add("发送消息给用户失败");
             }
         }
-        info.put("errmsg", errmsg);
+        info.put("errMsg", errMsg);
         return info;
     }
 
@@ -153,7 +153,7 @@ public class AdminServiceImpl implements AdminService
         if (borrowList.isEmpty())
         {
             info.put("flag", 0);
-            info.put("errmsg", "没有逾期未还设备");
+            info.put("errMsg", "没有逾期未还设备");
         }
         else
         {
@@ -171,7 +171,7 @@ public class AdminServiceImpl implements AdminService
     public JSONObject confirmReturn(int b_no)
     {
         JSONObject info = new JSONObject();
-        JSONArray errmsg = new JSONArray();
+        JSONArray errMsg = new JSONArray();
         Borrow borrow = borrowDao.getBorrowByNo(b_no);
         String u_no = borrow.getU_no();
         int d_no = borrow.getD_no();
@@ -179,27 +179,27 @@ public class AdminServiceImpl implements AdminService
         int flag = borrowDao.returnBorrow(b_no);
         if (flag == 0)
         {
-            errmsg.add("修改借用记录状态为归还失败");
+            errMsg.add("修改借用记录状态为归还失败");
         }
         //归还设备
         flag = returnDeviceDao.returnDevice(u_no, d_no, b_no);
         if (flag == 0)
         {
-            errmsg.add("添加到已归还设备失败");
+            errMsg.add("添加到已归还设备失败");
         }
         flag = deviceDao.setDeviceState("在库", d_no);
         if (flag == 0)
         {
-            errmsg.add("修改设备状态失败");
+            errMsg.add("修改设备状态失败");
         }
         flag = deviceDao.addBorrowedTimes(d_no);
         if (flag == 0)
         {
-            errmsg.add("设备借用次数增长失败");
+            errMsg.add("设备借用次数增长失败");
         }
 
         info.put("flag", flag);
-        info.put("errmsg", errmsg);
+        info.put("errMsg", errMsg);
         return info;
     }
 

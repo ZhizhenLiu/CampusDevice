@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService
         if (user == null)
         {
             info.put("flag", 0);
-            info.put("errmsg", "通过wechatID获取用户失败");
+            info.put("errMsg", "通过wechatID获取用户失败");
         }
         else
         {
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService
         info.put("flag", flag);
         if (flag == 0)
         {
-            info.put("errmsg", "注册用户失败");
+            info.put("errMsg", "注册用户失败");
         }
         return info;
     }
@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService
         if (deviceList.isEmpty())
         {
             info.put("flag", 0);
-            info.put("errmsg", "当前页数没有设备");
+            info.put("errMsg", "当前页数没有设备");
         }
         else
         {
@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService
         if (device == null)
         {
             info.put("flag", 0);
-            info.put("errmsg", "查询不到对应编号的设备");
+            info.put("errMsg", "查询不到对应编号的设备");
         }
         else
         {
@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService
     {
         String u_no = userDao.getUserByWechatID(wechatId).getU_no();
         JSONObject info = new JSONObject();
-        JSONArray errmsg = new JSONArray();
+        JSONArray errMsg = new JSONArray();
 
         //获取设备但前状态
         String state = deviceDao.getDeviceState(d_no);
@@ -133,16 +133,16 @@ public class UserServiceImpl implements UserService
             info.put("flag", flag);
             if (flag == 0)
             {
-                errmsg.add("用户预约设备失败");
+                errMsg.add("用户预约设备失败");
             }
         }
         else
         {
             //设备当前不在库，返回错误信息
             info.put("flag", 0);
-            errmsg.add("设备当前不可借用");
+            errMsg.add("设备当前不可借用");
         }
-        info.put("errmsg", errmsg);
+        info.put("errMsg", errMsg);
         return info;
     }
 
@@ -219,7 +219,7 @@ public class UserServiceImpl implements UserService
         if (deviceList.isEmpty())
         {
             info.put("flag", 0);
-            info.put("errmsg", "没有查询到对应关键字的设备");
+            info.put("errMsg", "没有查询到对应关键字的设备");
         }
         else
         {

@@ -49,7 +49,7 @@ public class LoginServlet extends HttpServlet
         //请求失败，返回错误信息
         else
         {
-            info.put("errmsg", result.get("errmsg"));
+            info.put("errMsg", result.get("errMsg"));
             info.put("flag", "0");
             System.out.println(info);
             printWriter.write(info.toJSONString());

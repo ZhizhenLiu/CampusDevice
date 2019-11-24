@@ -42,7 +42,7 @@ public class BorrowedServlet extends HttpServlet
         //请求失败，返回错误信息
         else
         {
-            info.put("errms", result.get("errmsg"));
+            info.put("errms", result.get("errMsg"));
             info.put("flag", "0");
             printWriter.write(info.toJSONString());
         }

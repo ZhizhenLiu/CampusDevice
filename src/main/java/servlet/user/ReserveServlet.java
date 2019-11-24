@@ -65,9 +65,9 @@ public class ReserveServlet extends HttpServlet
         //请求失败，返回错误信息
         else
         {
-            info.put("errms", result.get("errmsg"));
+            info.put("errMsg", result.get("errMsg"));
             info.put("flag", "0");
-            printWriter.write(result.get("errmsg").toString());
+            printWriter.write(result.get("errMsg").toString());
         }
         printWriter.flush();
         printWriter.close();

@@ -32,20 +32,20 @@ public class OverDueServlet extends HttpServlet
         JSONObject info = null;
         PrintWriter printWriter = response.getWriter();
         AdminService adminService = new AdminServiceImpl();
-        String wechatId = "";
+        String wechatID = "";
 
         //请求成功,获取管理员openid
         if (result.containsKey("openid"))
         {
-            wechatId = (String) result.get("openid");
-            printWriter.write(adminService.getOverDue(wechatId).toJSONString());
+            wechatID = (String) result.get("openid");
+            printWriter.write(adminService.getOverDue(wechatID).toJSONString());
         }
         //请求失败，返回错误信息
         else
         {
-            info.put("errmsg", result.get("errmsg"));
+            info.put("errMsg", result.get("errMsg"));
             info.put("flag", "0");
-            printWriter.write(result.get("errmsg").toString());
+            printWriter.write(result.get("errMsg").toString());
         }
 
     }

@@ -393,10 +393,10 @@ public class ReservationDaoImpl implements ReservationDao
 
             //执行操作
             pStmt.setString(1, u_no);
-            ResultSet m_rs = pStmt.executeQuery();
-            if (m_rs.next())
+            rs = pStmt.executeQuery();
+            if (rs.next())
             {
-                num = m_rs.getInt(1);
+                num = rs.getInt(1);
             }
         }
         catch (Exception e)
