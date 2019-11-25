@@ -336,7 +336,7 @@ public class ReservationDaoImpl implements ReservationDao
      * @Param u_no  d_no
      * @Return: int
      */
-    public int confirmReserve(String u_no, int d_no)
+    public int confirmReserve(int r_no)
     {
         //初始化
         con = null;
@@ -348,13 +348,12 @@ public class ReservationDaoImpl implements ReservationDao
         {
             con = JDBCUtils.getConnection();
             sql = "UPDATE reservation SET r_state = 1  " +
-                    "WHERE u_no = ? AND d_no = ? " +
+                    "WHERE r_no = ? " +
                     "AND r_state = 0";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
-            pStmt.setString(1, u_no);
-            pStmt.setInt(2, d_no);
+            pStmt.setInt(1, r_no);
 
             flag = pStmt.executeUpdate();
         }
@@ -374,7 +373,7 @@ public class ReservationDaoImpl implements ReservationDao
      * @Param u_no  d_no  r_feedBack
      * @Return: int
      */
-    public int refuseReserve(String u_no, int d_no, String r_feedBack)
+    public int refuseReserve(int r_no , String r_feedBack)
     {
         //初始化
         con = null;
@@ -386,14 +385,13 @@ public class ReservationDaoImpl implements ReservationDao
         {
             con = JDBCUtils.getConnection();
             sql = "UPDATE reservation SET r_state = -1, r_feedback = ?  " +
-                    "WHERE u_no = ? AND d_no = ? " +
+                    "WHERE r_no = ? " +
                     "AND r_state = 0";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
             pStmt.setString(1, r_feedBack);
-            pStmt.setString(2, u_no);
-            pStmt.setInt(3, d_no);
+            pStmt.setInt(2, r_no);
 
             flag = pStmt.executeUpdate();
         }

@@ -21,18 +21,17 @@ public class RefuseReservationServlet extends HttpServlet
         response.setCharacterEncoding("UTF-8");
 
         //获取参数
-        String u_no = request.getParameter("u_no");
-        int d_no = Integer.parseInt(request.getParameter("d_no"));
+        int r_no = Integer.parseInt(request.getParameter("r_no"));
         String r_feedBack = request.getParameter("r_feedBack");
 
         //返回参数
         AdminService adminService = new AdminServiceImpl();
         PrintWriter printWriter = response.getWriter();
-        printWriter.write(adminService.refuseBorrow(u_no, d_no, r_feedBack).toJSONString());
+        printWriter.write(adminService.refuseBorrow(r_no, r_feedBack).toJSONString());
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-
+        doPost(request, response);
     }
 }

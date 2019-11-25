@@ -21,13 +21,12 @@ public class ConfirmReservationServlet extends HttpServlet
         response.setCharacterEncoding("UTF-8");
 
         //获取参数
-        String u_no = request.getParameter("u_no");
-        int d_no = Integer.parseInt(request.getParameter("d_no"));
+        int r_no = Integer.parseInt(request.getParameter("r_no"));
 
         //返回参数
         AdminService adminService = new AdminServiceImpl();
         PrintWriter printWriter = response.getWriter();
-        printWriter.write(adminService.confirmBorrow(u_no, d_no).toJSONString());
+        printWriter.write(adminService.confirmBorrow(r_no).toJSONString());
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

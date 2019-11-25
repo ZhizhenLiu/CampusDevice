@@ -75,26 +75,39 @@ public class AdminServiceImpl implements AdminService
      * @Param u_no  d_no  borrowDate  returnDate
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject confirmBorrow(String u_no, int d_no)
+    public JSONObject confirmBorrow(int r_no)
     {
         JSONObject info = new JSONObject();
         JSONArray errMsg = new JSONArray();
+        Reservation reservation = reservationDao.getReservation(r_no);
+        String u_no = reservation.getU_no();
+        int d_no = reservation.getD_no();
         String state = deviceDao.getDeviceState(d_no);
+
+        info.put("flag", 1);
         if (state.equals("在库"))
         {
-            String borrowDate = reservationDao.getStartDate(u_no, d_no);
-            String returnDate = reservationDao.getReturnDate(u_no, d_no);
+            String borrowDate = reservation.getR_startDate();
+            String returnDate = reservation.getR_returnDate();
 
             // 预约状态置为1（成功）-> 设备状态修改外借 -> 借用表中插入记录
-            int flag = reservationDao.confirmReserve(u_no, d_no);
-            flag += deviceDao.setDeviceState("外借", d_no);
-            flag += borrowDao.confirmBorrow(u_no, d_no, borrowDate, returnDate);
-
-            info.put("flag", flag == 2 ? 1 : 0);
-
+            int flag = reservationDao.confirmReserve(r_no);
             if (flag == 0)
             {
-                errMsg.add("确认设备借用失败，出现异常");
+                info.put("flag", 0);
+                errMsg.add("修改预约状态失败");
+            }
+            flag = deviceDao.setDeviceState("外借", d_no);
+            if (flag == 0)
+            {
+                info.put("flag", 0);
+                errMsg.add("设备状态修改外借失败");
+            }
+            flag = borrowDao.confirmBorrow(u_no, d_no, borrowDate, returnDate);
+            if (flag == 0)
+            {
+                info.put("flag", 0);
+                errMsg.add("借用表中插入记录失败");
             }
         }
         else
@@ -111,11 +124,14 @@ public class AdminServiceImpl implements AdminService
      * @Param u_no  d_no
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject refuseBorrow(String u_no, int d_no, String r_feedBack)
+    public JSONObject refuseBorrow(int r_no, String r_feedBack)
     {
         JSONObject info = new JSONObject();
         JSONArray errMsg = new JSONArray();
-        int flag = reservationDao.refuseReserve(u_no, d_no, r_feedBack);
+        Reservation reservation = reservationDao.getReservation(r_no);
+        String u_no = reservation.getU_no();
+
+        int flag = reservationDao.refuseReserve(r_no, r_feedBack);
         info.put("flag", flag);
         if (flag == 0)
         {
