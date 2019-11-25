@@ -424,10 +424,11 @@ public class ReservationDaoImpl implements ReservationDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT r_no,r_reservation_date, r_start_date, r_return_date, d.d_no, d_name, d_main_use, r_state " +
+            sql = "SELECT r_no,r_reservation_date, r_start_date, r_return_date, d.d_no, d_name, d_main_use " +
                     "FROM reservation r,device d " +
                     "WHERE r.d_no = d.d_no " +
-                    "AND u_no = ? ";
+                    "AND u_no = ? AND r_state = 0 " +
+                    "ORDER BY r_reservation_date ";
             pStmt = con.prepareStatement(sql);
 
             //执行操作
@@ -442,7 +443,6 @@ public class ReservationDaoImpl implements ReservationDao
                 reservation.setR_returnDate(rs.getString("r_return_date"));
                 reservation.setD_no(rs.getInt("d_no"));
                 reservation.setD_name(rs.getString("d_name"));
-                reservation.setR_state(rs.getInt("r_state"));
                 reservationList.add(reservation);
             }
 
