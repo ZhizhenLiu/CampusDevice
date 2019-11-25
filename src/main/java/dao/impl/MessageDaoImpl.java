@@ -34,7 +34,7 @@ public class MessageDaoImpl implements MessageDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT * FROM message WHERE u_no = ? LIMIT ?,? ORDER BY m_date";
+            sql = "SELECT * FROM message WHERE u_no = ? ORDER BY m_date LIMIT ?,?";
             pStmt = con.prepareStatement(sql);
             //执行操作
             pStmt.setString(1, u_no);

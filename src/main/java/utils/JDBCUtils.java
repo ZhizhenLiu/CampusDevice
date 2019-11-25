@@ -8,7 +8,7 @@ import java.sql.*;
 public class JDBCUtils
 {
 
-    private static String c_url = "jdbc:mysql://49.235.73.29:3306/testdb?serverTimezone=UTC";
+    private static String c_url = "jdbc:mysql://49.235.73.29:3306/testdb?serverTimezone=Asia/Shanghai";
     private static String c_user = "root";
     private static String c_password = "skplroot";
     private static Connection connection;
