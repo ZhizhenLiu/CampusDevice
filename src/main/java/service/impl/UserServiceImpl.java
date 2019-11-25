@@ -147,6 +147,34 @@ public class UserServiceImpl implements UserService
     }
 
     /*
+     * @Description: 用户取消预约
+     * @Param r_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject cancelReservation(int r_no)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        info.put("flag", 1);
+        int flag = reservationDao.cancelReservation(r_no);
+        if (flag == 0)
+        {
+            info.put("flag", 0);
+            errMsg.add("用户取消预约失败");
+        }
+        String u_no = reservationDao.getReservation(r_no).getU_no();
+        flag = messageDao.sendMessage(u_no, "你已经成功取消预约设备");
+        if (flag == 0)
+        {
+            info.put("flag", 0);
+            errMsg.add("发送提示消息失败");
+        }
+        info.put("errMsg", errMsg);
+        return info;
+    }
+
+    /*
      * @Description: 查询用户借用的记录(借用中b_state=0，归还b_state=1,逾期未还b_state= -1)
      * @Param wechatID
      * @Return: com.alibaba.fastjson.JSONObject

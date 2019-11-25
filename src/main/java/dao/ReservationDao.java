@@ -9,7 +9,12 @@ import java.util.List;
 
 public interface ReservationDao
 {
-
+    /*
+     * @Description: 根据借用编号获取借用对象
+     * @Param r_no
+     * @Return: bean.Reservation
+     */
+    Reservation getReservation(int r_no);
 
     /*
      * @Description: 用户预约设备
@@ -17,6 +22,13 @@ public interface ReservationDao
      * @Return: com.alibaba.fastjson.JSONObject
      */
     int reserveDevice(int d_no, String wechatId, Date startDate, Date returnDate);
+
+    /*
+     * @Description: 用户取消预约
+     * @Param r_no
+     * @Return: int
+     */
+    int cancelReservation(int r_no);
 
     /*
      * @Description: 通过管理员编号获取管理员管辖范围内的有人预约的设备

@@ -54,6 +54,6 @@ public class Test {
 //       System.out.println(userService.getJSONUserByWechatID("o0ug241yqbsjM0N5xR5qhLxi8gH0"));
 //       System.out.println(adminService.getReservedDevice("o0ug241yqbsjM0N5xR5qhLxi8gH0"));
 //       System.out.println(adminService.getReservationDetail(1));
-       System.out.println(borrowDao.getOverDueList(3));
+       System.out.println(userService.cancelReservation(1));
    }
 }

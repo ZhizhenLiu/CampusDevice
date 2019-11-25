@@ -21,6 +21,51 @@ public class ReservationDaoImpl implements ReservationDao
     private String sql;
 
     /*
+     * @Description: 根据借用编号获取借用对象
+     * @Param r_no
+     * @Return: bean.Reservation
+     */
+    public Reservation getReservation(int r_no)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        Reservation reservation = new Reservation();
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "SELECT * FROM reservation WHERE r_no = ?";
+            pStmt = con.prepareStatement(sql);
+            pStmt.setInt(1, r_no);
+
+            //记录执行状态
+            rs = pStmt.executeQuery();
+            if (rs.next())
+            {
+                reservation.setR_no(rs.getInt("r_no"));
+                reservation.setD_no(rs.getInt("d_no"));
+                reservation.setU_no(rs.getString("u_no"));
+                reservation.setR_reservationDate(rs.getString("r_reservation_date"));
+                reservation.setR_startDate(rs.getString("r_start_date"));
+                reservation.setR_returnDate(rs.getString("r_return_date"));
+                reservation.setR_feedBack(rs.getString("r_feedback"));
+                reservation.setR_state(rs.getInt("r_state"));
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(null, pStmt, con);
+        }
+
+        return reservation;
+    }
+    /*
      * @Description: 用户预约设备
      * @Param deviceNo  wechatId  startDate  endDate
      * @Return: com.alibaba.fastjson.JSONObject
@@ -59,6 +104,42 @@ public class ReservationDaoImpl implements ReservationDao
         return flag;
     }
 
+    /*
+     * @Description: 用户取消预约
+     * @Param r_no
+     * @Return: int
+     */
+    public int cancelReservation(int r_no)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        int flag = 0;
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "UPDATE reservation SET r_state = -1, r_feedback = ?  " +
+                    "WHERE r_no = ? ";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            pStmt.setString(1, "用户取消预约");
+            pStmt.setInt(2, r_no);
+
+            flag = pStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return flag;
+    }
     /*
      * @Description: 通过标识获取管理员管辖范围内的有人预约的设备
      * @Param wechatId
@@ -343,7 +424,7 @@ public class ReservationDaoImpl implements ReservationDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT r_reservation_date, r_start_date, r_return_date, d.d_no, d_name, d_main_use, r_state " +
+            sql = "SELECT r_no,r_reservation_date, r_start_date, r_return_date, d.d_no, d_name, d_main_use, r_state " +
                     "FROM reservation r,device d " +
                     "WHERE r.d_no = d.d_no " +
                     "AND u_no = ? ";
@@ -355,6 +436,7 @@ public class ReservationDaoImpl implements ReservationDao
             while (rs.next())
             {
                 Reservation reservation = new Reservation();
+                reservation.setR_no(rs.getInt("r_no"));
                 reservation.setR_reservationDate(rs.getString("r_reservation_date"));
                 reservation.setR_startDate(rs.getString("r_start_date"));
                 reservation.setR_returnDate(rs.getString("r_return_date"));

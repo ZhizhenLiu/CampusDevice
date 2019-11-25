@@ -52,6 +52,13 @@ public interface UserService
     JSONObject reserveDevice(int d_no, String wechatId, Date startDate, Date returnDate);
 
     /*
+     * @Description: 用户取消预约
+     * @Param r_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject cancelReservation(int r_no);
+
+    /*
      * @Description: 查询用户借用的记录(借用中b_state=0，归还b_state=1,逾期未还b_state= -1)
      * @Param wechatID
      * @Return: com.alibaba.fastjson.JSONObject
