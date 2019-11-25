@@ -164,7 +164,8 @@ public class UserServiceImpl implements UserService
             errMsg.add("用户取消预约失败");
         }
         String u_no = reservationDao.getReservation(r_no).getU_no();
-        flag = messageDao.sendMessage(u_no, "你已经成功取消预约设备");
+        String d_name = reservationDao.getReservation(r_no).getD_name();
+        flag = messageDao.sendMessage(u_no, "你已经成功取消预约设备："+d_name);
         if (flag == 0)
         {
             info.put("flag", 0);

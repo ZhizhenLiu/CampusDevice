@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "HandleBorrowServlet")
+@WebServlet(name = "HandleBorrowServlet", urlPatterns = "/admin/handleBorrow")
 public class HandleBorrowServlet extends HttpServlet
 {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

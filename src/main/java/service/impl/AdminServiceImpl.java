@@ -190,13 +190,16 @@ public class AdminServiceImpl implements AdminService
         JSONArray errMsg = new JSONArray();
         Borrow borrow = borrowDao.getBorrowByNo(b_no);
         String u_no = borrow.getU_no();
+        String u_name = userDao.getUserByNo(u_no).getU_name();
         int d_no = borrow.getD_no();
+        String d_name = deviceDao.getDeviceByNo(d_no).getD_name();
 
         int flag = borrowDao.returnBorrow(b_no);
         if (flag == 0)
         {
             errMsg.add("修改借用记录状态为归还失败");
         }
+        flag = messageDao.sendMessage(u_no, u_name +"，管理员已确认你归还设备："+ d_name);
         //归还设备
         flag = returnDeviceDao.returnDevice(u_no, d_no, b_no);
         if (flag == 0)
