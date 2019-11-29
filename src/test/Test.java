@@ -1,18 +1,17 @@
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import dao.BorrowDao;
-import dao.DeviceDao;
-import dao.ReservationDao;
-import dao.UserDao;
-import dao.impl.BorrowDaoImpl;
-import dao.impl.DeviceDaoImpl;
-import dao.impl.ReservationDaoImpl;
-import dao.impl.UserDaoImpl;
+import dao.*;
+import dao.impl.*;
 import service.AdminService;
 import service.UserService;
 import service.impl.AdminServiceImpl;
 import service.impl.UserServiceImpl;
+import utils.JDBCUtils;
 import utils.MessageUtils;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class Test {
     @org.junit.jupiter.api.Test
@@ -20,8 +19,7 @@ public class Test {
     public void test() {
 
         ReservationDao reservationDao = new ReservationDaoImpl();
-        System.out.println(reservationDao.getStartDate("201797689552",2));
-        System.out.println(reservationDao.getReturnDate("201797689552",2));
+
     }
 
     @org.junit.jupiter.api.Test
@@ -47,13 +45,11 @@ public class Test {
        UserDao userDao = new UserDaoImpl();
        DeviceDao deviceDao = new DeviceDaoImpl();
        BorrowDao borrowDao = new BorrowDaoImpl();
-       /*
-       System.out.println(adminService.confirmBorrow("201726010310",5));*/
-//       System.out.println(adminService.refuseBorrow());
-//       System.out.println(adminService.getOverDue("o0ug241yqbsjM0N5xR5qhLxi8gH0"));
-//       System.out.println(userService.getJSONUserByWechatID("o0ug241yqbsjM0N5xR5qhLxi8gH0"));
+       CommentDao  commentDao = new CommentDaoImpl();
+
+//      System.out.println(userService.reserveDevice("1713714S","o0ug241yqbsjM0N5xR5qhLxi8gH0","2019-10-01","2019-10-07"));
 //       System.out.println(adminService.getReservedDevice("o0ug241yqbsjM0N5xR5qhLxi8gH0"));
-//       System.out.println(adminService.getReservationDetail(1));
-       System.out.println(adminService.confirmBorrow(14));
+
+       System.out.println(userService.getCommentByPage("1713714S",1,4));
    }
 }

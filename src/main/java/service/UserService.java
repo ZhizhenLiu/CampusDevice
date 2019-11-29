@@ -34,7 +34,7 @@ public interface UserService
      * @Param page:页数，第几页  count：每页设备数量
      * @Return: java.util.List<bean.Device>
      */
-    JSONObject getHotDeviceByPage(int page, int count);
+    JSONObject getHotDevice();
 
 
     /*
@@ -42,14 +42,14 @@ public interface UserService
      * @Param d_no
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject getDeviceDetails(int d_no);
+    JSONObject getDeviceDetails(String d_no);
 
     /*
      * @Description: 用户预约设备
      * @Param d_no  wechatId  startDate  returnDate
      * @Return: int : 1为成功、0为失败
      */
-    JSONObject reserveDevice(int d_no, String wechatId, Date startDate, Date returnDate);
+    JSONObject reserveDevice(String d_no, String wechatId, String startDate, String returnDate);
 
     /*
      * @Description: 用户取消预约
@@ -92,4 +92,18 @@ public interface UserService
      * @Return: com.alibaba.fastjson.JSONObject
      */
     JSONObject getDeviceByKeyword(String keyword);
+    
+    /*
+     * @Description: 用户评价设备
+     * @Param wechatID  d_no  comment
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject commentOnDevice(String wechatID, String d_no, String comment);
+
+    /*
+     * @Description: 分页查询 获得设备评论
+     * @Param d_no  page  count
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject getCommentByPage(String d_no, int page, int count);
 }

@@ -28,7 +28,7 @@ public class UserDaoImpl implements UserDao
         pStmt = null;
         rs = null;
 
-        User user = new User();
+        User user = null;
         try
         {
             con = JDBCUtils.getConnection();

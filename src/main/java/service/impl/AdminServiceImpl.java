@@ -3,7 +3,6 @@ package service.impl;
 import bean.Borrow;
 import bean.Device;
 import bean.Reservation;
-import bean.User;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -34,9 +33,9 @@ public class AdminServiceImpl implements AdminService
         //获取主键，通过主键查询
         int a_no = adminDao.getAdminByWechatID(wechatID).getA_no();
         JSONObject info = new JSONObject();
-        List<Device> deviceList = reservationDao.getReservedDevice(a_no);
+        List<Reservation> reservationList = reservationDao.handleReservation(a_no);
         info.put("flag", 1);
-        info.put("device", JSONArray.parseArray(JSON.toJSONString(deviceList)));
+        info.put("device", JSONArray.parseArray(JSON.toJSONString(reservationList)));
         return info;
     }
 
@@ -61,10 +60,10 @@ public class AdminServiceImpl implements AdminService
      * @Param deviceNo
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject getReservationDetail(int d_no)
+    public JSONObject getReservationDetail(String d_no)
     {
         JSONObject info = new JSONObject();
-        List<Reservation> reservationList = reservationDao.getReservationDetail(d_no);
+        List<Reservation> reservationList = reservationDao.handleReservationDetail(d_no);
         info.put("flag", 1);
         info.put("reservation", JSONArray.parseArray(JSON.toJSONString(reservationList)));
         return info;
@@ -81,7 +80,10 @@ public class AdminServiceImpl implements AdminService
         JSONArray errMsg = new JSONArray();
         Reservation reservation = reservationDao.getReservation(r_no);
         String u_no = reservation.getU_no();
-        int d_no = reservation.getD_no();
+        String u_name = reservation.getU_name() + reservation.getU_type();
+        String d_no = reservation.getD_no();
+        String d_name = reservation.getD_name();
+        String d_saveSite = reservation.getD_saveSite();
         String state = deviceDao.getDeviceState(d_no);
 
         info.put("flag", 1);
@@ -109,6 +111,12 @@ public class AdminServiceImpl implements AdminService
                 info.put("flag", 0);
                 errMsg.add("借用表中插入记录失败");
             }
+            flag = messageDao.sendMessage(u_no, u_name+"，管理员已批准你的预约，设备："+d_name+"。请在今日内到"+d_saveSite+"领取设备");
+            if (flag == 0)
+            {
+                info.put("flag", 0);
+                errMsg.add("发送成功借用提示失败");
+            }
         }
         else
         {
@@ -130,6 +138,7 @@ public class AdminServiceImpl implements AdminService
         JSONArray errMsg = new JSONArray();
         Reservation reservation = reservationDao.getReservation(r_no);
         String u_no = reservation.getU_no();
+        info.put("flag", 1);
 
         int flag = reservationDao.refuseReserve(r_no, r_feedBack);
         info.put("flag", flag);
@@ -142,6 +151,7 @@ public class AdminServiceImpl implements AdminService
         if (r_feedBack != null)
         {
             flag = messageDao.sendMessage(u_no, r_feedBack);
+            info.put("flag", flag);
             if (flag == 0)
             {
                 errMsg.add("发送消息给用户失败");
@@ -190,8 +200,8 @@ public class AdminServiceImpl implements AdminService
         JSONArray errMsg = new JSONArray();
         Borrow borrow = borrowDao.getBorrowByNo(b_no);
         String u_no = borrow.getU_no();
-        String u_name = userDao.getUserByNo(u_no).getU_name();
-        int d_no = borrow.getD_no();
+        String u_name = userDao.getUserByNo(u_no).getU_name() + userDao.getUserByNo(u_no).getU_type();
+        String d_no = borrow.getD_no();
         String d_name = deviceDao.getDeviceByNo(d_no).getD_name();
 
         int flag = borrowDao.returnBorrow(b_no);
@@ -199,7 +209,7 @@ public class AdminServiceImpl implements AdminService
         {
             errMsg.add("修改借用记录状态为归还失败");
         }
-        flag = messageDao.sendMessage(u_no, u_name +"，管理员已确认你归还设备："+ d_name);
+        flag = messageDao.sendMessage(u_no, u_name +"，管理员已确认你归还设备："+ d_name+"，感谢你的合作");
         if(flag == 0)
         {
             errMsg.add("发送提示信息失败");

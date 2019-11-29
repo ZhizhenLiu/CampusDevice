@@ -34,16 +34,10 @@ public class BorrowDaoImpl implements BorrowDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT " +
-                    "b_borrow_date," +
-                    "b_return_date," +
-                    "d_save_site," +
-                    "device.d_no," +
-                    "d_name," +
-                    "d_main_use," +
-                    "b_state " +
-                    "FROM borrow, device " +
-                    "WHERE u_no = ?";
+            sql = "SELECT b_borrow_date, b_return_date, d_save_site, device.d_no, d_name, d_main_use " +
+                  "FROM borrow, device " +
+                  "WHERE u_no = ? AND b_state = 0 " +
+                  "AND borrow.d_no = device.d_no";
             pStmt = con.prepareStatement(sql);
 
             //执行操作
@@ -55,10 +49,9 @@ public class BorrowDaoImpl implements BorrowDao
                 borrow.setB_borrowDate(rs.getString("b_borrow_date"));
                 borrow.setB_returnDate(rs.getString("b_return_date"));
                 borrow.setD_saveSite(rs.getString("d_save_site"));
-                borrow.setD_no(rs.getInt("d_no"));
+                borrow.setD_no(rs.getString("d_no"));
                 borrow.setD_name(rs.getString("d_name"));
                 borrow.setD_mainUse(rs.getString("d_main_use"));
-                borrow.setB_state(rs.getInt("b_state"));
                 borrowList.add(borrow);
             }
         }
@@ -106,7 +99,7 @@ public class BorrowDaoImpl implements BorrowDao
                 Borrow borrow = new Borrow();
                 borrow.setB_no(rs.getInt("b_no"));
                 borrow.setD_name(rs.getString("d_name"));
-                borrow.setD_no(rs.getInt("d_no"));
+                borrow.setD_no(rs.getString("d_no"));
                 borrow.setU_no(rs.getString("u_no"));
                 borrow.setU_name(rs.getString("u_name"));
                 borrow.setU_creditGrade(rs.getInt("u_credit_grade"));
@@ -131,7 +124,7 @@ public class BorrowDaoImpl implements BorrowDao
      * @Param u_no  d_no  borrowDate  returnDate
      * @Return: int
      */
-    public int confirmBorrow(String u_no, int d_no, String borrowDate, String returnDate)
+    public int confirmBorrow(String u_no, String d_no, String borrowDate, String returnDate)
     {
         //初始化
         con = null;
@@ -145,7 +138,7 @@ public class BorrowDaoImpl implements BorrowDao
         try
         {
             pStmt = con.prepareStatement(sql);
-            pStmt.setInt(1, d_no);
+            pStmt.setString(1, d_no);
             pStmt.setString(2, u_no);
             pStmt.setString(3, borrowDate);
             pStmt.setString(4, returnDate);
@@ -316,7 +309,7 @@ public class BorrowDaoImpl implements BorrowDao
             if (rs.next())
             {
                 borrow.setB_no(rs.getInt("b_no"));
-                borrow.setD_no(rs.getInt("d_no"));
+                borrow.setD_no(rs.getString("d_no"));
                 borrow.setU_no(rs.getString("u_no"));
                 borrow.setB_borrowDate(rs.getString("b_borrow_date"));
                 borrow.setB_returnDate(rs.getString("b_return_date"));

@@ -27,7 +27,7 @@ public interface BorrowDao
      * @Param u_no  d_no  borrowDate  returnDate
      * @Return: int
      */
-    int confirmBorrow(String u_no, int d_no, String borrowDate, String returnDate);
+    int confirmBorrow(String u_no, String d_no, String borrowDate, String returnDate);
 
     /*
      * @Description: 设置所有逾期设备状态为 -1 表示逾期未还

@@ -23,7 +23,7 @@ public class HotServlet extends HttpServlet
         //返回参数
         UserService userService = new UserServiceImpl();
         PrintWriter printWriter = response.getWriter();
-        printWriter.write(userService.getHotDeviceByPage(1, 10).toJSONString());
+        printWriter.write(userService.getHotDevice().toJSONString());
 
         printWriter.flush();
         printWriter.close();

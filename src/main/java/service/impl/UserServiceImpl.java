@@ -8,6 +8,7 @@ import dao.*;
 import dao.impl.*;
 import service.UserService;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class UserServiceImpl implements UserService
     private BorrowDao borrowDao = new BorrowDaoImpl();
     private CreditRecordDao creditRecordDao = new CreditRecordDaoImpl();
     private MessageDao messageDao = new MessageDaoImpl();
+    private CommentDao commentDao = new CommentDaoImpl();
 
     /*
      * @Description: 通过用户编号获取用户对象
@@ -74,9 +76,9 @@ public class UserServiceImpl implements UserService
      * @Param page  count
      * @Return: com.alibaba.fastjson.JSONArray
      */
-    public JSONObject getHotDeviceByPage(int page, int count)
+    public JSONObject getHotDevice()
     {
-        List<Device> deviceList = deviceDao.getHotDeviceByPage(page, count);
+        List<Device> deviceList = deviceDao.getHotDevice();
         JSONObject info = new JSONObject();
         if (deviceList.isEmpty())
         {
@@ -96,7 +98,7 @@ public class UserServiceImpl implements UserService
      * @Param deviceNo
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject getDeviceDetails(int d_no)
+    public JSONObject getDeviceDetails(String d_no)
     {
         JSONObject info = new JSONObject();
         Device device = deviceDao.getDeviceDetails(d_no);
@@ -119,21 +121,31 @@ public class UserServiceImpl implements UserService
      * @Param deviceNo  wechatId  startDate  endDate
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject reserveDevice(int d_no, String wechatId, Date startDate, Date returnDate)
+    public JSONObject reserveDevice(String d_no, String wechatId, String startDate, String returnDate)
     {
         String u_no = userDao.getUserByWechatID(wechatId).getU_no();
         JSONObject info = new JSONObject();
         JSONArray errMsg = new JSONArray();
+        info.put("flag", 1);
 
         //获取设备但前状态
         String state = deviceDao.getDeviceState(d_no);
         if (state.equals("在库"))
         {
-            int flag = reservationDao.reserveDevice(d_no, u_no, startDate, returnDate);
-            info.put("flag", flag);
-            if (flag == 0)
+            //判断是否已经正在预约,如果没有正在预约该设备
+            if (!reservationDao.isReserving(u_no, d_no))
             {
-                errMsg.add("用户预约设备失败");
+                int flag = reservationDao.reserveDevice(d_no, u_no, startDate, returnDate);
+                info.put("flag", flag);
+                if (flag == 0)
+                {
+                    errMsg.add("用户预约设备失败");
+                }
+            }
+            else
+            {
+                info.put("flag", 0);
+                errMsg.add("用户已正在预约该设备！");
             }
         }
         else
@@ -165,7 +177,7 @@ public class UserServiceImpl implements UserService
         }
         String u_no = reservationDao.getReservation(r_no).getU_no();
         String d_name = reservationDao.getReservation(r_no).getD_name();
-        flag = messageDao.sendMessage(u_no, "你已经成功取消预约设备："+d_name);
+        flag = messageDao.sendMessage(u_no, "你已经成功取消预约设备：" + d_name);
         if (flag == 0)
         {
             info.put("flag", 0);
@@ -257,4 +269,60 @@ public class UserServiceImpl implements UserService
         }
         return info;
     }
+
+    /*
+     * @Description: 用户评价设备
+     * @Param wechatID  d_no  comment
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject commentOnDevice(String wechatID, String d_no, String comment)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+        User user = userDao.getUserByWechatID(wechatID);
+        if (user == null)
+        {
+            info.put("flag", 0);
+            errMsg.add("不存在该用户");
+        }
+        else
+        {
+            info.put("flag", 1);
+            String u_no = user.getU_no();
+            int flag = commentDao.addComment(u_no, d_no, comment);
+            info.put("flag", flag);
+            if (flag == 0 )
+            {
+                errMsg.add("评论失败");
+            }
+        }
+        info.put("errMsg", errMsg);
+        return info;
+    }
+
+    /*
+     * @Description: 分页查询 获得设备评论
+     * @Param d_no  page  count
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject getCommentByPage(String d_no, int page, int count)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        List<Comment> commentList = commentDao.getCommentListByPage(d_no, page, count);
+        info.put("flag", 1);
+        if (commentList.isEmpty())
+        {
+            errMsg.add("当前设备暂时没有评论");
+        }
+        else
+        {
+            info.put("comment", JSONArray.parseArray(JSON.toJSONString(commentList)));
+        }
+        info.put("errMsg", errMsg);
+
+        return info;
+    }
+
 }

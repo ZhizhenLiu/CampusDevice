@@ -17,11 +17,18 @@ public interface ReservationDao
     Reservation getReservation(int r_no);
 
     /*
-     * @Description: 用户预约设备
-     * @Param d_no  wechatId  startDate  returnDate
-     * @Return: com.alibaba.fastjson.JSONObject
+     * @Description: 判断用户是否正在预约该设备的队列中
+     * @Param u_no  d_no
+     * @Return: boolean
      */
-    int reserveDevice(int d_no, String wechatId, Date startDate, Date returnDate);
+    boolean isReserving(String u_no, String d_no);
+
+    /*
+     * @Description: 用户预约设备
+     * @Param d_no  u_no  startDate  returnDate
+     * @Return: int
+     */
+    int reserveDevice(String d_no, String u_no, String startDate, String returnDate);
 
     /*
      * @Description: 用户取消预约
@@ -35,28 +42,28 @@ public interface ReservationDao
      * @Param a_no
      * @Return: java.util.List<bean.Device>
      */
-    List<Device> getReservedDevice(int a_no);
+    List<Reservation> handleReservation(int a_no);
 
     /*
      * @Description: 获取某一个设备的预约队列
      * @Param d_no
      * @Return: java.util.List<bean.Reservation>
      */
-    List<Reservation> getReservationDetail(int d_no);
+    List<Reservation> handleReservationDetail(String d_no);
 
     /*
      * @Description: 获取某个用户预约设备的开始日期
      * @Param u_no  d_no
      * @Return: java.lang.String
      */
-    String getStartDate(String u_no, int d_no);
+    String getStartDate(String u_no, String d_no);
 
     /*
      * @Description: 获取某个用户预约设备的归还日期
      * @Param u_no  d_no
      * @Return: java.lang.String
      */
-    String getReturnDate(String u_no, int d_no);
+    String getReturnDate(String u_no, String d_no);
 
     /*
      * @Description: 预约中设备预约成功：（0:预约中 -1：预约被拒绝 1：预约成功）
@@ -79,7 +86,11 @@ public interface ReservationDao
      */
     List<Reservation> getReservation(String u_no);
 
-    //获取用户预约设备的数量
+    /*
+     * @Description: 获取用户预约设备的数量
+     * @Param u_no
+     * @Return: int
+     */
     int getReservationNum(String u_no);
 
 }

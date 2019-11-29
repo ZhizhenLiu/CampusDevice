@@ -36,7 +36,10 @@ public class ReservationDaoImpl implements ReservationDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT * FROM reservation WHERE r_no = ?";
+            sql = "SELECT * FROM reservation r, user u, device d " +
+                    "WHERE r.u_no = u.u_no " +
+                    "AND r.d_no = d.d_no " +
+                    "AND r_no = ? ";
             pStmt = con.prepareStatement(sql);
             pStmt.setInt(1, r_no);
 
@@ -45,13 +48,23 @@ public class ReservationDaoImpl implements ReservationDao
             if (rs.next())
             {
                 reservation.setR_no(rs.getInt("r_no"));
-                reservation.setD_no(rs.getInt("d_no"));
+                reservation.setD_no(rs.getString("d_no"));
                 reservation.setU_no(rs.getString("u_no"));
                 reservation.setR_reservationDate(rs.getString("r_reservation_date"));
                 reservation.setR_startDate(rs.getString("r_start_date"));
                 reservation.setR_returnDate(rs.getString("r_return_date"));
                 reservation.setR_feedBack(rs.getString("r_feedback"));
                 reservation.setR_state(rs.getInt("r_state"));
+
+                //用户附加属性
+                reservation.setU_name(rs.getString("u_name"));
+                reservation.setU_type(rs.getString("u_type"));
+                reservation.setU_creditGrade(rs.getInt("u_credit_grade"));
+
+                //设备附加属性
+                reservation.setD_name(rs.getString("d_name"));
+                reservation.setD_saveSite(rs.getString("d_save_site"));
+                reservation.setD_mainUse(rs.getString("d_main_use"));
             }
         }
         catch (SQLException e)
@@ -66,11 +79,42 @@ public class ReservationDaoImpl implements ReservationDao
         return reservation;
     }
     /*
-     * @Description: 用户预约设备
-     * @Param deviceNo  wechatId  startDate  endDate
-     * @Return: com.alibaba.fastjson.JSONObject
+     * @Description: 判断用户是否正在预约该设备的队列中
+     * @Param u_no  d_no
+     * @Return: boolean
      */
-    public int reserveDevice(int d_no, String u_no, Date startDate, Date returnDate)
+    public boolean isReserving(String u_no, String d_no)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+        boolean flag = false;
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "SELECT * FROM reservation WHERE u_no = ? AND d_no = ?";
+            pStmt = con.prepareStatement(sql);
+            pStmt.setString(1, u_no);
+            pStmt.setString(2, d_no);
+            rs = pStmt.executeQuery();
+            if (rs.next())
+            {
+                flag = true;
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return flag;
+    }
+    /*
+     * @Description: 用户预约设备
+     * @Param d_no  u_no  startDate  returnDate
+     * @Return: int
+     */
+    public int reserveDevice(String d_no, String u_no, String startDate, String returnDate)
     {
         //初始化
         con = null;
@@ -84,10 +128,10 @@ public class ReservationDaoImpl implements ReservationDao
             sql = "INSERT INTO reservation(d_no,u_no,r_reservation_date,r_start_date,r_return_date) " +
                     "VALUES(?, ?, CURRENT_DATE, ?, ?)";
             pStmt = con.prepareStatement(sql);
-            pStmt.setInt(1, d_no);
+            pStmt.setString(1, d_no);
             pStmt.setString(2, u_no);
-            pStmt.setDate(3, new java.sql.Date(startDate.getTime()));
-            pStmt.setDate(4, new java.sql.Date(returnDate.getTime()));
+            pStmt.setString(3, startDate);
+            pStmt.setString(4, returnDate);
 
             //记录执行状态
             flag = pStmt.executeUpdate();
@@ -145,23 +189,23 @@ public class ReservationDaoImpl implements ReservationDao
      * @Param wechatId
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public List<Device> getReservedDevice(int a_no)
+    public List<Reservation> handleReservation(int a_no)
     {
         //初始化
         con = null;
         pStmt = null;
         rs = null;
 
-        List<Device> deviceList = new ArrayList<>();
+        List<Reservation> reservationList = new ArrayList<>();
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT d.d_no, d.d_name, d.d_main_use, COUNT(*) r_sum " +
+            sql = "SELECT d.d_no, d.d_name, d.d_model, COUNT(*) r_sum " +
                     "FROM reservation r, device d " +
                     "WHERE " +
                     "r.d_no = d.d_no " +
                     "AND d.a_no = ? AND r_state = 0 " +
-                    "GROUP BY d.d_no, d.d_name, d.d_main_use " +
+                    "GROUP BY d.d_no, d.d_name, d.d_model " +
                     "ORDER BY r_sum DESC";
             pStmt = con.prepareStatement(sql);
 
@@ -172,12 +216,12 @@ public class ReservationDaoImpl implements ReservationDao
             //判断是否存在记录
             while (rs.next())
             {
-                Device device = new Device();
-                device.setD_no(rs.getInt("d_no"));
-                device.setD_name(rs.getString("d_name"));
-                device.setD_mainUse(rs.getString("d_main_use"));
-                device.setR_sum(rs.getInt("r_sum"));
-                deviceList.add(device);
+                Reservation reservatioin = new Reservation();
+                reservatioin.setD_no(rs.getString("d_no"));
+                reservatioin.setD_name(rs.getString("d_name"));
+                reservatioin.setD_mainUse(rs.getString("d_model"));
+                reservatioin.setR_sum(rs.getInt("r_sum"));
+                reservationList.add(reservatioin);
             }
         }
         catch (SQLException e)
@@ -188,7 +232,7 @@ public class ReservationDaoImpl implements ReservationDao
         {
             JDBCUtils.closeAll(rs, pStmt, con);
         }
-        return deviceList;
+        return reservationList;
     }
 
     /*
@@ -196,7 +240,7 @@ public class ReservationDaoImpl implements ReservationDao
      * @Param deviceNo
      * @Return: java.util.List<bean.Reservation>
      */
-    public List<Reservation> getReservationDetail(int d_no)
+    public List<Reservation> handleReservationDetail(String d_no)
     {
         //初始化
         con = null;
@@ -217,7 +261,7 @@ public class ReservationDaoImpl implements ReservationDao
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
-            pStmt.setInt(1, d_no);
+            pStmt.setString(1, d_no);
             rs = pStmt.executeQuery();
 
             while (rs.next())
@@ -245,7 +289,7 @@ public class ReservationDaoImpl implements ReservationDao
         return reservationList;
     }
 
-    public String getStartDate(String u_no, int d_no)
+    public String getStartDate(String u_no, String d_no)
     {
         //初始化
         con = null;
@@ -264,7 +308,7 @@ public class ReservationDaoImpl implements ReservationDao
 
             //替换参数，从1开始
             pStmt.setString(1, u_no);
-            pStmt.setInt(2, d_no);
+            pStmt.setString(2, d_no);
             rs = pStmt.executeQuery();
 
             //判断是否存在记录
@@ -288,7 +332,7 @@ public class ReservationDaoImpl implements ReservationDao
         return startDate;
     }
 
-    public String getReturnDate(String u_no, int d_no)
+    public String getReturnDate(String u_no, String d_no)
     {
         //初始化
         con = null;
@@ -307,7 +351,7 @@ public class ReservationDaoImpl implements ReservationDao
 
             //替换参数，从1开始
             pStmt.setString(1, u_no);
-            pStmt.setInt(2, d_no);
+            pStmt.setString(2, d_no);
             rs = pStmt.executeQuery();
 
             //判断是否存在记录
@@ -439,7 +483,7 @@ public class ReservationDaoImpl implements ReservationDao
                 reservation.setR_reservationDate(rs.getString("r_reservation_date"));
                 reservation.setR_startDate(rs.getString("r_start_date"));
                 reservation.setR_returnDate(rs.getString("r_return_date"));
-                reservation.setD_no(rs.getInt("d_no"));
+                reservation.setD_no(rs.getString("d_no"));
                 reservation.setD_name(rs.getString("d_name"));
                 reservationList.add(reservation);
             }

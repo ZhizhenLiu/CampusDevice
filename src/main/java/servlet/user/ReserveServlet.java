@@ -27,27 +27,11 @@ public class ReserveServlet extends HttpServlet
         response.setCharacterEncoding("UTF-8");
 
         //获取参数
-        int d_no = Integer.parseInt(request.getParameter("d_no"));
+        String d_no = request.getParameter("d_no");
         String code = request.getParameter("code");
-        String start = request.getParameter("startDate");
-        String end = request.getParameter("returnDate");
+        String startDate = request.getParameter("startDate");
+        String returnDate = request.getParameter("returnDate");
 
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate = null, returnDate = null;
-        try
-        {
-            System.out.println(start + " " + end);
-            startDate = format.parse(start);
-            returnDate = format.parse(end);
-        }
-        catch (ParseException e)
-        {
-            e.printStackTrace();
-        }
-        System.out.println(d_no);
-        System.out.println(code);
-        System.out.println(startDate);
-        System.out.println(returnDate);
 
         //向微信服务器接口发送code，获取用户唯一标识openid, 返回参数
         JSONObject result = JSONObject.parseObject(HttpUtils.sendGet(code));

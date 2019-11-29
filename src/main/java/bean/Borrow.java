@@ -3,7 +3,7 @@ package bean;
 public class Borrow
 {
     private int b_no;
-    private int d_no;
+    private String d_no;
     private String u_no;
     private String b_borrowDate;
     private String b_returnDate;
@@ -25,24 +25,6 @@ public class Borrow
     {
     }
 
-    public Borrow(int b_no, int d_no, String u_no, String b_borrowDate, String b_returnDate, int b_state, String u_name, String u_type, int u_creditGrade, String u_phone, String u_email, String d_saveSite, String d_name, String d_mainUse)
-    {
-        this.b_no = b_no;
-        this.d_no = d_no;
-        this.u_no = u_no;
-        this.b_borrowDate = b_borrowDate;
-        this.b_returnDate = b_returnDate;
-        this.b_state = b_state;
-        this.u_name = u_name;
-        this.u_type = u_type;
-        this.u_creditGrade = u_creditGrade;
-        this.u_phone = u_phone;
-        this.u_email = u_email;
-        this.d_saveSite = d_saveSite;
-        this.d_name = d_name;
-        this.d_mainUse = d_mainUse;
-    }
-
     public int getB_no()
     {
         return b_no;
@@ -53,12 +35,12 @@ public class Borrow
         this.b_no = b_no;
     }
 
-    public int getD_no()
+    public String getD_no()
     {
         return d_no;
     }
 
-    public void setD_no(int d_no)
+    public void setD_no(String d_no)
     {
         this.d_no = d_no;
     }
@@ -188,19 +170,19 @@ public class Borrow
     {
         return "Borrow{" +
                 "b_no=" + b_no +
-                ", d_no=" + d_no +
+                ", d_no='" + d_no + '\'' +
                 ", u_no='" + u_no + '\'' +
-                ", b_borrow_date='" + b_borrowDate + '\'' +
-                ", b_return_date='" + b_returnDate + '\'' +
+                ", b_borrowDate='" + b_borrowDate + '\'' +
+                ", b_returnDate='" + b_returnDate + '\'' +
                 ", b_state=" + b_state +
                 ", u_name='" + u_name + '\'' +
                 ", u_type='" + u_type + '\'' +
-                ", u_credit_grade=" + u_creditGrade +
+                ", u_creditGrade=" + u_creditGrade +
                 ", u_phone='" + u_phone + '\'' +
                 ", u_email='" + u_email + '\'' +
-                ", return_place='" + d_saveSite + '\'' +
+                ", d_saveSite='" + d_saveSite + '\'' +
                 ", d_name='" + d_name + '\'' +
-                ", d_main_use='" + d_mainUse + '\'' +
+                ", d_mainUse='" + d_mainUse + '\'' +
                 '}';
     }
 }

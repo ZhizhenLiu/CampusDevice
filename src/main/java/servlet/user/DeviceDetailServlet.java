@@ -21,7 +21,7 @@ public class DeviceDetailServlet extends HttpServlet
         response.setCharacterEncoding("UTF-8");
 
         //获取参数
-        int d_no = Integer.parseInt(request.getParameter("d_no"));
+        String d_no = request.getParameter("d_no");
 
         //返回参数
         UserService userService = new UserServiceImpl();

@@ -23,7 +23,7 @@ public class DeviceDaoImpl implements DeviceDao
      * @Param  page: 页数，第几页  count：每页设备数量
      * @Return: java.util.List<bean.Device>
      */
-    public List<Device> getHotDeviceByPage(int page, int count)
+    public List<Device> getHotDevice()
     {
         //初始化
         con = null;
@@ -32,19 +32,19 @@ public class DeviceDaoImpl implements DeviceDao
 
         List<Device> deviceList = new ArrayList<>();
         con = JDBCUtils.getConnection();
-        sql = "SELECT * FROM device LIMIT ?,?";
+        sql = "SELECT * FROM device ORDER BY d_borrowed_times LIMIT 0,10";
         try
         {
             pStmt = con.prepareStatement(sql);
-            pStmt.setInt(1, (page - 1) * count);
-            pStmt.setInt(2, count);
             rs = pStmt.executeQuery();
 
             //判断是否存在记录
             while (rs.next())
             {
-                Device device = new Device(rs.getInt("d_no"), rs.getString("a_no"), rs.getString("d_state"), rs.getInt("d_borrowed_times"),
-                        rs.getString("d_name"), rs.getString("d_important_param"), rs.getString("d_main_use"), rs.getString("d_save_site"));
+                Device device = new Device();
+                device.setD_model(rs.getString("d_model"));
+                device.setD_name(rs.getString("d_name"));
+                device.setD_state(rs.getString("d_state"));
                 deviceList.add(device);
             }
         }
@@ -64,14 +64,14 @@ public class DeviceDaoImpl implements DeviceDao
      * @Param deviceNo
      * @Return: bean.Device
      */
-    public Device getDeviceDetails(int d_no)
+    public Device getDeviceDetails(String d_no)
     {
         //初始化
         con = null;
         pStmt = null;
         rs = null;
 
-        Device device = new Device();
+        Device device = null;
         try
         {
             con = JDBCUtils.getConnection();
@@ -80,11 +80,12 @@ public class DeviceDaoImpl implements DeviceDao
                     "(SELECT a_phone FROM administrator a2 WHERE a2.a_no = d.a_no ) a_phone  " +
                     "FROM device d WHERE d_no = ? ";
             pStmt = con.prepareStatement(sql);
-            pStmt.setInt(1, d_no);
+            pStmt.setString(1, d_no);
             rs = pStmt.executeQuery();
             if (rs.next())
             {
-                device.setD_no(rs.getInt("d_no"));
+                device = new Device();
+                device.setD_no(rs.getString("d_no"));
                 device.setD_name(rs.getString("d_name"));
                 device.setD_mainUse(rs.getString("d_main_use"));
                 device.setD_importantParam(rs.getString("d_important_param"));
@@ -107,10 +108,10 @@ public class DeviceDaoImpl implements DeviceDao
 
     /*
      * @Description: 改变设备状态
-     * @Param status  d_no
+     * @Param state  d_no
      * @Return: int
      */
-    public int setDeviceState(String status, int d_no)
+    public int setDeviceState(String state, String d_no)
     {
         //初始化
         con = null;
@@ -123,8 +124,8 @@ public class DeviceDaoImpl implements DeviceDao
             con = JDBCUtils.getConnection();
             String sql = "UPDATE device SET d_state = ? WHERE d_no = ?";
             pStmt = con.prepareStatement(sql);
-            pStmt.setString(1, status);
-            pStmt.setInt(2, d_no);
+            pStmt.setString(1, state);
+            pStmt.setString(2, d_no);
 
             //更新状态
             flag = pStmt.executeUpdate();
@@ -145,7 +146,7 @@ public class DeviceDaoImpl implements DeviceDao
      * @Param d_no
      * @Return: java.lang.String
      */
-    public String getDeviceState(int d_no)
+    public String getDeviceState(String d_no)
     {
         //初始化
         con = null;
@@ -158,17 +159,13 @@ public class DeviceDaoImpl implements DeviceDao
             con = JDBCUtils.getConnection();
             String sql = "SELECT d_state FROM device WHERE d_no= ?";
             pStmt = con.prepareStatement(sql);
-            pStmt.setInt(1, d_no);
+            pStmt.setString(1, d_no);
 
             //查询
             rs = pStmt.executeQuery();
             if (rs.next())
             {
                 result = rs.getString("d_state");
-            }
-            else
-            {
-                result = "不存在该设备";
             }
         }
         catch (SQLException e)
@@ -187,7 +184,7 @@ public class DeviceDaoImpl implements DeviceDao
      * @Param d_no
      * @Return: int
      */
-    public int addBorrowedTimes(int d_no)
+    public int addBorrowedTimes(String d_no)
     {
         //初始化
         con = null;
@@ -200,7 +197,7 @@ public class DeviceDaoImpl implements DeviceDao
             con = JDBCUtils.getConnection();
             sql = "UPDATE device SET d_borrowed_times = d_borrowed_times+1 WHERE d_no = ?";
             pStmt = con.prepareStatement(sql);
-            pStmt.setInt(1, d_no);
+            pStmt.setString(1, d_no);
 
             //更新状态
             flag = pStmt.executeUpdate();
@@ -221,7 +218,7 @@ public class DeviceDaoImpl implements DeviceDao
      * @Param d_no
      * @Return: bean.Device
      */
-    public Device getDeviceByNo(int d_no)
+    public Device getDeviceByNo(String d_no)
     {
         //初始化
         con = null;
@@ -236,14 +233,23 @@ public class DeviceDaoImpl implements DeviceDao
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
-            pStmt.setInt(1, d_no);
+            pStmt.setString(1, d_no);
             rs = pStmt.executeQuery();
 
             if (rs.next())
             {
-                device = new Device(rs.getInt("d_no"), rs.getString("a_no"), rs.getString("d_state"),
-                        rs.getInt("d_borrowed_times"), rs.getString("d_name"), rs.getString("d_important_param"),
-                        rs.getString("d_main_use"), rs.getString("d_save_site"));
+                device.setD_no(rs.getString("d_no"));
+                device.setD_name(rs.getString("d_name"));
+                device.setD_model(rs.getString("d_model"));
+                device.setD_saveSite(rs.getString("d_save_site"));
+                device.setA_no(rs.getString("a_no"));
+                device.setD_factoryNo(rs.getString("d_factory_no"));
+                device.setD_state(rs.getString("d_state"));
+                device.setD_storeDate(rs.getString("d_store_date"));
+                device.setD_borrowedTimes(rs.getInt("d_borrowed_times"));
+                device.setD_importantParam(rs.getString("d_important_param"));
+                device.setD_mainUse(rs.getString("d_main_use"));
+
             }
         }
         catch (SQLException e)
@@ -331,9 +337,18 @@ public class DeviceDaoImpl implements DeviceDao
 
             while (rs.next())
             {
-                Device device = new Device(rs.getInt("d_no"), rs.getString("a_no"), rs.getString("d_state"),
-                        rs.getInt("d_borrowed_times"), rs.getString("d_name"), rs.getString("d_important_param"),
-                        rs.getString("d_main_use"), rs.getString("d_save_site"));
+                Device device = new Device();
+                device.setD_no(rs.getString("d_no"));
+                device.setD_name(rs.getString("d_name"));
+                device.setD_model(rs.getString("d_model"));
+                device.setD_saveSite(rs.getString("d_save_site"));
+                device.setA_no(rs.getString("a_no"));
+                device.setD_factoryNo(rs.getString("d_factory_no"));
+                device.setD_state(rs.getString("d_state"));
+                device.setD_storeDate(rs.getString("d_store_date"));
+                device.setD_borrowedTimes(rs.getInt("d_borrowed_times"));
+                device.setD_importantParam(rs.getString("d_important_param"));
+                device.setD_mainUse(rs.getString("d_main_use"));
                 deviceList.add(device);
             }
         }

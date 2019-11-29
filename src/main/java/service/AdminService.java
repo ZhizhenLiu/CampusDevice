@@ -25,7 +25,7 @@ public interface AdminService
      * @Param d_no
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject getReservationDetail(int d_no);
+    JSONObject getReservationDetail(String d_no);
 
     /*
      * @Description: 管理员确认设备租借给某个用户
