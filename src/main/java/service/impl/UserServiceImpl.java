@@ -23,13 +23,17 @@ public class UserServiceImpl implements UserService
     private CommentDao commentDao = new CommentDaoImpl();
 
     /*
-     * @Description: 通过用户编号获取用户对象
-     * @Param userNo
-     * @Return: bean.User
+     * @Description: 登陆校验，判断用户是否存在
+     * @Param wechatID
+     * @Return: boolean
      */
-    public User getUserByWechatID(String wechatID)
+    public boolean isUserExist(String wechatID)
     {
-        return userDao.getUserByWechatID(wechatID);
+        if (userDao.getUserByWechatID(wechatID) == null)
+        {
+            return false;
+        }
+        return true;
     }
 
     /*

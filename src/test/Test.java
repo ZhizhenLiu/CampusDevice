@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+
 public class Test {
     @org.junit.jupiter.api.Test
 
@@ -48,8 +49,7 @@ public class Test {
        CommentDao  commentDao = new CommentDaoImpl();
 
 //      System.out.println(userService.reserveDevice("1713714S","o0ug241yqbsjM0N5xR5qhLxi8gH0","2019-10-01","2019-10-07"));
-//       System.out.println(adminService.getReservedDevice("o0ug241yqbsjM0N5xR5qhLxi8gH0"));
-
-       System.out.println(userService.getCommentByPage("1713714S",1,4));
+//       System.out.println(adminService.getReservedDevice(""));
+       System.out.println(borrowDao.setAllOverDueState());
    }
 }

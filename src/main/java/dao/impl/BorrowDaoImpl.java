@@ -163,7 +163,7 @@ public class BorrowDaoImpl implements BorrowDao
      * @Param
      * @Return: int
      */
-    public int setAllStateOverDue()
+    public int setAllOverDueState()
     {
         //初始化
         con = null;

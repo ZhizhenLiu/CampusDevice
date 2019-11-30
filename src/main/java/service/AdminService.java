@@ -7,6 +7,13 @@ public interface AdminService
 {
 
     /*
+     * @Description: 登陆校验。判断管理员是否存在
+     * @Param wechatID
+     * @Return: boolean
+     */
+    boolean isAdminExist(String wechatID);
+
+    /*
      * @Description: 通过标识获取管理员管辖范围内的有人预约的设备
      * @Param wechatID
      * @Return: com.alibaba.fastjson.JSONObject

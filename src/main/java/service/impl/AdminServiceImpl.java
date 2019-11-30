@@ -1,7 +1,6 @@
 package service.impl;
 
 import bean.Borrow;
-import bean.Device;
 import bean.Reservation;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -23,6 +22,19 @@ public class AdminServiceImpl implements AdminService
     private ReturnDeviceDao returnDeviceDao = new ReturnDeviceDaoImpl();
     private MessageDao messageDao = new MessageDaoImpl();
 
+    /*
+     * @Description: 登陆校验。判断管理员是否存在
+     * @Param wechatID
+     * @Return: boolean
+     */
+    public boolean isAdminExist(String wechatID)
+    {
+        if (adminDao.getAdminByWechatID(wechatID) == null)
+        {
+            return false;
+        }
+        return true;
+    }
     /*
      * @Description: 通过标识获取管理员管辖范围内的有人预约的设备
      * @Param wechatID
@@ -172,7 +184,7 @@ public class AdminServiceImpl implements AdminService
         int a_no = adminDao.getAdminByWechatID(wechatID).getA_no();
 
         //设置所有逾期设备状态为 -1 表示逾期未还
-        borrowDao.setAllStateOverDue();
+        borrowDao.setAllOverDueState();
 
         JSONObject info = new JSONObject();
         List<Borrow> borrowList = borrowDao.getOverDueList(a_no);

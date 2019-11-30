@@ -9,11 +9,11 @@ public interface UserService
 {
 
     /*
-     * @Description: 通过用户编号获取用户对象
-     * @Param userNo
-     * @Return: bean.User
+     * @Description: 登陆校验，判断用户是否存在
+     * @Param wechatID
+     * @Return: boolean
      */
-    User getUserByWechatID(String wechatID);
+    boolean isUserExist(String wechatID);
 
     /*
      * @Description: 通过微信唯一标识获取用户

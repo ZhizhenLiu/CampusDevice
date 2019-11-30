@@ -34,7 +34,7 @@ public interface BorrowDao
      * @Param
      * @Return: int
      */
-    int setAllStateOverDue();
+    int setAllOverDueState();
 
     /*
      * @Description: 管理员获取管辖范围内预期未还用户
