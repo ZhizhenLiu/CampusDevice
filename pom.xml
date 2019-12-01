@@ -64,6 +64,31 @@
       <artifactId>poi-ooxml</artifactId>
       <version>4.1.1</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/com.google.zxing/core -->
+    <dependency>
+      <groupId>com.google.zxing</groupId>
+      <artifactId>core</artifactId>
+      <version>3.4.0</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/com.google.zxing/javase -->
+    <dependency>
+      <groupId>com.google.zxing</groupId>
+      <artifactId>javase</artifactId>
+      <version>3.4.0</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/net.glxn/qrgen -->
+    <dependency>
+      <groupId>net.glxn</groupId>
+      <artifactId>qrgen</artifactId>
+      <version>1.4</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
+    <dependency>
+      <groupId>commons-net</groupId>
+      <artifactId>commons-net</artifactId>
+      <version>3.6</version>
+    </dependency>
+
   </dependencies>
 
   <build>
