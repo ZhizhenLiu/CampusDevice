@@ -8,6 +8,7 @@ import service.impl.AdminServiceImpl;
 import service.impl.UserServiceImpl;
 import utils.JDBCUtils;
 import utils.MessageUtils;
+import utils.QRCodeUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,6 +51,5 @@ public class Test {
 
 //      System.out.println(userService.reserveDevice("1713714S","o0ug241yqbsjM0N5xR5qhLxi8gH0","2019-10-01","2019-10-07"));
 //       System.out.println(adminService.getReservedDevice(""));
-       System.out.println(borrowDao.setAllOverDueState());
    }
 }

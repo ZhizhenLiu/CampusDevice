@@ -42,6 +42,7 @@ public class DeviceDaoImpl implements DeviceDao
             while (rs.next())
             {
                 Device device = new Device();
+                device.setD_no(rs.getString("d_no"));
                 device.setD_model(rs.getString("d_model"));
                 device.setD_name(rs.getString("d_name"));
                 device.setD_state(rs.getString("d_state"));
