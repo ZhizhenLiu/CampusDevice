@@ -22,10 +22,10 @@ public class ShowQRcodeServlet extends HttpServlet
         //获取二维码填入内容参数
         String content = request.getParameter("content");
         String path = getServletContext().getRealPath("/");
-        String QRCodePath = QRCodeUtils.createQRCode(content, path);
+        String codeUrl = QRCodeUtils.createQRCode(content, path);
 
         PrintWriter printWriter = response.getWriter();
-        printWriter.write(QRCodePath);
+        printWriter.write(codeUrl);
         printWriter.flush();
         printWriter.close();
     }

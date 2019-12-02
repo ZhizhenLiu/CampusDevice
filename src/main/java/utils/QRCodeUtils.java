@@ -9,9 +9,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,7 +17,7 @@ import java.util.HashMap;
 public class QRCodeUtils
 {
     /*
-     * @Description: 生成存储内容的二维码
+     * @Description: 生成存储内容的二维码,返回存在服务器的图片的url
      * @Param content
      * @Return: java.lang.String
      */
@@ -27,7 +25,7 @@ public class QRCodeUtils
     {
         int width = 300;    //定义宽和高
         int height = 300;
-        //这里如果你想自动跳转的话，content需要加上https,如: "https://github.com/hbbliyong/QRCode.git";
+        //这里如果想自动跳转的话，content需要加上https,如: "https://github.com/ZhizhenLiu/CampusDevice.git";
 
         String format = "png";    //图片格式
 
@@ -37,30 +35,31 @@ public class QRCodeUtils
         hints.put(EncodeHintType.MARGIN, 2);    //边距
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-        String realPath = path + "img";
-        System.out.println(path + " " + realPath);
+        path = path + "img/code";
+        String codeUrl = "http://49.235.73.29:8083/img/code";
         try
         {
             BitMatrix bitMatrix = new MultiFormatWriter().
                     encode(content, BarcodeFormat.QR_CODE, width, height, hints);
 
-            File file = new File(realPath);
-            System.out.println(path + "img");
+            File file = new File(path);
+
             // 当文件夹不存在时，mkdirs会自动创建多层目录，区别于mkdir．(mkdir如果父目录不存在则会抛出异常)
             if (!file.exists())
             {
                 file.mkdirs();
             }
-            realPath = realPath + "/code-" + dateFormat.format(date) + ".png";
-            System.out.println(realPath);
-            file = new File(realPath);
+            path = path + "/code-" + dateFormat.format(date) + ".png";
+            codeUrl = codeUrl + "/code-" + dateFormat.format(date) + ".png";
+            file = new File(path);
             MatrixToImageWriter.writeToPath(bitMatrix, format, file.toPath());
         }
         catch (IOException | WriterException e)
         {
             e.printStackTrace();
         }
-        return realPath;
+
+        return codeUrl;
     }
-    
+
 }
