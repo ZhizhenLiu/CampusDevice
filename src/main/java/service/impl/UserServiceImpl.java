@@ -21,6 +21,7 @@ public class UserServiceImpl implements UserService
     private CreditRecordDao creditRecordDao = new CreditRecordDaoImpl();
     private MessageDao messageDao = new MessageDaoImpl();
     private CommentDao commentDao = new CommentDaoImpl();
+    private TrackDao trackDao = new TrackDaoImpl();
 
     /*
      * @Description: 登陆校验，判断用户是否存在
@@ -295,7 +296,7 @@ public class UserServiceImpl implements UserService
             String u_no = user.getU_no();
             int flag = commentDao.addComment(u_no, d_no, comment);
             info.put("flag", flag);
-            if (flag == 0 )
+            if (flag == 0)
             {
                 errMsg.add("评论失败");
             }
@@ -329,4 +330,48 @@ public class UserServiceImpl implements UserService
         return info;
     }
 
+    /*
+     * @Description: 用户跟踪设备
+     * @Param wechatID  d_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject trackDevice(String wechatID, String d_no)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        String u_no = userDao.getUserByWechatID(wechatID).getU_no();
+        if (trackDao.isTracking(u_no, d_no))
+        {
+            info.put("flag", 0);
+            errMsg.add("已在跟踪设备中");
+        }
+        else
+        {
+            int flag = trackDao.trackDevice(u_no, d_no);
+            info.put("flag", flag);
+        }
+        info.put("errMsg", errMsg);
+        return info;
+    }
+
+    /*
+     * @Description: 用户取消跟踪设备
+     * @Param t_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject cancelTrack(int t_no)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        int flag = trackDao.cancelTrackDevice(t_no);
+        info.put("flag", flag);
+        if (flag == 0)
+        {
+            errMsg.add("取消失败");
+        }
+        info.put("errMsg", errMsg);
+        return info;
+    }
 }

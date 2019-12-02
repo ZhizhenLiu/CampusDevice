@@ -72,7 +72,7 @@ public class TrackDaoImpl implements TrackDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "INSERT INTO track (T_STATE, U_NO, D_NO) VALUES (1, ?, ?)";
+            sql = "INSERT INTO track (U_NO, D_NO) VALUES ( ?, ?)";
             pStmt = con.prepareStatement(sql);
             pStmt.setString(1, u_no);
             pStmt.setString(2, d_no);
@@ -106,7 +106,7 @@ public class TrackDaoImpl implements TrackDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "UPDATE track SET t_state = 0 WHERE t_no = ?";
+            sql = "DELETE FROM track WHERE t_no = ?";
             pStmt = con.prepareStatement(sql);
             pStmt.setInt(1, t_no);
 
@@ -139,7 +139,7 @@ public class TrackDaoImpl implements TrackDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT u_no FROM track where d_no = ?";
+            sql = "SELECT u_no FROM track WHERE d_no = ?";
             pStmt = con.prepareStatement(sql);
             pStmt.setString(1, d_no);
             rs = pStmt.executeQuery();

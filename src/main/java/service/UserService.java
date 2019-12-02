@@ -106,4 +106,18 @@ public interface UserService
      * @Return: com.alibaba.fastjson.JSONObject
      */
     JSONObject getCommentByPage(String d_no, int page, int count);
+
+    /*
+     * @Description: 用户跟踪设备
+     * @Param wechatID  d_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject trackDevice(String wechatID, String d_no);
+    
+    /*
+     * @Description: 用户取消跟踪设备
+     * @Param t_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject cancelTrack(int t_no);
 }
