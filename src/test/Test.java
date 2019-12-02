@@ -51,6 +51,9 @@ public class Test {
 
 //      System.out.println(userService.reserveDevice("1713714S","o0ug241yqbsjM0N5xR5qhLxi8gH0","2019-10-01","2019-10-07"));
 //       System.out.println(adminService.getReservedDevice(""));
-
+       System.out.println(userService.trackDevice("o0ug242ge55sufbQW0xHk7KTmq60","1905399S"));
+       System.out.println();
+       System.out.println();
+       System.out.println(userService.cancelTrack(1));
    }
 }
