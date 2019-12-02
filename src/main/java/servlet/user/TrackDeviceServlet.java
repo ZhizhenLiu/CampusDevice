@@ -47,7 +47,8 @@ public class TrackDeviceServlet extends HttpServlet
             printWriter.write(result.get("errMsg").toString());
         }
         printWriter.flush();
-        printWriter.close();    }
+        printWriter.close();
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
