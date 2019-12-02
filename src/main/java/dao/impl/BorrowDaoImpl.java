@@ -34,9 +34,9 @@ public class BorrowDaoImpl implements BorrowDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT b_borrow_date, b_return_date, d_save_site, device.d_no, d_name, d_main_use " +
+            sql = "SELECT b_no, b_borrow_date, b_return_date, d_save_site, device.d_no, d_name, d_main_use, b_state " +
                   "FROM borrow, device " +
-                  "WHERE u_no = ? AND b_state = 0 " +
+                  "WHERE u_no = ?" +
                   "AND borrow.d_no = device.d_no";
             pStmt = con.prepareStatement(sql);
 
@@ -46,12 +46,14 @@ public class BorrowDaoImpl implements BorrowDao
             while (rs.next())
             {
                 Borrow borrow = new Borrow();
+                borrow.setB_no(rs.getInt("b_no"));
                 borrow.setB_borrowDate(rs.getString("b_borrow_date"));
                 borrow.setB_returnDate(rs.getString("b_return_date"));
                 borrow.setD_saveSite(rs.getString("d_save_site"));
                 borrow.setD_no(rs.getString("d_no"));
                 borrow.setD_name(rs.getString("d_name"));
                 borrow.setD_mainUse(rs.getString("d_main_use"));
+                borrow.setB_state(rs.getInt("b_state"));
                 borrowList.add(borrow);
             }
         }

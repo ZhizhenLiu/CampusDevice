@@ -2,6 +2,7 @@ package service.impl;
 
 import bean.Borrow;
 import bean.Reservation;
+import bean.User;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -21,6 +22,7 @@ public class AdminServiceImpl implements AdminService
     private BorrowDao borrowDao = new BorrowDaoImpl();
     private ReturnDeviceDao returnDeviceDao = new ReturnDeviceDaoImpl();
     private MessageDao messageDao = new MessageDaoImpl();
+    private TrackDao trackDao = new TrackDaoImpl();
 
     /*
      * @Description: 登陆校验。判断管理员是否存在
@@ -128,6 +130,12 @@ public class AdminServiceImpl implements AdminService
             {
                 info.put("flag", 0);
                 errMsg.add("发送成功借用提示失败");
+            }
+            List<String> userNoListList = trackDao.getTrackingUserNoList(d_no);
+            for (String userNo : userNoListList)
+            {
+                User user = userDao.getUserByNo(userNo);
+                messageDao.sendMessage(userNo, u_name+"，你跟踪的设备："+d_name+"。已经归还，如有需要，请尽快预约");
             }
         }
         else
