@@ -88,6 +88,28 @@ public class UserServiceImpl implements UserService
         if (deviceList.isEmpty())
         {
             info.put("flag", 0);
+            info.put("errMsg", "没有查询到热门设备");
+        }
+        else
+        {
+            info.put("flag", 1);
+            info.put("device", JSONArray.parseArray(JSON.toJSONString(deviceList)));
+        }
+        return info;
+    }
+
+    /*
+     * @Description: 分页查询所有设备
+     * @Param page  count
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject getAllDeviceByPage(int page, int count)
+    {
+        List<Device> deviceList = deviceDao.getAllDeviceByPage(page, count);
+        JSONObject info = new JSONObject();
+        if (deviceList.isEmpty())
+        {
+            info.put("flag", 0);
             info.put("errMsg", "当前页数没有设备");
         }
         else

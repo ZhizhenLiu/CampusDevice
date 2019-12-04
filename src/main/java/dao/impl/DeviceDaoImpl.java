@@ -55,7 +55,51 @@ public class DeviceDaoImpl implements DeviceDao
         }
         finally
         {
-            JDBCUtils.closeAll(null, pStmt, con);
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return deviceList;
+    }
+
+    /*
+     * @Description: 查询首页所有设备
+     * @Param page  count
+     * @Return: java.util.List<bean.Device>
+     */
+    public List<Device> getAllDeviceByPage(int page, int count)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        List<Device> deviceList = new ArrayList<>();
+        con = JDBCUtils.getConnection();
+        sql = "SELECT * FROM device LIMIT ?, ?";
+        try
+        {
+            pStmt = con.prepareStatement(sql);
+            pStmt.setInt(1, (page-1)*count);
+            pStmt.setInt(2, count);
+            rs = pStmt.executeQuery();
+
+            //判断是否存在记录
+            while (rs.next())
+            {
+                Device device = new Device();
+                device.setD_no(rs.getString("d_no"));
+                device.setD_model(rs.getString("d_model"));
+                device.setD_name(rs.getString("d_name"));
+                device.setD_state(rs.getString("d_state"));
+                deviceList.add(device);
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
         }
         return deviceList;
     }

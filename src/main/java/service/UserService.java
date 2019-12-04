@@ -30,11 +30,18 @@ public interface UserService
     JSONObject registerUser(User user);
 
     /*
-     * @Description: 分页查询首页热门设备
+     * @Description: 查询首页热门设备
      * @Param page:页数，第几页  count：每页设备数量
      * @Return: java.util.List<bean.Device>
      */
     JSONObject getHotDevice();
+
+    /*
+     * @Description: 分页查询所有设备
+     * @Param page  count
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject getAllDeviceByPage(int page, int count);
 
 
     /*

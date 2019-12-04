@@ -57,5 +57,7 @@ public class Test {
        System.out.println();
 
        String wechatID = "o0ug242ge55sufbQW0xHk7KTmq60";
+
+       System.out.println(userService.getAllDeviceByPage(2, 1));
    }
 }

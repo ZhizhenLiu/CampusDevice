@@ -15,6 +15,13 @@ public interface DeviceDao
     List<Device> getHotDevice();
 
     /*
+     * @Description: 查询首页所有设备
+     * @Param page  count
+     * @Return: java.util.List<bean.Device>
+     */
+    List<Device> getAllDeviceByPage(int page, int count);
+
+    /*
      * @Description: 用户浏览获取设备具体信息
      * @Param d_no
      * @Return: com.alibaba.fastjson.JSONObject
