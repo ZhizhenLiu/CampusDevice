@@ -42,7 +42,7 @@ public interface ReservationDao
      * @Param a_no
      * @Return: java.util.List<bean.Device>
      */
-    List<Reservation> handleReservation(int a_no);
+    List<Reservation> handleReservation(String a_no);
 
     /*
      * @Description: 获取某一个设备的预约队列

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "TrackDeviceServlet")
+@WebServlet(name = "TrackDeviceServlet", urlPatterns = "/user/track")
 public class TrackDeviceServlet extends HttpServlet
 {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

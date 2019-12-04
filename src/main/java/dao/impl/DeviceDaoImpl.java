@@ -32,7 +32,7 @@ public class DeviceDaoImpl implements DeviceDao
 
         List<Device> deviceList = new ArrayList<>();
         con = JDBCUtils.getConnection();
-        sql = "SELECT * FROM device ORDER BY d_borrowed_times LIMIT 0,10";
+        sql = "SELECT * FROM device ORDER BY d_borrowed_times DESC LIMIT 0,10";
         try
         {
             pStmt = con.prepareStatement(sql);
@@ -330,7 +330,9 @@ public class DeviceDaoImpl implements DeviceDao
         {
             con = JDBCUtils.getConnection();
             //参数不太好用setString替换，直接字符串代替也没错
-            sql = "select * from device where d_name like '%" + keyword + "%' or d_important_param like '%" + keyword + "%' or d_main_use like '%" + keyword + "%'";
+            sql = "SELECT * FROM device WHERE d_name LIKE '%" + keyword + "%' OR " +
+                  "d_model like '%" + keyword + "%' OR " +
+                  "d_save_site LIKE '%" + keyword + "%'";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
@@ -343,13 +345,9 @@ public class DeviceDaoImpl implements DeviceDao
                 device.setD_name(rs.getString("d_name"));
                 device.setD_model(rs.getString("d_model"));
                 device.setD_saveSite(rs.getString("d_save_site"));
-                device.setA_no(rs.getString("a_no"));
-                device.setD_factoryNo(rs.getString("d_factory_no"));
                 device.setD_state(rs.getString("d_state"));
                 device.setD_storeDate(rs.getString("d_store_date"));
                 device.setD_borrowedTimes(rs.getInt("d_borrowed_times"));
-                device.setD_importantParam(rs.getString("d_important_param"));
-                device.setD_mainUse(rs.getString("d_main_use"));
                 deviceList.add(device);
             }
         }

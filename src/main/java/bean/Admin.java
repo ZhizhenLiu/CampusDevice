@@ -5,7 +5,7 @@ package bean;
  */
 public class Admin
 {
-    private int a_no;
+    private String a_no;
     private String a_name;
     private String a_wechatID;
     private String a_type;
@@ -17,7 +17,8 @@ public class Admin
      * @Param a_no  a_name  a_wechatId  a_type  a_phone  a_emial
      * @Return: null
      */
-    public Admin(int a_no, String a_name, String a_wechatID, String a_type, String a_phone, String a_email)
+
+    public Admin(String a_no, String a_name, String a_wechatID, String a_type, String a_phone, String a_email)
     {
         this.a_no = a_no;
         this.a_name = a_name;
@@ -27,16 +28,17 @@ public class Admin
         this.a_email = a_email;
     }
 
-    public Admin()
+    public Admin(String a_no)
     {
+        this.a_no = a_no;
     }
 
-    public int getA_no()
+    public String getA_no()
     {
         return a_no;
     }
 
-    public void setA_no(int a_no)
+    public void setA_no(String a_no)
     {
         this.a_no = a_no;
     }
@@ -94,14 +96,13 @@ public class Admin
     @Override
     public String toString()
     {
-        return "Admin[" +
-                "a_no='" + a_no + '\"' +
-                ", a_name=\"" + a_name + '\"' +
-                ", a_wechatId=\"" + a_wechatID + '\"' +
-                ", a_type=\"" + a_type + '\"' +
-                ", a_phone=\"" + a_phone + '\"' +
-                ", a_emial=\"" + a_email + '\"' +
-                ']';
+        return "Admin{" +
+                "a_no='" + a_no + '\'' +
+                ", a_name='" + a_name + '\'' +
+                ", a_wechatID='" + a_wechatID + '\'' +
+                ", a_type='" + a_type + '\'' +
+                ", a_phone='" + a_phone + '\'' +
+                ", a_email='" + a_email + '\'' +
+                '}';
     }
-
 }

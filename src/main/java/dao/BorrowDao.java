@@ -20,7 +20,7 @@ public interface BorrowDao
      * @Param a_no
      * @Return: java.util.List<bean.Borrow>
      */
-    List<Borrow> getBorrowList(int a_no);
+    List<Borrow> getBorrowList(String a_no);
 
     /*
      * @Description: 管理员确认设备租借给某个用户
@@ -41,7 +41,7 @@ public interface BorrowDao
      * @Param a_no
      * @Return: java.util.List<bean.Borrow>
      */
-    List<Borrow> getOverDueList(int a_no);
+    List<Borrow> getOverDueList(String a_no);
 
     /*
      * @Description: 借用中设备归还 （0：借用中，1：归还 -1:逾期）

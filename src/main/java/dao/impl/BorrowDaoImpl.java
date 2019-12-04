@@ -73,7 +73,7 @@ public class BorrowDaoImpl implements BorrowDao
      * @Param a_no
      * @Return: java.util.List<bean.Borrow>
      */
-    public List<Borrow> getBorrowList(int a_no)
+    public List<Borrow> getBorrowList(String a_no)
     {
         //初始化
         con = null;
@@ -89,12 +89,11 @@ public class BorrowDaoImpl implements BorrowDao
                     "WHERE a.a_no = ? " +
                     "AND b.u_no = u.u_no " +
                     "AND b.d_no = d.d_no " +
-                    "AND b_state = 0 " +
                     "ORDER BY b_return_date";
             pStmt = con.prepareStatement(sql);
 
             //执行操作
-            pStmt.setInt(1, a_no);
+            pStmt.setString(1, a_no);
             rs = pStmt.executeQuery();
             while (rs.next())
             {
@@ -199,7 +198,7 @@ public class BorrowDaoImpl implements BorrowDao
      * @Param a_no
      * @Return: java.util.List<bean.Borrow>
      */
-    public List<Borrow> getOverDueList(int a_no)
+    public List<Borrow> getOverDueList(String a_no)
     {
         //初始化
         con = null;
@@ -218,7 +217,7 @@ public class BorrowDaoImpl implements BorrowDao
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
-            pStmt.setInt(1, a_no);
+            pStmt.setString(1, a_no);
             rs = pStmt.executeQuery();
 
             //判断是否存在记录

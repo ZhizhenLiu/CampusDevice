@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "LoginServlet", urlPatterns = "/user/login")
+@WebServlet(name = "LoginServlet", urlPatterns = "/login")
 public class LoginServlet extends HttpServlet
 {
 
@@ -30,12 +30,14 @@ public class LoginServlet extends HttpServlet
 
         //向微信服务器接口发送code，获取用户唯一标识openid, 返回参数
         JSONObject result = JSONObject.parseObject(HttpUtils.sendGet(code));
+        System.out.println(result.toJSONString());
+
         JSONObject info = new JSONObject();
         PrintWriter printWriter = response.getWriter();
         UserService userService = new UserServiceImpl();
         AdminService adminService = new AdminServiceImpl();
 
-        //请求成功,获取用户openiid
+        //请求成功,获取用户openid
         if (result.containsKey("openid"))
         {
             String wechatID = (String) result.get("openid");
@@ -55,15 +57,16 @@ public class LoginServlet extends HttpServlet
                 flag = 0;
             }
             else flag = -1;
-            printWriter.write(flag);
+            info.put("flag", "1");
+            info.put("identity", flag);
         }
         //请求失败，返回错误信息
         else
         {
-            info.put("errMsg", result.get("errMsg"));
+            info.put("errMsg", result.get("errmsg"));
             info.put("flag", "0");
-            printWriter.write(info.toJSONString());
         }
+        printWriter.write(info.toJSONString());
         printWriter.flush();
         printWriter.close();
     }

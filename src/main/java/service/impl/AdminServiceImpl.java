@@ -45,7 +45,7 @@ public class AdminServiceImpl implements AdminService
     public JSONObject getReservedDevice(String wechatID)
     {
         //获取主键，通过主键查询
-        int a_no = adminDao.getAdminByWechatID(wechatID).getA_no();
+        String a_no = adminDao.getAdminByWechatID(wechatID).getA_no();
         JSONObject info = new JSONObject();
         List<Reservation> reservationList = reservationDao.handleReservation(a_no);
         info.put("flag", 1);
@@ -61,7 +61,7 @@ public class AdminServiceImpl implements AdminService
     public JSONObject getBorrowedDevice(String wechatID)
     {
         //获取主键，通过主键查询
-        int a_no = adminDao.getAdminByWechatID(wechatID).getA_no();
+        String a_no = adminDao.getAdminByWechatID(wechatID).getA_no();
         JSONObject info = new JSONObject();
         List<Borrow> borrowList = borrowDao.getBorrowList(a_no);
         info.put("flag", 1);
@@ -189,7 +189,7 @@ public class AdminServiceImpl implements AdminService
     public JSONObject getOverDue(String wechatID)
     {
         //获取主键，通过主键查询
-        int a_no = adminDao.getAdminByWechatID(wechatID).getA_no();
+        String a_no = adminDao.getAdminByWechatID(wechatID).getA_no();
 
         //设置所有逾期设备状态为 -1 表示逾期未还
         borrowDao.setAllOverDueState();

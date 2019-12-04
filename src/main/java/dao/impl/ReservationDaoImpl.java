@@ -189,7 +189,7 @@ public class ReservationDaoImpl implements ReservationDao
      * @Param wechatId
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public List<Reservation> handleReservation(int a_no)
+    public List<Reservation> handleReservation(String a_no)
     {
         //初始化
         con = null;
@@ -210,7 +210,7 @@ public class ReservationDaoImpl implements ReservationDao
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
-            pStmt.setInt(1, a_no);
+            pStmt.setString(1, a_no);
             rs = pStmt.executeQuery();
 
             //判断是否存在记录
