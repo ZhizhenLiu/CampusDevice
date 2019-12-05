@@ -189,7 +189,7 @@ public class ReservationDaoImpl implements ReservationDao
      * @Param wechatId
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public List<Reservation> handleReservation(String a_no)
+    public List<Reservation> handleReservationByPage(String a_no, int page, int count)
     {
         //初始化
         con = null;
@@ -206,11 +206,15 @@ public class ReservationDaoImpl implements ReservationDao
                     "r.d_no = d.d_no " +
                     "AND d.a_no = ? AND r_state = 0 " +
                     "GROUP BY d.d_no, d.d_name, d.d_model " +
-                    "ORDER BY r_sum DESC";
+                    "ORDER BY r_sum DESC " +
+                    "LIMIT ?, ? ";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
             pStmt.setString(1, a_no);
+            pStmt.setInt(2, (page-1)*count);
+            pStmt.setInt(3, count);
+
             rs = pStmt.executeQuery();
 
             //判断是否存在记录
@@ -451,11 +455,11 @@ public class ReservationDaoImpl implements ReservationDao
     }
 
     /*
-     * @Description: 用户查看我的预约
-     * @Param userNo
+     * @Description: 用户查看申请中预约：预约中、协商中
+     * @Param u_no  page  count
      * @Return: java.util.List<bean.Reservation>
      */
-    public List<Reservation> getReservation(String u_no)
+    public List<Reservation> getUnfinishedReservationByPage(String u_no, int page, int count)
     {
         //初始化
         con = null;
@@ -467,14 +471,17 @@ public class ReservationDaoImpl implements ReservationDao
         {
             con = JDBCUtils.getConnection();
             sql = "SELECT r_no,r_reservation_date, r_start_date, r_return_date, d.d_no, d_name, d_main_use, r_state " +
-                    "FROM reservation r,device d " +
-                    "WHERE r.d_no = d.d_no " +
-                    "AND u_no = ? " +
-                    "ORDER BY r_reservation_date ";
+                  "FROM reservation r,device d " +
+                  "WHERE r.d_no = d.d_no " +
+                  "AND u_no = ? AND r_state IN(0, 2) " +
+                  "ORDER BY r_reservation_date " +
+                  "LIMIT ?, ?";
             pStmt = con.prepareStatement(sql);
 
             //执行操作
             pStmt.setString(1, u_no);
+            pStmt.setInt(2, (page-1)*count);
+            pStmt.setInt(3, count);
             rs = pStmt.executeQuery();
             while (rs.next())
             {
@@ -501,6 +508,59 @@ public class ReservationDaoImpl implements ReservationDao
         return reservationList;
     }
 
+    /*
+     * @Description: 用户查看已完成预约：成功，拒绝、取消
+     * @Param u_no  page  count
+     * @Return: java.util.List<bean.Reservation>
+     */
+    public List<Reservation> getFinishedReservationByPage(String u_no, int page, int count)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+        List<Reservation> reservationList = new ArrayList<>();
+
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "SELECT r_no,r_reservation_date, r_start_date, r_return_date, d.d_no, d_name, d_main_use, r_state " +
+                  "FROM reservation r,device d " +
+                  "WHERE r.d_no = d.d_no " +
+                  "AND u_no = ? AND r_state IN(-2, -1, 1) " +
+                  "ORDER BY r_reservation_date " +
+                  "LIMIT ?, ?";
+            pStmt = con.prepareStatement(sql);
+
+            //执行操作
+            pStmt.setString(1, u_no);
+            pStmt.setInt(2, (page-1)*count);
+            pStmt.setInt(3, count);
+            rs = pStmt.executeQuery();
+            while (rs.next())
+            {
+                Reservation reservation = new Reservation();
+                reservation.setR_no(rs.getInt("r_no"));
+                reservation.setR_reservationDate(rs.getString("r_reservation_date"));
+                reservation.setR_startDate(rs.getString("r_start_date"));
+                reservation.setR_returnDate(rs.getString("r_return_date"));
+                reservation.setD_no(rs.getString("d_no"));
+                reservation.setD_name(rs.getString("d_name"));
+                reservation.setR_state(rs.getInt("r_state"));
+                reservationList.add(reservation);
+            }
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return reservationList;
+    }
 
     public int getReservationNum(String u_no)
     {

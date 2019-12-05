@@ -6,14 +6,6 @@ import service.AdminService;
 import service.UserService;
 import service.impl.AdminServiceImpl;
 import service.impl.UserServiceImpl;
-import utils.HttpUtils;
-import utils.JDBCUtils;
-import utils.MessageUtils;
-import utils.QRCodeUtils;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 
 public class Test {
@@ -58,6 +50,9 @@ public class Test {
 
        String wechatID = "o0ug242ge55sufbQW0xHk7KTmq60";
 
-       System.out.println(userService.getAllDeviceByPage(2, 1));
+
+       System.out.println(userService.getBorrowRecordByPage("o0ug241yqbsjM0N5xR5qhLxi8gH0",1 ,10, true));
+       System.out.println();
+       System.out.println(userService.getBorrowRecordByPage("o0ug241yqbsjM0N5xR5qhLxi8gH0",1 ,10, false));
    }
 }

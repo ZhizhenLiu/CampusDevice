@@ -2,9 +2,7 @@ package servlet.admin;
 
 import com.alibaba.fastjson.JSONObject;
 import service.AdminService;
-import service.UserService;
 import service.impl.AdminServiceImpl;
-import service.impl.UserServiceImpl;
 import utils.HttpUtils;
 
 import javax.servlet.ServletException;
@@ -26,7 +24,7 @@ public class HandleReservationServlet extends HttpServlet
 
         //获取参数
         String code = request.getParameter("code");
-        System.out.println(code);
+        int page = Integer.parseInt(request.getParameter("page"));
 
         //向微信服务器接口发送code，获取用户唯一标识openid, 返回参数
         AdminService adminService = new AdminServiceImpl();
@@ -39,7 +37,7 @@ public class HandleReservationServlet extends HttpServlet
         if (result.containsKey("openid"))
         {
             wechatId = (String) result.get("openid");
-            printWriter.write(adminService.getReservedDevice(wechatId).toJSONString());
+            printWriter.write(adminService.getReservedDeviceByPage(wechatId, page, 10).toJSONString());
         }
         //请求失败，返回错误信息
         else

@@ -107,8 +107,8 @@ public class CreditRecordDaoImpl implements CreditRecordDao
         {
             con = JDBCUtils.getConnection();
             sql = "SELECT * FROM credit_record WHERE u_no = ?  " +
-                    "ORDER BY cr_date " +
-                    "LIMIT ? ,?";
+                  "ORDER BY cr_date " +
+                  "LIMIT ? ,?";
             pStmt = con.prepareStatement(sql);
             pStmt.setString(1, u_no);
             pStmt.setInt(2, (page - 1) * count);

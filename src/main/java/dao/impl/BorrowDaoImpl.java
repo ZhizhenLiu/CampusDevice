@@ -19,11 +19,11 @@ public class BorrowDaoImpl implements BorrowDao
     private String sql;
 
     /*
-     * @Description: 查询用户借用中的记录(借用中b_state=0，归还b_state=1,逾期未还b_state= -1)
-     * @Param userNo
+     * @Description: 查询用户借用的记录(借用中b_state=0，归还b_state=1, 逾期未还b_state=-1, 逾期归还=-2)
+     * @Param u_no  page  count
      * @Return: java.util.List<bean.Borrow>
      */
-    public List<Borrow> getBorrowRecord(String u_no)
+    public List<Borrow> getFinishedBorrowRecordByPage(String u_no, int page, int count)
     {
         //初始化
         con = null;
@@ -37,11 +37,69 @@ public class BorrowDaoImpl implements BorrowDao
             sql = "SELECT b_no, b_borrow_date, b_return_date, d_save_site, device.d_no, d_name, d_main_use, b_state " +
                   "FROM borrow, device " +
                   "WHERE u_no = ?" +
-                  "AND borrow.d_no = device.d_no";
+                  "AND borrow.d_no = device.d_no AND b_state IN(-2, 1) " +
+                  "LIMIT ?, ?";
             pStmt = con.prepareStatement(sql);
 
             //执行操作
             pStmt.setString(1, u_no);
+            pStmt.setInt(2, (page-1)*count);
+            pStmt.setInt(3, count);
+
+            rs = pStmt.executeQuery();
+            while (rs.next())
+            {
+                Borrow borrow = new Borrow();
+                borrow.setB_no(rs.getInt("b_no"));
+                borrow.setB_borrowDate(rs.getString("b_borrow_date"));
+                borrow.setB_returnDate(rs.getString("b_return_date"));
+                borrow.setD_saveSite(rs.getString("d_save_site"));
+                borrow.setD_no(rs.getString("d_no"));
+                borrow.setD_name(rs.getString("d_name"));
+                borrow.setD_mainUse(rs.getString("d_main_use"));
+                borrow.setB_state(rs.getInt("b_state"));
+                borrowList.add(borrow);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return borrowList;
+    }
+
+    /*
+     * @Description: 用户查询借用中的记录( 逾期借用: -1 借用中：0 )
+     * @Param u_no  page  count
+     * @Return: java.util.List<bean.Borrow>
+     */
+    public List<Borrow> getUnfinishedBorrowRecordByPage(String u_no, int page, int count)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+        List<Borrow> borrowList = new ArrayList<>();
+
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "SELECT b_no, b_borrow_date, b_return_date, d_save_site, device.d_no, d_name, d_main_use, b_state " +
+                    "FROM borrow, device " +
+                    "WHERE u_no = ?" +
+                    "AND borrow.d_no = device.d_no AND b_state IN(-1, 0) " +
+                    "LIMIT ?, ?";
+            pStmt = con.prepareStatement(sql);
+
+            //执行操作
+            pStmt.setString(1, u_no);
+            pStmt.setInt(2, (page-1)*count);
+            pStmt.setInt(3, count);
+
             rs = pStmt.executeQuery();
             while (rs.next())
             {
@@ -73,7 +131,7 @@ public class BorrowDaoImpl implements BorrowDao
      * @Param a_no
      * @Return: java.util.List<bean.Borrow>
      */
-    public List<Borrow> getBorrowList(String a_no)
+    public List<Borrow> getBorrowListByPage(String a_no, int page, int count)
     {
         //初始化
         con = null;
@@ -89,11 +147,15 @@ public class BorrowDaoImpl implements BorrowDao
                     "WHERE a.a_no = ? " +
                     "AND b.u_no = u.u_no " +
                     "AND b.d_no = d.d_no " +
-                    "ORDER BY b_return_date";
+                    "ORDER BY b_return_date " +
+                    "LIMIT ?, ?";
             pStmt = con.prepareStatement(sql);
 
             //执行操作
             pStmt.setString(1, a_no);
+            pStmt.setInt(2, (page-1)*count);
+            pStmt.setInt(3, count);
+
             rs = pStmt.executeQuery();
             while (rs.next())
             {
@@ -176,8 +238,8 @@ public class BorrowDaoImpl implements BorrowDao
         {
             con = JDBCUtils.getConnection();
             sql = "UPDATE borrow SET b_state = -1 " +
-                    "WHERE b_return_date < CURRENT_DATE " +
-                    "AND b_state = 0";
+                  "WHERE b_return_date < CURRENT_DATE " +
+                  "AND b_state = 0";
             pStmt = con.prepareStatement(sql);
 
             result = pStmt.executeUpdate();
@@ -195,10 +257,10 @@ public class BorrowDaoImpl implements BorrowDao
 
     /*
      * @Description: 管理员获取管辖范围内预期未还用户
-     * @Param a_no
+     * @Param a_no  page  count
      * @Return: java.util.List<bean.Borrow>
      */
-    public List<Borrow> getOverDueList(String a_no)
+    public List<Borrow> getOverDueListByPage(String a_no, int page, int count)
     {
         //初始化
         con = null;
@@ -245,11 +307,11 @@ public class BorrowDaoImpl implements BorrowDao
     }
 
     /*
-     * @Description: 借用中设备归还 （0：借用中，1：归还 -1:逾期）
+     * @Description: 借用中设备按时归还 （0:借用中，1:按时归还 -1:逾期未还 -2:逾期归还）
      * @Param b_no
      * @Return: int
      */
-    public int returnBorrow(int b_no)
+    public int returnOnTime(int b_no)
     {
         //初始化
         con = null;
@@ -261,8 +323,44 @@ public class BorrowDaoImpl implements BorrowDao
         {
             con = JDBCUtils.getConnection();
             sql = "UPDATE borrow SET b_state = 1 " +
-                    "WHERE b_no = ? " +
-                    "AND b_state <> 1";
+                  "WHERE b_no = ? " +
+                  "AND b_state <> 1";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            pStmt.setInt(1, b_no);
+
+            flag = pStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return flag;
+    }
+    /*
+     * @Description: 借用中设备逾期归还 （0:借用中，1:按时归还 -1:逾期未还 -2:逾期归还）
+     * @Param b_no
+     * @Return: int
+     */
+    public int returnOutOfTime(int b_no)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        int flag = 0;
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "UPDATE borrow SET b_state = -2 " +
+                  "WHERE b_no = ? " +
+                  "AND b_state <> 1";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
@@ -281,7 +379,6 @@ public class BorrowDaoImpl implements BorrowDao
         return flag;
     }
 
-
     /*
      * @Description: 根据借用编号查询借用记录
      * @Param b_no
@@ -299,9 +396,9 @@ public class BorrowDaoImpl implements BorrowDao
         {
             con = JDBCUtils.getConnection();
             sql = "SELECT * FROM borrow b, device d, user u " +
-                    "WHERE b.d_no = d.d_no " +
-                    "AND b.u_no = u.u_no " +
-                    "AND b_no = ?";
+                  "WHERE b.d_no = d.d_no " +
+                  "AND b.u_no = u.u_no " +
+                  "AND b_no = ?";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始

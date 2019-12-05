@@ -66,11 +66,11 @@ public interface UserService
     JSONObject cancelReservation(int r_no);
 
     /*
-     * @Description: 查询用户借用的记录(借用中b_state=0，归还b_state=1,逾期未还b_state= -1)
-     * @Param wechatID
+     * @Description: 逾期归还：-2  逾期借用: -1 借用中：0 归还：1
+     * @Param wechatID  page  count  isFinished
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject getBorrowRecord(String wechatID);
+    JSONObject getBorrowRecordByPage(String wechatID, int page, int count, boolean isFinished);
 
     /*
      * @Description: 获取用户的信用记录:分页查询
@@ -87,25 +87,25 @@ public interface UserService
     JSONObject getMessageByPage(String wechatID, int page, int count);
 
     /*
-     * @Description: 用户查询已预约设备信息
-     * @Param wechatID
+     * @Description: 用户查看申请中预约 或 用户查看已完成预约
+     * @Param wechatID  page  count  isFinished
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject getReservation(String wechatID);
+    JSONObject getReservationByPage(String wechatID, int page, int count, boolean isFinished);
 
     /*
      * @Description: 通过关键字检索查找设备
-     * @Param keyword
+     * @Param keyword  page  count
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject getDeviceByKeyword(String keyword);
+    JSONObject getDeviceByPageWithKeyword(String keyword, int page, int count);
     
     /*
-     * @Description: 用户评价设备
-     * @Param wechatID  d_no  comment
+     * @Description: 用户评价借用设备
+     * @Param b_no  comment
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject commentOnDevice(String wechatID, String d_no, String comment);
+    JSONObject commentOnDevice(int b_no, String comment);
 
     /*
      * @Description: 分页查询 获得设备评论

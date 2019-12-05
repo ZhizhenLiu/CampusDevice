@@ -69,7 +69,8 @@ public class CommentDaoImpl implements CommentDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT * FROM comment WHERE d_no = ? LIMIT ?, ? ";
+            sql = "SELECT * FROM comment WHERE d_no = ? ORDER BY c_date DESC " +
+                  "LIMIT ?, ? ";
             pStmt = con.prepareStatement(sql);
             pStmt.setString(1, d_no);
             pStmt.setInt(2, (page-1)*count);

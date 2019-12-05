@@ -15,17 +15,17 @@ public interface AdminService
 
     /*
      * @Description: 通过标识获取管理员管辖范围内的有人预约的设备
-     * @Param wechatID
+     * @Param wechatID  page  count
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject getReservedDevice(String wechatID);
+    JSONObject getReservedDeviceByPage(String wechatID, int page, int count);
 
     /*
      * @Description: 通过标识获取管理员管辖范围内外借设备
-     * @Param wechatID
+     * @Param wechatID  page  count
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject getBorrowedDevice(String wechatID);
+    JSONObject getBorrowedDeviceByPage(String wechatID, int page, int count);
 
     /*
      * @Description: 获取某一个设备的预约队列
@@ -50,10 +50,10 @@ public interface AdminService
 
     /*
      * @Description: 通过微信唯一标识获得对应管理范围设备外借预期信息
-     * @Param wechatID
+     * @Param wechatID  page  count
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject getOverDue(String wechatID);
+    JSONObject getOverDueByPage(String wechatID, int page, int count);
 
     /*
      * @Description: 管理员确认用户归还设备

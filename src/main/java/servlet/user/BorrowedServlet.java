@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "BorrowedServlet", urlPatterns = "/user/borrowed")
+@WebServlet(name = "BorrowedServlet", urlPatterns = "/user/unfinishedBorrow")
 public class BorrowedServlet extends HttpServlet
 {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -24,6 +24,7 @@ public class BorrowedServlet extends HttpServlet
 
         //获取参数
         String code = request.getParameter("code");
+        int page = Integer.parseInt(request.getParameter("page"));
 
         //向微信服务器接口发送code，获取用户唯一标识openid, 返回参数
         JSONObject result = JSONObject.parseObject(HttpUtils.sendGet(code));
@@ -36,13 +37,13 @@ public class BorrowedServlet extends HttpServlet
         if (result.containsKey("openid"))
         {
             wechatID = (String) result.get("openid");
-            info = userService.getBorrowRecord(wechatID);
+            info = userService.getBorrowRecordByPage(wechatID, page, 10, false);
             printWriter.write(info.toJSONString());
         }
         //请求失败，返回错误信息
         else
         {
-            info.put("errms", result.get("errMsg"));
+            info.put("errMsg", result.get("errmsg"));
             info.put("flag", "0");
             printWriter.write(info.toJSONString());
         }

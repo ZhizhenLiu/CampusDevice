@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "MessageServlet", urlPatterns = "/user/getMessage")
-public class MessageServlet extends HttpServlet
+@WebServlet(name = "UnfinishedReservationServlet", urlPatterns = "/user/unfinishedReservation")
+public class UnfinishedReservationServlet extends HttpServlet
 {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -37,7 +37,7 @@ public class MessageServlet extends HttpServlet
         if (result.containsKey("openid"))
         {
             wechatID = (String) result.get("openid");
-            info = userService.getMessageByPage(wechatID, page, 10);
+            info = userService.getReservationByPage(wechatID, page, 10, false);
             printWriter.write(info.toJSONString());
         }
         //请求失败，返回错误信息

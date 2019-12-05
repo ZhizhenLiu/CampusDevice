@@ -8,8 +8,6 @@ import dao.*;
 import dao.impl.*;
 import service.UserService;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class UserServiceImpl implements UserService
@@ -105,18 +103,21 @@ public class UserServiceImpl implements UserService
      */
     public JSONObject getAllDeviceByPage(int page, int count)
     {
-        List<Device> deviceList = deviceDao.getAllDeviceByPage(page, count);
         JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        List<Device> deviceList = deviceDao.getAllDeviceByPage(page, count);
         if (deviceList.isEmpty())
         {
             info.put("flag", 0);
-            info.put("errMsg", "当前页数没有设备");
+            errMsg.add("当前页数没有设备");
         }
         else
         {
             info.put("flag", 1);
             info.put("device", JSONArray.parseArray(JSON.toJSONString(deviceList)));
         }
+        info.put("errMsg", errMsg);
         return info;
     }
 
@@ -215,16 +216,46 @@ public class UserServiceImpl implements UserService
     }
 
     /*
-     * @Description: 查询用户借用的记录(借用中b_state=0，归还b_state=1,逾期未还b_state= -1)
-     * @Param wechatID
+     * @Description: 逾期归还：-2  逾期借用: -1 借用中：0 归还：1
+     * @Param wechatID  page  count  isFinished
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject getBorrowRecord(String wechatID)
+    public JSONObject getBorrowRecordByPage(String wechatID, int page, int count, boolean isFinished)
     {
-        String u_no = userDao.getUserByWechatID(wechatID).getU_no();
         JSONObject info = new JSONObject();
-        List<Borrow> borrowList = borrowDao.getBorrowRecord(u_no);
-        info.put("borrowed_item", JSONArray.parseArray(JSON.toJSONString(borrowList)));
+        JSONArray errMsg = new JSONArray();
+
+        String u_no = userDao.getUserByWechatID(wechatID).getU_no();
+        List<Borrow> borrowList;
+        if (isFinished)
+        {
+            borrowList = borrowDao.getFinishedBorrowRecordByPage(u_no, page, count);
+            if (borrowList.isEmpty())
+            {
+                info.put("flag", 0);
+                errMsg.add("当前页数没有已完成借用记录");
+            }
+            else
+            {
+                info.put("flag", 1);
+                info.put("borrowed_item", JSONArray.parseArray(JSON.toJSONString(borrowList)));
+            }
+        }
+        else
+        {
+            borrowList = borrowDao.getUnfinishedBorrowRecordByPage(u_no, page, count);
+            if (borrowList.isEmpty())
+            {
+                info.put("flag", 0);
+                errMsg.add("当前页数没有借用中记录");
+            }
+            else
+            {
+                info.put("flag", 1);
+                info.put("borrowed_item", JSONArray.parseArray(JSON.toJSONString(borrowList)));
+            }
+        }
+        info.put("errMsg", errMsg);
         return info;
     }
 
@@ -235,13 +266,27 @@ public class UserServiceImpl implements UserService
      */
     public JSONObject getCreditRecordByPage(String wechatID, int page, int count)
     {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
         User user = userDao.getUserByWechatID(wechatID);
         String u_no = user.getU_no();
         int credit_score = user.getU_creditGrade();
-        JSONObject info = new JSONObject();
+
         List<CreditRecord> creditRecordList = creditRecordDao.getRecordByPage(u_no, page, count);
+        if (creditRecordList.isEmpty())
+        {
+            info.put("flag", 0);
+            errMsg.add("当前页数没有信用记录");
+        }
+        else
+        {
+            info.put("flag", 1);
+            info.put("record", JSONArray.parseArray(JSON.toJSONString(creditRecordList)));
+        }
         info.put("score", credit_score);
-        info.put("record", JSONArray.parseArray(JSON.toJSONString(creditRecordList)));
+        info.put("errMsg", errMsg);
+
         return info;
     }
 
@@ -252,70 +297,119 @@ public class UserServiceImpl implements UserService
      */
     public JSONObject getMessageByPage(String wechatID, int page, int count)
     {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
         User user = userDao.getUserByWechatID(wechatID);
         String u_no = user.getU_no();
-        JSONObject info = new JSONObject();
+
         List<Message> messageList = messageDao.getMessageByPage(u_no, page, count);
-        info.put("messages", JSONArray.parseArray(JSON.toJSONString(messageList)));
+        if (messageList.isEmpty())
+        {
+            info.put("flag", 0);
+            errMsg.add("当前页数没有消息");
+        }
+        else
+        {
+            info.put("flag", 1);
+            info.put("messages", JSONArray.parseArray(JSON.toJSONString(messageList)));
+        }
+        info.put("errMsg", errMsg);
         return info;
     }
 
     /*
-     * @Description: 用户查询已预约设备信息
-     * @Param wechatID
+     * @Description: 用户查看申请中预约 或 用户查看已完成预约
+     * @Param wechatID  page  count  isFinished
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject getReservation(String wechatID)
+    public JSONObject getReservationByPage(String wechatID, int page, int count, boolean isFinished)
     {
-        User user = userDao.getUserByWechatID(wechatID);
         JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        User user = userDao.getUserByWechatID(wechatID);
         String u_no = user.getU_no();
-        List<Reservation> reservationList = reservationDao.getReservation(u_no);
-        info.put("reservation", JSONArray.parseArray(JSON.toJSONString(reservationList)));
+        List<Reservation> reservationList;
+        if (isFinished)
+        {
+            reservationList = reservationDao.getFinishedReservationByPage(u_no, page, count);
+            if (reservationList.isEmpty())
+            {
+                info.put("flag", 0);
+                errMsg.add("当前页数没有已完成预约记录");
+            }
+            else
+            {
+                info.put("flag", 1);
+                info.put("reservation", JSONArray.parseArray(JSON.toJSONString(reservationList)));
+            }
+        }
+        else
+        {
+            reservationList = reservationDao.getUnfinishedReservationByPage(u_no, page, count);
+            if (reservationList.isEmpty())
+            {
+                info.put("flag", 0);
+                errMsg.add("当前页数没有申请中预约记录");
+            }
+            else
+            {
+                info.put("flag", 1);
+                info.put("reservation", JSONArray.parseArray(JSON.toJSONString(reservationList)));
+            }
+        }
+        info.put("errMsg", errMsg);
         return info;
     }
 
     /*
      * @Description: 通过关键字检索查找设备
-     * @Param keyword
+     * @Param keyword  page  count
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject getDeviceByKeyword(String keyword)
+    public JSONObject getDeviceByPageWithKeyword(String keyword, int page, int count)
     {
         JSONObject info = new JSONObject();
-        List<Device> deviceList = deviceDao.getDeviceByKeyword(keyword);
+        JSONArray errMsg = new JSONArray();
+
+        List<Device> deviceList = deviceDao.getDeviceByPageWithKeyword(keyword, page, count);
         if (deviceList.isEmpty())
         {
             info.put("flag", 0);
-            info.put("errMsg", "没有查询到对应关键字的设备");
+            errMsg.add("没有查询到对应关键字的设备");
         }
         else
         {
             info.put("flag", 1);
             info.put("device", JSONArray.parseArray(JSON.toJSONString(deviceList)));
         }
+        info.put("errMsg", errMsg);
         return info;
     }
 
+
     /*
-     * @Description: 用户评价设备
-     * @Param wechatID  d_no  comment
+     * @Description: 用户评价借用设备
+     * @Param b_no  comment
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject commentOnDevice(String wechatID, String d_no, String comment)
+    public JSONObject commentOnDevice(int b_no, String comment)
     {
         JSONObject info = new JSONObject();
         JSONArray errMsg = new JSONArray();
-        User user = userDao.getUserByWechatID(wechatID);
-        if (user == null)
+        Borrow borrow = borrowDao.getBorrowByNo(b_no);
+
+        if (borrow == null)
         {
             info.put("flag", 0);
-            errMsg.add("不存在该用户");
+            errMsg.add("不存在该借用记录");
         }
         else
         {
             info.put("flag", 1);
-            String u_no = user.getU_no();
+            String u_no = borrow.getU_no();
+            String d_no = borrow.getD_no();
             int flag = commentDao.addComment(u_no, d_no, comment);
             info.put("flag", flag);
             if (flag == 0)
@@ -341,10 +435,12 @@ public class UserServiceImpl implements UserService
         info.put("flag", 1);
         if (commentList.isEmpty())
         {
-            errMsg.add("当前设备暂时没有评论");
+            info.put("flag", 0);
+            errMsg.add("当前页数暂时没有评论");
         }
         else
         {
+            info.put("flag", 1);
             info.put("comment", JSONArray.parseArray(JSON.toJSONString(commentList)));
         }
         info.put("errMsg", errMsg);
@@ -372,6 +468,7 @@ public class UserServiceImpl implements UserService
         {
             int flag = trackDao.trackDevice(u_no, d_no);
             info.put("flag", flag);
+            if (flag == 0) errMsg.add("跟踪设备失败异常");
         }
         info.put("errMsg", errMsg);
         return info;
@@ -394,6 +491,7 @@ public class UserServiceImpl implements UserService
             errMsg.add("取消失败");
         }
         info.put("errMsg", errMsg);
+
         return info;
     }
 }

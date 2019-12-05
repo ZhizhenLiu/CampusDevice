@@ -358,11 +358,10 @@ public class DeviceDaoImpl implements DeviceDao
 
     /*
      * @Description: 通过关键词获取设备信息
-     * @Param keyword
-     * @Return: List<Device>
+     * @Param keyword  page  count
+     * @Return: java.util.List<bean.Device>
      */
-    @Override
-    public List<Device> getDeviceByKeyword(String keyword)
+    public List<Device> getDeviceByPageWithKeyword(String keyword, int page, int count)
     {
         //初始化
         con = null;
@@ -376,8 +375,11 @@ public class DeviceDaoImpl implements DeviceDao
             //参数不太好用setString替换，直接字符串代替也没错
             sql = "SELECT * FROM device WHERE d_name LIKE '%" + keyword + "%' OR " +
                   "d_model like '%" + keyword + "%' OR " +
-                  "d_save_site LIKE '%" + keyword + "%'";
+                  "d_save_site LIKE '%" + keyword + "%' " +
+                  "LIMIT ?, ?";
             pStmt = con.prepareStatement(sql);
+            pStmt.setInt(1, (page-1)*count);
+            pStmt.setInt(2, count);
 
             //替换参数，从1开始
             rs = pStmt.executeQuery();

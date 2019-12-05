@@ -63,12 +63,10 @@ public interface DeviceDao
      */
     List<String> getDevice();
 
-    //修改自增编号的信息：alter table device auto_increment = 11;
-
     /*
      * @Description: 通过关键词获取设备信息
-     * @Param keyword
-     * @Return: List<Device>
+     * @Param keyword  page  count
+     * @Return: java.util.List<bean.Device>
      */
-    List<Device> getDeviceByKeyword(String keyword);
+    List<Device> getDeviceByPageWithKeyword(String keyword, int page, int count);
 }

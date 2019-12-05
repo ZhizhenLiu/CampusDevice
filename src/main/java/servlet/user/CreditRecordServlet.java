@@ -24,6 +24,7 @@ public class CreditRecordServlet extends HttpServlet
 
         //获取参数
         String code = request.getParameter("code");
+        int page= Integer.parseInt(request.getParameter("page"));
 
         //向微信服务器接口发送code，获取用户唯一标识openid, 返回参数
         JSONObject result = JSONObject.parseObject(HttpUtils.sendGet(code));
@@ -36,7 +37,7 @@ public class CreditRecordServlet extends HttpServlet
         if (result.containsKey("openid"))
         {
             wechatID = (String) result.get("openid");
-            info = userService.getCreditRecordByPage(wechatID, 1, 10);
+            info = userService.getCreditRecordByPage(wechatID, page, 10);
             printWriter.write(info.toJSONString());
         }
         //请求失败，返回错误信息

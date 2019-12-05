@@ -2,9 +2,7 @@ package servlet.admin;
 
 import com.alibaba.fastjson.JSONObject;
 import service.AdminService;
-import service.UserService;
 import service.impl.AdminServiceImpl;
-import service.impl.UserServiceImpl;
 import utils.HttpUtils;
 
 import javax.servlet.ServletException;
@@ -26,6 +24,7 @@ public class OverDueServlet extends HttpServlet
 
         //获取参数
         String code = request.getParameter("code");
+        int page = Integer.parseInt(request.getParameter("page"));
 
         //向微信服务器接口发送code，获取管理员唯一标识openid, 返回参数
         JSONObject result = JSONObject.parseObject(HttpUtils.sendGet(code));
@@ -38,7 +37,7 @@ public class OverDueServlet extends HttpServlet
         if (result.containsKey("openid"))
         {
             wechatID = (String) result.get("openid");
-            printWriter.write(adminService.getOverDue(wechatID).toJSONString());
+            printWriter.write(adminService.getOverDueByPage(wechatID, page, 10).toJSONString());
         }
         //请求失败，返回错误信息
         else

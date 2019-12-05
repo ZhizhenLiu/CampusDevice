@@ -25,6 +25,7 @@ public class CancelTrackServlet extends HttpServlet
         PrintWriter printWriter = response.getWriter();
         UserService userService = new UserServiceImpl();
         printWriter.write(userService.cancelTrack(t_no).toJSONString());
+
         printWriter.flush();
         printWriter.close();
     }

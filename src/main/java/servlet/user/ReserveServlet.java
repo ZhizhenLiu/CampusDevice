@@ -53,6 +53,7 @@ public class ReserveServlet extends HttpServlet
             info.put("flag", "0");
             printWriter.write(result.get("errMsg").toString());
         }
+
         printWriter.flush();
         printWriter.close();
     }

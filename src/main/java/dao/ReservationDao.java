@@ -39,10 +39,10 @@ public interface ReservationDao
 
     /*
      * @Description: 通过管理员编号获取管理员管辖范围内的有人预约的设备
-     * @Param a_no
-     * @Return: java.util.List<bean.Device>
+     * @Param a_no  page  count
+     * @Return: java.util.List<bean.Reservation>
      */
-    List<Reservation> handleReservation(String a_no);
+    List<Reservation> handleReservationByPage(String a_no, int page, int count);
 
     /*
      * @Description: 获取某一个设备的预约队列
@@ -80,11 +80,18 @@ public interface ReservationDao
     int refuseReserve(int r_no , String r_feedBack);
 
     /*
-     * @Description: 用户查看我的预约
+     * @Description: 用户查看申请中预约：预约中、协商中
      * @Param u_no
      * @Return: java.util.List<bean.Reservation>
      */
-    List<Reservation> getReservation(String u_no);
+    List<Reservation> getUnfinishedReservationByPage(String u_no, int page, int count);
+
+    /*
+     * @Description: 用户查看已完成预约：成功，拒绝、取消
+     * @Param u_no  page  count
+     * @Return: java.util.List<bean.Reservation>
+     */
+    List<Reservation> getFinishedReservationByPage(String u_no, int page, int count);
 
     /*
      * @Description: 获取用户预约设备的数量

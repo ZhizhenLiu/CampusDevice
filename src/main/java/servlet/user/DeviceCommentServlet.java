@@ -28,6 +28,9 @@ public class DeviceCommentServlet extends HttpServlet
         UserService userService = new UserServiceImpl();
         PrintWriter printWriter = response.getWriter();
         printWriter.write(userService.getCommentByPage(d_no, 1, 10).toJSONString());
+
+        printWriter.flush();
+        printWriter.close();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

@@ -21,11 +21,13 @@ public class SearchDeviceServlet extends HttpServlet
 
         //获取检索关键字参数
         String keyword = request.getParameter("keyword");
+        int page = Integer.parseInt(request.getParameter("page"));
 
         //返回信息
         UserService userService = new UserServiceImpl();
         PrintWriter printWriter = response.getWriter();
-        printWriter.write(userService.getDeviceByKeyword(keyword).toJSONString());
+        printWriter.write(userService.getDeviceByPageWithKeyword(keyword, page, 10).toJSONString());
+
         printWriter.flush();
         printWriter.close();
     }

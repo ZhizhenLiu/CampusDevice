@@ -25,6 +25,7 @@ public class RegisterServlet extends HttpServlet
         //设置编码
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
+
         //获取参数
         String u_no = request.getParameter("u_no");
         String u_name = request.getParameter("u_name");
@@ -37,10 +38,7 @@ public class RegisterServlet extends HttpServlet
         String code = request.getParameter("code");
 
         //向微信服务器接口发送code，获取用户唯一标识openid, 返回参数
-        System.out.println("code: " + code);
-        System.out.println("u_email: " + u_email);
         JSONObject result = JSONObject.parseObject(HttpUtils.sendGet(code));
-        System.out.println(result);
         JSONObject info = null;
         PrintWriter printWriter = response.getWriter();
         UserService userService = new UserServiceImpl();
@@ -59,9 +57,10 @@ public class RegisterServlet extends HttpServlet
         else
         {
             info.put("errms", result.get("errMsg"));
-            info.put("flag", "0");
+            info.put("flag", 0);
             printWriter.write(info.toJSONString());
         }
+
         printWriter.flush();
         printWriter.close();
     }

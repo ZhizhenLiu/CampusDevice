@@ -37,35 +37,61 @@ public class AdminServiceImpl implements AdminService
         }
         return true;
     }
+
     /*
      * @Description: 通过标识获取管理员管辖范围内的有人预约的设备
-     * @Param wechatID
+     * @Param wechatID  page  count
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject getReservedDevice(String wechatID)
+    public JSONObject getReservedDeviceByPage(String wechatID, int page, int count)
     {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
         //获取主键，通过主键查询
         String a_no = adminDao.getAdminByWechatID(wechatID).getA_no();
-        JSONObject info = new JSONObject();
-        List<Reservation> reservationList = reservationDao.handleReservation(a_no);
-        info.put("flag", 1);
-        info.put("device", JSONArray.parseArray(JSON.toJSONString(reservationList)));
+        List<Reservation> reservationList = reservationDao.handleReservationByPage(a_no, page, count);
+
+        if (reservationList.isEmpty())
+        {
+            info.put("flag", 0);
+            errMsg.add("当前页数暂时没有预约中设备");
+        }
+        else
+        {
+            info.put("flag", 1);
+            info.put("device", JSONArray.parseArray(JSON.toJSONString(reservationList)));
+        }
+        info.put("errMsg", errMsg);
+
         return info;
     }
 
     /*
      * @Description: 通过标识获取管理员管辖范围内外借设备
-     * @Param wechatID
+     * @Param wechatID  page  count
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject getBorrowedDevice(String wechatID)
+    public JSONObject getBorrowedDeviceByPage(String wechatID, int page, int count)
     {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
         //获取主键，通过主键查询
         String a_no = adminDao.getAdminByWechatID(wechatID).getA_no();
-        JSONObject info = new JSONObject();
-        List<Borrow> borrowList = borrowDao.getBorrowList(a_no);
-        info.put("flag", 1);
-        info.put("borrow", borrowList);
+        List<Borrow> borrowList = borrowDao.getBorrowListByPage(a_no, page, count);
+        if (borrowList.isEmpty())
+        {
+            info.put("flag", 0);
+            errMsg.add("当前页数暂时没有外借中设备");
+        }
+        else
+        {
+            info.put("flag", 1);
+            info.put("device", JSONArray.parseArray(JSON.toJSONString(borrowList)));
+        }
+        info.put("errMsg", errMsg);
+
         return info;
     }
 
@@ -156,6 +182,7 @@ public class AdminServiceImpl implements AdminService
     {
         JSONObject info = new JSONObject();
         JSONArray errMsg = new JSONArray();
+
         Reservation reservation = reservationDao.getReservation(r_no);
         String u_no = reservation.getU_no();
         info.put("flag", 1);
@@ -183,29 +210,33 @@ public class AdminServiceImpl implements AdminService
 
     /*
      * @Description: 通过微信唯一标识获得对应管理范围设备外借预期信息
-     * @Param wechatID
+     * @Param wechatID  page  count
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject getOverDue(String wechatID)
+    public JSONObject getOverDueByPage(String wechatID, int page, int count)
     {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
         //获取主键，通过主键查询
         String a_no = adminDao.getAdminByWechatID(wechatID).getA_no();
 
         //设置所有逾期设备状态为 -1 表示逾期未还
         borrowDao.setAllOverDueState();
 
-        JSONObject info = new JSONObject();
-        List<Borrow> borrowList = borrowDao.getOverDueList(a_no);
+        List<Borrow> borrowList = borrowDao.getOverDueListByPage(a_no, page, count);
         if (borrowList.isEmpty())
         {
             info.put("flag", 0);
-            info.put("errMsg", "没有逾期未还设备");
+            errMsg.add("当前页数没有逾期未还设备");
         }
         else
         {
             info.put("flag", 1);
-            info.put("borrow", borrowList);
+            info.put("borrow", JSONArray.parseArray(JSON.toJSONString(borrowList)));
         }
+        info.put("errMsg", errMsg);
+
         return info;
     }
 
@@ -218,13 +249,14 @@ public class AdminServiceImpl implements AdminService
     {
         JSONObject info = new JSONObject();
         JSONArray errMsg = new JSONArray();
+
         Borrow borrow = borrowDao.getBorrowByNo(b_no);
         String u_no = borrow.getU_no();
         String u_name = userDao.getUserByNo(u_no).getU_name() + userDao.getUserByNo(u_no).getU_type();
         String d_no = borrow.getD_no();
         String d_name = deviceDao.getDeviceByNo(d_no).getD_name();
 
-        int flag = borrowDao.returnBorrow(b_no);
+        int flag = borrowDao.returnOnTime(b_no);
         if (flag == 0)
         {
             errMsg.add("修改借用记录状态为归还失败");

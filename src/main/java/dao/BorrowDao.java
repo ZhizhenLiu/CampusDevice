@@ -9,18 +9,25 @@ public interface BorrowDao
 {
 
     /*
-     * @Description: 查询用户借用的记录(借用中b_state=0，归还b_state=1,逾期未还b_state= -1)
-     * @Param u_no
+     * @Description: 用户查询借用完成的记录(逾期归还：-2  归还：1)
+     * @Param u_no  page  count
      * @Return: java.util.List<bean.Borrow>
      */
-    List<Borrow> getBorrowRecord(String u_no);
+    List<Borrow> getFinishedBorrowRecordByPage(String u_no, int page, int count);
+
+    /*
+     * @Description: 用户查询借用中的记录( 逾期借用: -1 借用中：0 )
+     * @Param u_no  page  count
+     * @Return: java.util.List<bean.Borrow>
+     */
+    List<Borrow> getUnfinishedBorrowRecordByPage(String u_no, int page, int count);
 
     /*
      * @Description: 管理员查看管辖范围内外借中记录
-     * @Param a_no
+     * @Param a_no  page  count
      * @Return: java.util.List<bean.Borrow>
      */
-    List<Borrow> getBorrowList(String a_no);
+    List<Borrow> getBorrowListByPage(String a_no, int page, int count);
 
     /*
      * @Description: 管理员确认设备租借给某个用户
@@ -38,17 +45,24 @@ public interface BorrowDao
 
     /*
      * @Description: 管理员获取管辖范围内预期未还用户
-     * @Param a_no
+     * @Param a_no  page  count
      * @Return: java.util.List<bean.Borrow>
      */
-    List<Borrow> getOverDueList(String a_no);
+    List<Borrow> getOverDueListByPage(String a_no, int page, int count);
 
     /*
-     * @Description: 借用中设备归还 （0：借用中，1：归还 -1:逾期）
+     * @Description: 借用中设备按时归还 （0:借用中，1:按时归还 -1:逾期未还 -2:逾期归还）
      * @Param b_no
      * @Return: int
      */
-    int returnBorrow(int b_no);
+    int returnOnTime(int b_no);
+
+    /*
+     * @Description: 借用中设备逾期归还 （0:借用中，1:按时归还 -1:逾期未还 -2:逾期归还）
+     * @Param b_no
+     * @Return: int
+     */
+    int returnOutOfTime(int b_no);
 
     /*
      * @Description: 根据借用编号查询借用记录
