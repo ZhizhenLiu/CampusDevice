@@ -43,19 +43,19 @@ public class AdminServiceImpl implements AdminService
      * @Param wechatID  page  count
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject getReservedDeviceByPage(String wechatID, int page, int count)
+    public JSONObject getReservedDevice(String wechatID)
     {
         JSONObject info = new JSONObject();
         JSONArray errMsg = new JSONArray();
 
         //获取主键，通过主键查询
         String a_no = adminDao.getAdminByWechatID(wechatID).getA_no();
-        List<Reservation> reservationList = reservationDao.handleReservationByPage(a_no, page, count);
+        List<Reservation> reservationList = reservationDao.handleReservation(a_no);
 
         if (reservationList.isEmpty())
         {
             info.put("flag", 0);
-            errMsg.add("当前页数暂时没有预约中设备");
+            errMsg.add("暂时没有预约中设备");
         }
         else
         {
@@ -69,21 +69,21 @@ public class AdminServiceImpl implements AdminService
 
     /*
      * @Description: 通过标识获取管理员管辖范围内外借设备
-     * @Param wechatID  page  count
+     * @Param wechatID
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject getBorrowedDeviceByPage(String wechatID, int page, int count)
+    public JSONObject getBorrowedDevice(String wechatID)
     {
         JSONObject info = new JSONObject();
         JSONArray errMsg = new JSONArray();
 
         //获取主键，通过主键查询
         String a_no = adminDao.getAdminByWechatID(wechatID).getA_no();
-        List<Borrow> borrowList = borrowDao.getBorrowListByPage(a_no, page, count);
+        List<Borrow> borrowList = borrowDao.getBorrowList(a_no);
         if (borrowList.isEmpty())
         {
             info.put("flag", 0);
-            errMsg.add("当前页数暂时没有外借中设备");
+            errMsg.add("暂时没有外借中设备");
         }
         else
         {
@@ -103,9 +103,50 @@ public class AdminServiceImpl implements AdminService
     public JSONObject getReservationDetail(String d_no)
     {
         JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
         List<Reservation> reservationList = reservationDao.handleReservationDetail(d_no);
+        if (reservationList.isEmpty())
+        {
+            info.put("flag", 0);
+            errMsg.add("该设备没有预约队列");        }
+        else
+        {
+            info.put("flag", 1);
+            info.put("reservation", JSONArray.parseArray(JSON.toJSONString(reservationList)));
+        }
+        return info;
+    }
+
+    /*
+     * @Description: 管理员编辑修改用户预约，开始协商
+     * @Param r_no  startDate  endDate  feedBack
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject editReservation(int r_no, String startDate, String endDate, String feedBack)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        Reservation reservation = reservationDao.getReservation(r_no);
+        String u_no = reservation.getU_no();
+        String u_name = reservation.getU_name() + reservation.getU_type();
+        String d_name = reservation.getD_name();
         info.put("flag", 1);
-        info.put("reservation", JSONArray.parseArray(JSON.toJSONString(reservationList)));
+        int flag = reservationDao.editReservation(r_no, startDate, endDate, feedBack);
+        if (flag == 0)
+        {
+            info.put("flag", 0);
+            errMsg.add("编辑修改预约失败");
+        }
+        flag = messageDao.sendMessage(u_no, u_name + "，你有一条来自管理员的预约协商：" + d_name + "，请在我的预约中查看详情");
+        if (flag == 0)
+        {
+            info.put("flag", 0);
+            errMsg.add("发送提示消息失败");
+        }
+        info.put("errMsg", errMsg);
+
         return info;
     }
 
@@ -224,7 +265,7 @@ public class AdminServiceImpl implements AdminService
         //设置所有逾期设备状态为 -1 表示逾期未还
         borrowDao.setAllOverDueState();
 
-        List<Borrow> borrowList = borrowDao.getOverDueListByPage(a_no, page, count);
+        List<Borrow> borrowList = borrowDao.getOverDueList(a_no, page, count);
         if (borrowList.isEmpty())
         {
             info.put("flag", 0);

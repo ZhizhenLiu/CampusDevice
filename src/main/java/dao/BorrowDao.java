@@ -24,10 +24,10 @@ public interface BorrowDao
 
     /*
      * @Description: 管理员查看管辖范围内外借中记录
-     * @Param a_no  page  count
+     * @Param a_no
      * @Return: java.util.List<bean.Borrow>
      */
-    List<Borrow> getBorrowListByPage(String a_no, int page, int count);
+    List<Borrow> getBorrowList(String a_no);
 
     /*
      * @Description: 管理员确认设备租借给某个用户
@@ -48,7 +48,7 @@ public interface BorrowDao
      * @Param a_no  page  count
      * @Return: java.util.List<bean.Borrow>
      */
-    List<Borrow> getOverDueListByPage(String a_no, int page, int count);
+    List<Borrow> getOverDueList(String a_no, int page, int count);
 
     /*
      * @Description: 借用中设备按时归还 （0:借用中，1:按时归还 -1:逾期未还 -2:逾期归还）

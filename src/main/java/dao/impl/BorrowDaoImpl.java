@@ -38,6 +38,7 @@ public class BorrowDaoImpl implements BorrowDao
                   "FROM borrow, device " +
                   "WHERE u_no = ?" +
                   "AND borrow.d_no = device.d_no AND b_state IN(-2, 1) " +
+                  "ORDER BY b_borrow_date DESC  " +
                   "LIMIT ?, ?";
             pStmt = con.prepareStatement(sql);
 
@@ -89,10 +90,11 @@ public class BorrowDaoImpl implements BorrowDao
         {
             con = JDBCUtils.getConnection();
             sql = "SELECT b_no, b_borrow_date, b_return_date, d_save_site, device.d_no, d_name, d_main_use, b_state " +
-                    "FROM borrow, device " +
-                    "WHERE u_no = ?" +
-                    "AND borrow.d_no = device.d_no AND b_state IN(-1, 0) " +
-                    "LIMIT ?, ?";
+                  "FROM borrow, device " +
+                  "WHERE u_no = ?" +
+                  "AND borrow.d_no = device.d_no AND b_state IN(-1, 0) " +
+                  "ORDER BY b_borrow_date DESC " +
+                  "LIMIT ?, ?";
             pStmt = con.prepareStatement(sql);
 
             //执行操作
@@ -131,7 +133,7 @@ public class BorrowDaoImpl implements BorrowDao
      * @Param a_no
      * @Return: java.util.List<bean.Borrow>
      */
-    public List<Borrow> getBorrowListByPage(String a_no, int page, int count)
+    public List<Borrow> getBorrowList(String a_no)
     {
         //初始化
         con = null;
@@ -143,18 +145,15 @@ public class BorrowDaoImpl implements BorrowDao
         {
             con = JDBCUtils.getConnection();
             sql = "SELECT b_no, b.b_state,b.b_no, d.d_name, d.d_no, u.u_no, u.u_name, u_credit_grade, b_borrow_date, b_return_date " +
-                    "FROM borrow b, administrator a, user u ,device d  " +
-                    "WHERE a.a_no = ? " +
-                    "AND b.u_no = u.u_no " +
-                    "AND b.d_no = d.d_no " +
-                    "ORDER BY b_return_date " +
-                    "LIMIT ?, ?";
+                  "FROM borrow b, administrator a, user u ,device d  " +
+                  "WHERE a.a_no = ? " +
+                  "AND b.u_no = u.u_no " +
+                  "AND b.d_no = d.d_no " +
+                  "ORDER BY b_return_date " ;
             pStmt = con.prepareStatement(sql);
 
             //执行操作
             pStmt.setString(1, a_no);
-            pStmt.setInt(2, (page-1)*count);
-            pStmt.setInt(3, count);
 
             rs = pStmt.executeQuery();
             while (rs.next())
@@ -197,7 +196,7 @@ public class BorrowDaoImpl implements BorrowDao
         int flag = 0;
         con = JDBCUtils.getConnection();
         sql = "INSERT INTO borrow(d_no, u_no, b_borrow_date, b_return_date) " +
-                "VALUES (?, ?, ?, ?)";
+              "VALUES (?, ?, ?, ?)";
         try
         {
             pStmt = con.prepareStatement(sql);
@@ -260,7 +259,7 @@ public class BorrowDaoImpl implements BorrowDao
      * @Param a_no  page  count
      * @Return: java.util.List<bean.Borrow>
      */
-    public List<Borrow> getOverDueListByPage(String a_no, int page, int count)
+    public List<Borrow> getOverDueList(String a_no, int page, int count)
     {
         //初始化
         con = null;

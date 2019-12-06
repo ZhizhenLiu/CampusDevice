@@ -1,6 +1,7 @@
 package service;
 
 import bean.Admin;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 public interface AdminService
@@ -15,17 +16,17 @@ public interface AdminService
 
     /*
      * @Description: 通过标识获取管理员管辖范围内的有人预约的设备
-     * @Param wechatID  page  count
+     * @Param wechatID
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject getReservedDeviceByPage(String wechatID, int page, int count);
+    JSONObject getReservedDevice(String wechatID);
 
     /*
      * @Description: 通过标识获取管理员管辖范围内外借设备
-     * @Param wechatID  page  count
+     * @Param wechatID
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject getBorrowedDeviceByPage(String wechatID, int page, int count);
+    JSONObject getBorrowedDevice(String wechatID);
 
     /*
      * @Description: 获取某一个设备的预约队列
@@ -33,6 +34,13 @@ public interface AdminService
      * @Return: com.alibaba.fastjson.JSONObject
      */
     JSONObject getReservationDetail(String d_no);
+
+    /*
+     * @Description: 管理员编辑修改用户预约，开始协商
+     * @Param r_no  startDate  endDate  feedBack
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject editReservation(int r_no, String startDate, String endDate, String feedBack);
 
     /*
      * @Description: 管理员确认设备租借给某个用户

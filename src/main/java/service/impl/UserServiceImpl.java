@@ -216,6 +216,41 @@ public class UserServiceImpl implements UserService
     }
 
     /*
+     * @Description: 用户同意 修改预约
+     * @Param r_no isAgreed
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject agreeEditReservation(int r_no)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        int flag = 1;
+        info.put("flag", flag);
+        Reservation reservation = reservationDao.getReservation(r_no);
+        String u_no = reservation.getU_no();
+        String d_name = reservation.getD_name();
+        String startDate = reservation.getR_startDate();
+        String returnDate = reservation.getR_returnDate();
+
+        flag = reservationDao.setReservationState(r_no, 0);
+        if (flag == 0)
+        {
+            info.put("flag", 0);
+            errMsg.add("用户同意协商申请失败");
+        }
+        flag = messageDao.sendMessage(u_no, "你已同意预约协商：" + d_name +"。预约时间修改为：" + startDate + " ~ " + returnDate);
+        if (flag == 0)
+        {
+            info.put("flag", 0);
+            errMsg.add("发送提示消息失败");
+        }
+        info.put("errMsg", errMsg);
+
+        return info;
+    }
+
+    /*
      * @Description: 逾期归还：-2  逾期借用: -1 借用中：0 归还：1
      * @Param wechatID  page  count  isFinished
      * @Return: com.alibaba.fastjson.JSONObject

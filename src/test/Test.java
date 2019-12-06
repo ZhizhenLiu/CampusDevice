@@ -41,7 +41,7 @@ public class Test {
        DeviceDao deviceDao = new DeviceDaoImpl();
        BorrowDao borrowDao = new BorrowDaoImpl();
        CommentDao  commentDao = new CommentDaoImpl();
-
+       ReservationDao reservationDao = new ReservationDaoImpl();
 //      System.out.println(userService.reserveDevice("1713714S","o0ug241yqbsjM0N5xR5qhLxi8gH0","2019-10-01","2019-10-07"));
 //       System.out.println(adminService.getReservedDevice(""));
 
@@ -51,8 +51,13 @@ public class Test {
        String wechatID = "o0ug242ge55sufbQW0xHk7KTmq60";
 
 
-       System.out.println(userService.getBorrowRecordByPage("o0ug241yqbsjM0N5xR5qhLxi8gH0",1 ,10, true));
-       System.out.println();
-       System.out.println(userService.getBorrowRecordByPage("o0ug241yqbsjM0N5xR5qhLxi8gH0",1 ,10, false));
+//       System.out.println(userService.getReservationByPage("o0ug241yqbsjM0N5xR5qhLxi8gH0",1 ,10, true));
+//       System.out.println(reservationDao.getFinishedReservationByPage("201726010310", 1, 10));
+//       System.out.println();
+//       System.out.println(userService.getReservationByPage("",1 ,10, false));
+//       System.out.println(reservationDao.getUnfinishedReservationByPage("201726010310", 1, 10));
+//       System.out.println(userService.reserveDevice("1905399S", "o0ug241yqbsjM0N5xR5qhLxi8gH0", "2019-12-06", "2019-12-12"));
+//       System.out.println(adminService.editReservation(39, "2019-12-15", "2019-12-30", "原借用时间段有人外借"));
+
    }
 }

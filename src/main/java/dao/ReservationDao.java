@@ -39,10 +39,10 @@ public interface ReservationDao
 
     /*
      * @Description: 通过管理员编号获取管理员管辖范围内的有人预约的设备
-     * @Param a_no  page  count
+     * @Param a_no
      * @Return: java.util.List<bean.Reservation>
      */
-    List<Reservation> handleReservationByPage(String a_no, int page, int count);
+    List<Reservation> handleReservation(String a_no);
 
     /*
      * @Description: 获取某一个设备的预约队列
@@ -50,6 +50,13 @@ public interface ReservationDao
      * @Return: java.util.List<bean.Reservation>
      */
     List<Reservation> handleReservationDetail(String d_no);
+
+    /*
+     * @Description: 管理员编辑修改用户预约，开始协商
+     * @Param r_no  startDate  endDate
+     * @Return: int
+     */
+    int editReservation(int r_no, String startDate, String endDate, String feedBack);
 
     /*
      * @Description: 获取某个用户预约设备的开始日期
@@ -99,5 +106,12 @@ public interface ReservationDao
      * @Return: int
      */
     int getReservationNum(String u_no);
+
+    /*
+     * @Description: 设置预约状态
+     * @Param r_no  r_state
+     * @Return: int
+     */
+    int setReservationState(int r_no, int r_state);
 
 }

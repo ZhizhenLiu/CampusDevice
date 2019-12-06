@@ -66,6 +66,13 @@ public interface UserService
     JSONObject cancelReservation(int r_no);
 
     /*
+     * @Description: 用户同意 修改预约
+     * @Param r_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject agreeEditReservation(int r_no);
+
+    /*
      * @Description: 逾期归还：-2  逾期借用: -1 借用中：0 归还：1
      * @Param wechatID  page  count  isFinished
      * @Return: com.alibaba.fastjson.JSONObject
@@ -99,7 +106,7 @@ public interface UserService
      * @Return: com.alibaba.fastjson.JSONObject
      */
     JSONObject getDeviceByPageWithKeyword(String keyword, int page, int count);
-    
+
     /*
      * @Description: 用户评价借用设备
      * @Param b_no  comment

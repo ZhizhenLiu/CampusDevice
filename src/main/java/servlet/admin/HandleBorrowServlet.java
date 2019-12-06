@@ -24,8 +24,6 @@ public class HandleBorrowServlet extends HttpServlet
 
         //获取参数
         String code = request.getParameter("code");
-        System.out.println(code);
-        int page = Integer.parseInt(request.getParameter("page"));
 
         //向微信服务器接口发送code，获取用户唯一标识openid, 返回参数
         AdminService adminService = new AdminServiceImpl();
@@ -38,7 +36,7 @@ public class HandleBorrowServlet extends HttpServlet
         if (result.containsKey("openid"))
         {
             wechatId = (String) result.get("openid");
-            printWriter.write(adminService.getBorrowedDeviceByPage(wechatId, page, 10).toJSONString());
+            printWriter.write(adminService.getBorrowedDevice(wechatId).toJSONString());
         }
         //请求失败，返回错误信息
         else

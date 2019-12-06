@@ -93,7 +93,7 @@ public class ReservationDaoImpl implements ReservationDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT * FROM reservation WHERE u_no = ? AND d_no = ?";
+            sql = "SELECT * FROM reservation WHERE u_no = ? AND d_no = ? AND r_state = 0 ";
             pStmt = con.prepareStatement(sql);
             pStmt.setString(1, u_no);
             pStmt.setString(2, d_no);
@@ -126,7 +126,7 @@ public class ReservationDaoImpl implements ReservationDao
         {
             con = JDBCUtils.getConnection();
             sql = "INSERT INTO reservation(d_no,u_no,r_reservation_date,r_start_date,r_return_date) " +
-                    "VALUES(?, ?, CURRENT_DATE, ?, ?)";
+                  "VALUES(?, ?, CURRENT_DATE, ?, ?)";
             pStmt = con.prepareStatement(sql);
             pStmt.setString(1, d_no);
             pStmt.setString(2, u_no);
@@ -164,7 +164,7 @@ public class ReservationDaoImpl implements ReservationDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "UPDATE reservation SET r_state = -1, r_feedback = ?  " +
+            sql = "UPDATE reservation SET r_state = -2, r_feedback = ?  " +
                     "WHERE r_no = ? ";
             pStmt = con.prepareStatement(sql);
 
@@ -184,12 +184,13 @@ public class ReservationDaoImpl implements ReservationDao
         }
         return flag;
     }
+
     /*
-     * @Description: 通过标识获取管理员管辖范围内的有人预约的设备
-     * @Param wechatId
-     * @Return: com.alibaba.fastjson.JSONObject
+     * @Description: 通过管理员编号获取管理员管辖范围内的有人预约的设备
+     * @Param a_no
+     * @Return: java.util.List<bean.Reservation>
      */
-    public List<Reservation> handleReservationByPage(String a_no, int page, int count)
+    public List<Reservation> handleReservation(String a_no)
     {
         //初始化
         con = null;
@@ -206,14 +207,11 @@ public class ReservationDaoImpl implements ReservationDao
                     "r.d_no = d.d_no " +
                     "AND d.a_no = ? AND r_state = 0 " +
                     "GROUP BY d.d_no, d.d_name, d.d_model " +
-                    "ORDER BY r_sum DESC " +
-                    "LIMIT ?, ? ";
+                    "ORDER BY r_sum DESC ";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
             pStmt.setString(1, a_no);
-            pStmt.setInt(2, (page-1)*count);
-            pStmt.setInt(3, count);
 
             rs = pStmt.executeQuery();
 
@@ -255,13 +253,12 @@ public class ReservationDaoImpl implements ReservationDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT u.u_no, u_name, u_type, r_no, r_start_date, r_return_date, r_reservation_date, u_credit_grade " +
-                    "FROM user u, reservation r " +
-                    "WHERE " +
-                    "u.u_no = r.u_no " +
-                    "AND d_no = ? " +
-                    "AND r_state = 0 " +
-                    "ORDER BY r_reservation_date DESC,u_credit_grade DESC";
+            sql = "SELECT r_state, u.u_no, u_name, u_type, r_no, r_start_date, r_return_date, r_reservation_date, u_credit_grade " +
+                  "FROM user u, reservation r " +
+                  "WHERE u.u_no = r.u_no " +
+                  "AND d_no = ? " +
+                  "AND r_state IN(0, 2) " +
+                  "ORDER BY r_reservation_date DESC,u_credit_grade DESC";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
@@ -291,6 +288,44 @@ public class ReservationDaoImpl implements ReservationDao
             JDBCUtils.closeAll(rs, pStmt, con);
         }
         return reservationList;
+    }
+
+    /*
+     * @Description: 管理员编辑修改用户预约，开始协商
+     * @Param r_no  startDate  endDate  feedBack
+     * @Return: int
+     */
+    public int editReservation(int r_no, String startDate, String endDate, String feedBack)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        int flag = 0;
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "UPDATE reservation SET r_start_date = ? , r_return_date = ?, r_state = 2 , r_feedback = ? " +
+                  "WHERE r_no = ? ";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            pStmt.setString(1, startDate);
+            pStmt.setString(2, endDate);
+            pStmt.setString(3, feedBack);
+            pStmt.setInt(4, r_no);
+            flag = pStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(null , pStmt, con);
+        }
+        return flag;
     }
 
     public String getStartDate(String u_no, String d_no)
@@ -396,8 +431,8 @@ public class ReservationDaoImpl implements ReservationDao
         {
             con = JDBCUtils.getConnection();
             sql = "UPDATE reservation SET r_state = 1  " +
-                    "WHERE r_no = ? " +
-                    "AND r_state = 0";
+                  "WHERE r_no = ? " +
+                  "AND r_state = 0";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
@@ -474,7 +509,7 @@ public class ReservationDaoImpl implements ReservationDao
                   "FROM reservation r,device d " +
                   "WHERE r.d_no = d.d_no " +
                   "AND u_no = ? AND r_state IN(0, 2) " +
-                  "ORDER BY r_reservation_date " +
+                  "ORDER BY r_reservation_date DESC " +
                   "LIMIT ?, ?";
             pStmt = con.prepareStatement(sql);
 
@@ -528,7 +563,7 @@ public class ReservationDaoImpl implements ReservationDao
                   "FROM reservation r,device d " +
                   "WHERE r.d_no = d.d_no " +
                   "AND u_no = ? AND r_state IN(-2, -1, 1) " +
-                  "ORDER BY r_reservation_date " +
+                  "ORDER BY r_reservation_date DESC " +
                   "LIMIT ?, ?";
             pStmt = con.prepareStatement(sql);
 
@@ -593,5 +628,40 @@ public class ReservationDaoImpl implements ReservationDao
             JDBCUtils.closeAll(rs, pStmt, con);
         }
         return num;
+    }
+
+    /*
+     * @Description: 设置预约状态
+     * @Param r_no  r_state
+     * @Return: int
+     */
+    public int setReservationState(int r_no, int r_state)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+        int flag = 0;
+
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "UPDATE reservation SET r_state = ? WHERE r_no = ?";
+            pStmt = con.prepareStatement(sql);
+
+            //执行操作
+            pStmt.setInt(1, r_state);
+            pStmt.setInt(2, r_no);
+            flag = pStmt.executeUpdate();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return flag;
     }
 }
