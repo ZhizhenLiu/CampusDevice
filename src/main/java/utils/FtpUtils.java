@@ -401,9 +401,9 @@ public class FtpUtils
     public static void main(String[] args)
     {
         FtpUtils ftp = new FtpUtils();
-//        ftp.uploadFile("/img", "code.png", "E:\\IDEA WorkStation\\CampusDevice\\src\\main\\webapp\\img\\code.png");
+        ftp.uploadFile("/img", "code.png", "E:\\code.png");
         //ftp.downloadFile("ftpFile/data", "123.docx", "F://");
-        ftp.deleteFile("/img", "code.png");
+
         System.out.println("ok");
     }
 }

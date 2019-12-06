@@ -42,16 +42,16 @@ public class QRCodeUtils
             BitMatrix bitMatrix = new MultiFormatWriter().
                     encode(content, BarcodeFormat.QR_CODE, width, height, hints);
 
-            File file = new File(path);
+            File dir = new File(path);
 
             // 当文件夹不存在时，mkdirs会自动创建多层目录，区别于mkdir．(mkdir如果父目录不存在则会抛出异常)
-            if (!file.exists())
+            if (!dir.exists())
             {
-                file.mkdirs();
+                dir.mkdirs();
             }
             path = path + "/code-" + dateFormat.format(date) + ".png";
             codeUrl = codeUrl + "/code-" + dateFormat.format(date) + ".png";
-            file = new File(path);
+            File file = new File(path);
             MatrixToImageWriter.writeToPath(bitMatrix, format, file.toPath());
         }
         catch (IOException | WriterException e)

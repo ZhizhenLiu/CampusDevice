@@ -1,5 +1,6 @@
 package utils;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,6 +22,22 @@ public class TransformUtils
         catch (ParseException e)
         {
             System.out.println("字符串转时间错误！");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    //将数据库SQL变成字符串
+    public static String SQLDateTransString(java.sql.Date dateTime)
+    {
+        try{
+            Date date = new java.util.Date(dateTime.getTime());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String stringDate = sdf.format(date);
+            return stringDate;
+
+        }catch (Exception e){
+            System.out.println("数据库时间转字符串错误！");
             e.printStackTrace();
         }
         return null;

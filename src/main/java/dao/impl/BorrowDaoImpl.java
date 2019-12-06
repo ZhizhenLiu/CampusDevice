@@ -3,6 +3,7 @@ package dao.impl;
 import bean.Borrow;
 import dao.BorrowDao;
 import utils.JDBCUtils;
+import utils.TransformUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -427,5 +428,74 @@ public class BorrowDaoImpl implements BorrowDao
             JDBCUtils.closeAll(rs, pStmt, con);
         }
         return borrow;
+    }
+
+    /*
+     * @Description: 以String的形式返回逾期人学工号、逾期人名、设备编号、设备名、借用日期、应当归还日期、实际归还日期、借用人信用分、管理仪器的管理员的名字
+     * @Param b_no
+     * @Return: List<String>
+     */
+    public List<String> getOverDueList()
+    {
+
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        try{
+            con = JDBCUtils.getConnection();
+            //第一种是已归还，但实际归还日期大于应当归还日期
+            String firstSQL =   "select u.u_no, u.u_name, d.d_no, d.d_name, b.b_borrow_date, b.b_return_date, rd.rd_date, u.u_credit_grade, a.a_name "+
+                    "from user u, device d, borrow b, return_device rd, administrator a "+
+                    "where u.u_no=b.u_no and d.d_no=b.d_no and rd.u_no=u.u_no and rd.d_no=d.d_no and d.a_no=a.a_no and rd.rd_date > b.b_return_date "+
+                    "order by u.u_no";
+
+            //第二种是未归还，但b_state=-1
+            String secondSQL =  "select u.u_no, u.u_name, d.d_no, d.d_name, b.b_borrow_date, b.b_return_date, u.u_credit_grade, a.a_name "+
+                    "from user u, device d, borrow b, administrator a "+
+                    "where u.u_no=b.u_no and d.d_no=b.d_no and d.a_no=a.a_no and b.b_state=-1 "+
+                    "order by u.u_no";
+
+            List<String> list = new ArrayList<>();
+
+            //执行
+            pStmt = con.prepareStatement(firstSQL);
+            rs = pStmt.executeQuery();
+            while(rs.next())
+            {
+                list.add(rs.getString(1));
+                list.add(rs.getString(2));
+                list.add(rs.getString(3));
+                list.add(rs.getString(4));
+                list.add(TransformUtils.SQLDateTransString(rs.getDate(5)));
+                list.add(TransformUtils.SQLDateTransString(rs.getDate(6)));
+                list.add(TransformUtils.SQLDateTransString(rs.getDate(7)));
+                list.add(Integer.toString(rs.getInt(8)));
+                list.add(rs.getString(9));
+            }
+
+            pStmt = con.prepareStatement(secondSQL);
+            rs = pStmt.executeQuery();
+            while(rs.next())
+            {
+                list.add(rs.getString(1));
+                list.add(rs.getString(2));
+                list.add(rs.getString(3));
+                list.add(rs.getString(4));
+                list.add(TransformUtils.SQLDateTransString(rs.getDate(5)));
+                list.add(TransformUtils.SQLDateTransString(rs.getDate(6)));
+                list.add("尚未归还");
+                list.add(Integer.toString(rs.getInt(7)));
+                list.add(rs.getString(8));
+            }
+
+            return list;
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

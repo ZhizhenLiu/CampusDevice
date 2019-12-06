@@ -468,8 +468,8 @@ public class ReservationDaoImpl implements ReservationDao
         {
             con = JDBCUtils.getConnection();
             sql = "UPDATE reservation SET r_state = -1, r_feedback = ?  " +
-                    "WHERE r_no = ? " +
-                    "AND r_state = 0";
+                  "WHERE r_no = ? " +
+                  "AND r_state = 0";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
@@ -505,12 +505,12 @@ public class ReservationDaoImpl implements ReservationDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT r_no,r_reservation_date, r_start_date, r_return_date, d.d_no, d_name, d_main_use, r_state " +
+            sql = "SELECT r_no,r_reservation_date, r_start_date, r_return_date, d.d_no, d_name, d_main_use, r_state, r_feedback " +
                   "FROM reservation r,device d " +
                   "WHERE r.d_no = d.d_no " +
                   "AND u_no = ? AND r_state IN(0, 2) " +
                   "ORDER BY r_reservation_date DESC " +
-                  "LIMIT ?, ?";
+                  "LIMIT ?, ? ";
             pStmt = con.prepareStatement(sql);
 
             //执行操作
@@ -528,6 +528,7 @@ public class ReservationDaoImpl implements ReservationDao
                 reservation.setD_no(rs.getString("d_no"));
                 reservation.setD_name(rs.getString("d_name"));
                 reservation.setR_state(rs.getInt("r_state"));
+                reservation.setR_feedBack(rs.getString("r_feedback"));
                 reservationList.add(reservation);
             }
 
@@ -559,12 +560,12 @@ public class ReservationDaoImpl implements ReservationDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT r_no,r_reservation_date, r_start_date, r_return_date, d.d_no, d_name, d_main_use, r_state " +
+            sql = "SELECT r_no,r_reservation_date, r_start_date, r_return_date, d.d_no, d_name, d_main_use, r_state, r_feedback " +
                   "FROM reservation r,device d " +
                   "WHERE r.d_no = d.d_no " +
                   "AND u_no = ? AND r_state IN(-2, -1, 1) " +
                   "ORDER BY r_reservation_date DESC " +
-                  "LIMIT ?, ?";
+                  "LIMIT ?, ? ";
             pStmt = con.prepareStatement(sql);
 
             //执行操作
@@ -582,6 +583,7 @@ public class ReservationDaoImpl implements ReservationDao
                 reservation.setD_no(rs.getString("d_no"));
                 reservation.setD_name(rs.getString("d_name"));
                 reservation.setR_state(rs.getInt("r_state"));
+                reservation.setR_feedBack(rs.getString("r_feedback"));
                 reservationList.add(reservation);
             }
 

@@ -1,13 +1,13 @@
 package utils;
 
 import bean.Device;
-import dao.DeviceDao;
-import dao.impl.DeviceDaoImpl;
+import dao.BorrowDao;
+import dao.impl.BorrowDaoImpl;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -245,34 +245,43 @@ public class ExcelUtils
         //创建Sheet对象
         XSSFSheet sheet = workbook.createSheet("未归还设备人员名单");
         //获取Device表中的内容
-        DeviceDao deviceDao = new DeviceDaoImpl();
-        List<String> list = deviceDao.getDevice();
-        for (int i = 0; i < list.size(); i++)
+        BorrowDao borrowDao = new BorrowDaoImpl();
+        List<String> list = borrowDao.getOverDueList();
+        //设置格子宽高
+        for(int i = 0; i < 8; i++)
         {
-            System.out.println(list.get(i));
+            sheet.setColumnWidth(i,4000);
         }
+        sheet.setColumnWidth(8,7000);
         //获取行数和列数
-        int row = list.size() / 8;
-        int column = 8;
+        int row = list.size() / 9;
+        int column = 9;
+        //第0行为标题部分
+        String title[] = {"逾期人学工号","逾期人名","设备编号","设备名","借用日期","应当归还日期","实际归还日期","借用人信用分","管理仪器的管理员的姓名"};
+        XSSFRow firstRow = sheet.createRow(0);
+        for(int i = 0; i < 9; i++)
+        {
+            firstRow.createCell(i).setCellValue(title[i]);
+        }
         //赋值给i行j列
-        for (int i = 0; i < row; i++)
+        for (int i = 1; i <= row; i++)
         {
             XSSFRow xssfRow = sheet.createRow(i);
-            for (int j = 0; j < 8; j++)
+            for (int j = 0; j < 9; j++)
             {
-                xssfRow.createCell(j).setCellValue(list.get(8 * i + j));
+                xssfRow.createCell(j).setCellValue(list.get(j+9*(i-1)));
             }
         }
 
         //输出Excel文件
-        File file = new File(filePath);
+        File file = new File(filePath,fileName);
         try
         {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             //将workbook的内容写入file
             workbook.write(fileOutputStream);
             workbook.close();
-
+            System.out.println("导出excel表成功！");
         }
         catch (Exception e)
         {

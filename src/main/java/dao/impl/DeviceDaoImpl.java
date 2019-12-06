@@ -46,6 +46,7 @@ public class DeviceDaoImpl implements DeviceDao
                 device.setD_model(rs.getString("d_model"));
                 device.setD_name(rs.getString("d_name"));
                 device.setD_state(rs.getString("d_state"));
+                device.setD_photo(rs.getString("d_photo"));
                 deviceList.add(device);
             }
         }
@@ -90,6 +91,7 @@ public class DeviceDaoImpl implements DeviceDao
                 device.setD_model(rs.getString("d_model"));
                 device.setD_name(rs.getString("d_name"));
                 device.setD_state(rs.getString("d_state"));
+                device.setD_photo(rs.getString("d_photo"));
                 deviceList.add(device);
             }
         }
@@ -120,7 +122,7 @@ public class DeviceDaoImpl implements DeviceDao
         try
         {
             con = JDBCUtils.getConnection();
-            String sql = "SELECT d_no,d_name,d_main_use,d_important_param,d_save_site,d_state," +
+            String sql = "SELECT d_no,d_name,d_main_use,d_important_param,d_save_site,d_state, d_photo " +
                     "(SELECT a_name FROM administrator a1 WHERE a1.a_no = d.a_no ) a_name, " +
                     "(SELECT a_phone FROM administrator a2 WHERE a2.a_no = d.a_no ) a_phone  " +
                     "FROM device d WHERE d_no = ? ";
@@ -138,6 +140,7 @@ public class DeviceDaoImpl implements DeviceDao
                 device.setD_state(rs.getString("d_state"));
                 device.setA_name(rs.getString("a_name"));
                 device.setA_phone(rs.getString("a_phone"));
+                device.setD_photo(rs.getString("d_photo"));
             }
         }
         catch (SQLException e)
@@ -294,7 +297,7 @@ public class DeviceDaoImpl implements DeviceDao
                 device.setD_borrowedTimes(rs.getInt("d_borrowed_times"));
                 device.setD_importantParam(rs.getString("d_important_param"));
                 device.setD_mainUse(rs.getString("d_main_use"));
-
+                device.setD_photo(rs.getString("d_photo"));
             }
         }
         catch (SQLException e)
@@ -394,6 +397,7 @@ public class DeviceDaoImpl implements DeviceDao
                 device.setD_state(rs.getString("d_state"));
                 device.setD_storeDate(rs.getString("d_store_date"));
                 device.setD_borrowedTimes(rs.getInt("d_borrowed_times"));
+                device.setD_photo(rs.getString("d_photo"));
                 deviceList.add(device);
             }
         }
@@ -406,5 +410,41 @@ public class DeviceDaoImpl implements DeviceDao
             JDBCUtils.closeAll(rs, pStmt, con);
         }
         return deviceList;
+    }
+
+    /*
+     * @Description: 设置设备图片url
+     * @Param url
+     * @Return: int
+     */
+    public int setDeviceImgUrl(String d_no, String url)
+    {
+
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        int flag = 0;
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "UPDATE device SET d_photo = ? WHERE d_no = ?";
+            pStmt = con.prepareStatement(sql);
+            pStmt.setString(1, url);
+            pStmt.setString(2, d_no);
+
+            //替换参数，从1开始
+            flag = pStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return flag;
     }
 }

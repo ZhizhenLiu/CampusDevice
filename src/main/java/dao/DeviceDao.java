@@ -69,4 +69,11 @@ public interface DeviceDao
      * @Return: java.util.List<bean.Device>
      */
     List<Device> getDeviceByPageWithKeyword(String keyword, int page, int count);
+
+    /*
+     * @Description: 设置设备图片url
+     * @Param url
+     * @Return: int
+     */
+    int setDeviceImgUrl(String d_no, String url);
 }

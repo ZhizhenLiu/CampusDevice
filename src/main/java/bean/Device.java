@@ -16,12 +16,13 @@ public class Device
     private int d_borrowedTimes;
     private String d_importantParam;
     private String d_mainUse;
+    private String d_photo;
 
     //扩展属性
     private String a_name;
     private String a_phone;
 
-    public Device(String d_no, String d_name, String d_model, String d_saveSite, String a_no, String d_factoryNo, String d_state, String d_storeDate, int d_borrowedTimes, String d_importantParam, String d_mainUse, String a_name, String a_phone)
+    public Device(String d_no, String d_name, String d_model, String d_saveSite, String a_no, String d_factoryNo, String d_state, String d_storeDate, int d_borrowedTimes, String d_importantParam, String d_mainUse, String d_photo, String a_name, String a_phone)
     {
         this.d_no = d_no;
         this.d_name = d_name;
@@ -34,6 +35,7 @@ public class Device
         this.d_borrowedTimes = d_borrowedTimes;
         this.d_importantParam = d_importantParam;
         this.d_mainUse = d_mainUse;
+        this.d_photo = d_photo;
         this.a_name = a_name;
         this.a_phone = a_phone;
     }
@@ -152,6 +154,16 @@ public class Device
         this.d_mainUse = d_mainUse;
     }
 
+    public String getD_photo()
+    {
+        return d_photo;
+    }
+
+    public void setD_photo(String d_photo)
+    {
+        this.d_photo = d_photo;
+    }
+
     public String getA_name()
     {
         return a_name;
@@ -187,6 +199,7 @@ public class Device
                 ", d_borrowedTimes=" + d_borrowedTimes +
                 ", d_importantParam='" + d_importantParam + '\'' +
                 ", d_mainUse='" + d_mainUse + '\'' +
+                ", d_photo='" + d_photo + '\'' +
                 ", a_name='" + a_name + '\'' +
                 ", a_phone='" + a_phone + '\'' +
                 '}';

@@ -344,4 +344,25 @@ public class AdminServiceImpl implements AdminService
         info.put("flag", 1);
         return info;
     }
+    /*
+     * @Description: 设置设备图片url
+     * @Param d_no  url
+     * @Return: int
+     */
+    public JSONObject setDeviceImgUrl(String d_no, String url)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        int flag = deviceDao.setDeviceImgUrl(d_no, url);
+        if (flag == 0)
+        {
+            errMsg.add("设置设备url错误");
+            info.put("flag", 0);
+        }
+        else  info.put("flag", 1);
+        info.put("errMsg", errMsg);
+
+        return info;
+    }
 }

@@ -76,4 +76,11 @@ public interface AdminService
      * @Return: com.alibaba.fastjson.JSONObject
      */
     JSONObject remindOverDue(int b_no);
+
+    /*
+     * @Description: 设置设备图片url
+     * @Param d_no  url
+     * @Return: int
+     */
+    JSONObject setDeviceImgUrl(String d_no, String url);
 }
