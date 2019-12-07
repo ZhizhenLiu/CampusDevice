@@ -9,7 +9,7 @@ public interface BorrowDao
 {
 
     /*
-     * @Description: 用户查询借用完成的记录(逾期归还：-2  归还：1)
+     * @Description: 用户查询借用完成的记录(逾期归还:-2 归还未评价:1 归还评价:2)
      * @Param u_no  page  count
      * @Return: java.util.List<bean.Borrow>
      */
@@ -51,14 +51,14 @@ public interface BorrowDao
     List<Borrow> getOverDueList(String a_no, int page, int count);
 
     /*
-     * @Description: 借用中设备按时归还 （0:借用中，1:按时归还 -1:逾期未还 -2:逾期归还）
+     * @Description: 借用中设备按时归还 （逾期归还:-2  逾期借用: -1  借用中:0  归还:1 归还评价:2）
      * @Param b_no
      * @Return: int
      */
     int returnOnTime(int b_no);
 
     /*
-     * @Description: 借用中设备逾期归还 （0:借用中，1:按时归还 -1:逾期未还 -2:逾期归还）
+     * @Description: 借用中设备逾期归还 （逾期归还:-2  逾期借用: -1  借用中:0  归还:1 归还评价:2）
      * @Param b_no
      * @Return: int
      */

@@ -26,17 +26,18 @@ public class EditReservationServlet extends HttpServlet
         int r_no = Integer.parseInt(request.getParameter("r_no"));
         String startDate = request.getParameter("startDate");
         String returnDate = request.getParameter("returnDate");
+        String feedBack = request.getParameter("feedBack");
 
         //返回操作结果
         PrintWriter printWriter = response.getWriter();
         AdminService adminService = new AdminServiceImpl();
-        printWriter.write(adminService.editReservation(r_no, startDate, returnDate, "").toJSONString());
+        printWriter.write(adminService.editReservation(r_no, startDate, returnDate, feedBack).toJSONString());
         printWriter.flush();
         printWriter.close();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-
+        doPost(request, response);
     }
 }

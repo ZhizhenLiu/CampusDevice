@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "agreeEditReservationServlet", urlPatterns = "/user/agreeEditReservation")
-public class agreeEditReservationServlet extends HttpServlet
+@WebServlet(name = "AgreeEditReservationServlet", urlPatterns = "/user/agreeEditReservation")
+public class AgreeEditReservationServlet extends HttpServlet
 {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {

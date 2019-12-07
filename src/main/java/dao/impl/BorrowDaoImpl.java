@@ -20,7 +20,7 @@ public class BorrowDaoImpl implements BorrowDao
     private String sql;
 
     /*
-     * @Description: 查询用户借用的记录(借用中b_state=0，归还b_state=1, 逾期未还b_state=-1, 逾期归还=-2)
+     * @Description: 用户查询借用完成的记录(逾期归还:-2 归还未评价:1 归还评价:2)
      * @Param u_no  page  count
      * @Return: java.util.List<bean.Borrow>
      */
@@ -38,7 +38,7 @@ public class BorrowDaoImpl implements BorrowDao
             sql = "SELECT b_no, b_borrow_date, b_return_date, d_save_site, device.d_no, d_name, d_main_use, b_state " +
                   "FROM borrow, device " +
                   "WHERE u_no = ?" +
-                  "AND borrow.d_no = device.d_no AND b_state IN(-2, 1) " +
+                  "AND borrow.d_no = device.d_no AND b_state IN(-2, 1, 2) " +
                   "ORDER BY b_borrow_date DESC  " +
                   "LIMIT ?, ?";
             pStmt = con.prepareStatement(sql);

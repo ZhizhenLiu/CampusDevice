@@ -20,7 +20,7 @@ public class MessageUtils
     public static String sendVerifyCode(User user)
     {
         String name = user.getU_name();
-        String type = user.getU_type();
+        String type = user.getU_type().equals("学生")?"同学":"老师";
         String phone = user.getU_phone();
         ZhenziSmsClient client = new ZhenziSmsClient(c_apiUrl, c_appId, c_appSecret);
 
@@ -47,15 +47,14 @@ public class MessageUtils
      */
     public static void sendRemindMessage(Borrow borrow)
     {
-        String u_name = borrow.getU_name();
-        String u_type = borrow.getU_type();
+        String u_name = borrow.getU_name() + (borrow.getU_type().equals("学生")?"同学":"老师");
         String u_phone = borrow.getU_phone();
         String d_name = borrow.getD_name();
         String d_saveSite = borrow.getD_saveSite();
         ZhenziSmsClient client = new ZhenziSmsClient(c_apiUrl, c_appId, c_appSecret);
         try
         {
-            String message = u_name + u_type + "，您好！您借用的设备:" + d_name + "，已经逾期未还，请在近日内归还到" + d_saveSite;
+            String message = u_name + "，您好！您借用的设备:" + d_name + "，已经逾期未还，请在近日内归还到" + d_saveSite;
             System.out.println(message);
             String result = client.send(u_phone, message);
             System.out.println(result);

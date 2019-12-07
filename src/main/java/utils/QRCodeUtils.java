@@ -18,10 +18,10 @@ public class QRCodeUtils
 {
     /*
      * @Description: 生成存储内容的二维码,返回存在服务器的图片的url
-     * @Param content
+     * @Param b_no
      * @Return: java.lang.String
      */
-    public static String createQRCode(String content, String path)
+    public static String createQRCode(String b_no, String path)
     {
         int width = 300;    //定义宽和高
         int height = 300;
@@ -33,14 +33,13 @@ public class QRCodeUtils
         hints.put(EncodeHintType.CHARACTER_SET, "utf-8");    //字符集，包含中文的话就要utf-8
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);    //纠错等级，等级越高图片越不清晰
         hints.put(EncodeHintType.MARGIN, 2);    //边距
-        Date date = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+
         path = path + "img/code";
         String codeUrl = "http://49.235.73.29:8083/img/code";
         try
         {
             BitMatrix bitMatrix = new MultiFormatWriter().
-                    encode(content, BarcodeFormat.QR_CODE, width, height, hints);
+                    encode(b_no, BarcodeFormat.QR_CODE, width, height, hints);
 
             File dir = new File(path);
 
@@ -49,8 +48,8 @@ public class QRCodeUtils
             {
                 dir.mkdirs();
             }
-            path = path + "/code-" + dateFormat.format(date) + ".png";
-            codeUrl = codeUrl + "/code-" + dateFormat.format(date) + ".png";
+            path = path + "/code-" + b_no + ".png";
+            codeUrl = codeUrl + "/code-" + b_no + ".png";
             File file = new File(path);
             MatrixToImageWriter.writeToPath(bitMatrix, format, file.toPath());
         }

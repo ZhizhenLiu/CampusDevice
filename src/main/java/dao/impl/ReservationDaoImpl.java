@@ -490,7 +490,7 @@ public class ReservationDaoImpl implements ReservationDao
     }
 
     /*
-     * @Description: 用户查看申请中预约：预约中、协商中
+     * @Description: 用户查看申请中预约：预约中0、协商中2、协商成功3
      * @Param u_no  page  count
      * @Return: java.util.List<bean.Reservation>
      */
@@ -508,7 +508,7 @@ public class ReservationDaoImpl implements ReservationDao
             sql = "SELECT r_no,r_reservation_date, r_start_date, r_return_date, d.d_no, d_name, d_main_use, r_state, r_feedback " +
                   "FROM reservation r,device d " +
                   "WHERE r.d_no = d.d_no " +
-                  "AND u_no = ? AND r_state IN(0, 2) " +
+                  "AND u_no = ? AND r_state IN(0, 2, 3) " +
                   "ORDER BY r_reservation_date DESC " +
                   "LIMIT ?, ? ";
             pStmt = con.prepareStatement(sql);
@@ -545,7 +545,7 @@ public class ReservationDaoImpl implements ReservationDao
     }
 
     /*
-     * @Description: 用户查看已完成预约：成功，拒绝、取消
+     * @Description: 用户查看已完成预约：成功1，拒绝-1、取消-2
      * @Param u_no  page  count
      * @Return: java.util.List<bean.Reservation>
      */

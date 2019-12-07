@@ -226,6 +226,8 @@ public class AdminServiceImpl implements AdminService
 
         Reservation reservation = reservationDao.getReservation(r_no);
         String u_no = reservation.getU_no();
+        String u_name = reservation.getU_name() + (reservation.getU_type().equals("学生")?"同学":"老师");
+        String d_name = reservation.getD_name();
         info.put("flag", 1);
 
         int flag = reservationDao.refuseReserve(r_no, r_feedBack);
@@ -238,7 +240,7 @@ public class AdminServiceImpl implements AdminService
         //反馈不为空
         if (r_feedBack != null)
         {
-            flag = messageDao.sendMessage(u_no, r_feedBack);
+            flag = messageDao.sendMessage(u_no, u_name + "，你的预约：" + d_name + "被拒绝。请在我的预约中查看详情");
             info.put("flag", flag);
             if (flag == 0)
             {
@@ -293,7 +295,7 @@ public class AdminServiceImpl implements AdminService
 
         Borrow borrow = borrowDao.getBorrowByNo(b_no);
         String u_no = borrow.getU_no();
-        String u_name = userDao.getUserByNo(u_no).getU_name() + userDao.getUserByNo(u_no).getU_type();
+        String u_name = userDao.getUserByNo(u_no).getU_name() + (userDao.getUserByNo(u_no).getU_type().equals("学生")?"同学":"老师");
         String d_no = borrow.getD_no();
         String d_name = deviceDao.getDeviceByNo(d_no).getD_name();
 
@@ -337,11 +339,25 @@ public class AdminServiceImpl implements AdminService
     public JSONObject remindOverDue(int b_no)
     {
         JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
 
         //根据借用记录查找借用记录
         Borrow borrow = borrowDao.getBorrowByNo(b_no);
+        String u_no = borrow.getU_no() + borrow.getU_type();
+        String u_name = borrow.getU_name() + (borrow.getU_type().equals("学生")?"同学":"老师");
+        String d_name = borrow.getD_name();
+        String d_saveSite = borrow.getD_saveSite();
+
         MessageUtils.sendRemindMessage(borrow);
-        info.put("flag", 1);
+        int flag = messageDao.sendMessage(u_no, u_name + "，您好！您借用的设备:" + d_name + "，已经逾期未还，请在近日内归还到" + d_saveSite);
+        if (flag == 0)
+        {
+            errMsg.add("发送提醒信息出错");
+            info.put("flag", 0);
+        }
+        else info.put("flag", 1);
+        info.put("errMsg", errMsg);
+
         return info;
     }
     /*

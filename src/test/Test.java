@@ -58,8 +58,9 @@ public class Test {
 //       System.out.println(reservationDao.getUnfinishedReservationByPage("201726010310", 1, 10));
 //       System.out.println(userService.reserveDevice("1905399S", "o0ug241yqbsjM0N5xR5qhLxi8gH0", "2019-12-06", "2019-12-12"));
 //       System.out.println(adminService.editReservation(39, "2019-12-15", "2019-12-30", "原借用时间段有人外借"));
-       System.out.println(userService.getReservationByPage(wechatID,1,10,true));
-       System.out.println();
-       System.out.println(userService.getReservationByPage(wechatID,1,10,false));
+//       System.out.println(userService.getReservationByPage(wechatID,1,10,true));
+//       System.out.println();
+//       System.out.println(userService.getReservationByPage(wechatID,1,10,false));
+       System.out.println(userService.getDeviceDetails("1905399S"));
    }
 }
