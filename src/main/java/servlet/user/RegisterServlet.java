@@ -18,8 +18,6 @@ import java.io.PrintWriter;
 @WebServlet(name = "RegisterServlet", urlPatterns = "/user/register")
 public class RegisterServlet extends HttpServlet
 {
-    private UserService userService;
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         //设置编码
@@ -43,6 +41,7 @@ public class RegisterServlet extends HttpServlet
         PrintWriter printWriter = response.getWriter();
         UserService userService = new UserServiceImpl();
         String wechatId = "";
+
         //请求成功
         if (result.containsKey("openid"))
         {

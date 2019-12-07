@@ -2,6 +2,8 @@ package utils;
 
 import bean.Borrow;
 import bean.User;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.zhenzi.sms.ZhenziSmsClient;
 
 import java.util.Random;
@@ -10,27 +12,28 @@ public class MessageUtils
 {
     private static String c_apiUrl = "https://sms_developer.zhenzikj.com";
     private static String c_appId = "102764";
-    private static String c_appSecret = "9b94983e-1e86-4bab-ae82-a83e484eb7ea";
+    private static String c_appSecret = "MWMyOTM1NWItNGYwZS00YThhLWE4NzMtZmVjMzk4MDM5YTQ3";
 
     /*
      * @Description: 返回验证码工具类
      * @Param number  name
      * @Return: java.lang.String
      */
-    public static String sendVerifyCode(User user)
+    public static String sendVerifyCode(String phone)
     {
-        String name = user.getU_name();
-        String type = user.getU_type().equals("学生")?"同学":"老师";
-        String phone = user.getU_phone();
         ZhenziSmsClient client = new ZhenziSmsClient(c_apiUrl, c_appId, c_appSecret);
 
         //验证码
-        String verifyCode = String.valueOf(new Random().nextInt(899999) + 100000);
+        String verifyCode = null;
         try
         {
-            String message = name + type + "，您好！您的验证码为:" + verifyCode + "，该码有效期为5分钟，该码只能使用一次!";
+            verifyCode = String.valueOf(new Random().nextInt(899999) + 100000);
+            String message = "您好！您的验证码为:" + verifyCode + "，该码有效期为5分钟，该码只能使用一次!";
             System.out.println(message);
-            String result = client.send(phone, message);
+            JSONObject result = JSONObject.parseObject(client.send(phone, message));
+
+            //返回结果是json格式的字符串, code: 发送状态，0为成功。非0为发送失败，可从data中查看错误信息
+            if (result.getInteger("code") !=  0) verifyCode = null;
             System.out.println(result);
         }
         catch (Exception e)
