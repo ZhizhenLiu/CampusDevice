@@ -19,27 +19,27 @@ public class CreditRecordDaoImpl implements CreditRecordDao
     private ResultSet rs;
     private String sql;
 
-    public void initCredit(String u_no)
+    public int initCredit(String u_no, int score)
     {
         //初始化
         con = null;
         pStmt = null;
         rs = null;
 
+        int flag = 0;
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "INSERT INTO credit_record(cr_no, u_no, cr_change_score, cr_change_reason, cr_date, cr_after_grade) " +
-                    "VALUES (?,?,?,?, CURRENT_DATE ,?)";
+            sql = "INSERT INTO credit_record(u_no, cr_change_score, cr_change_reason, cr_date, cr_after_grade) " +
+                  "VALUES (?,?,?, CURRENT_DATE ,?)";
             pStmt = con.prepareStatement(sql);
 
-            pStmt.setInt(1, 1);
-            pStmt.setString(2, u_no);
-            pStmt.setInt(3, 0);
-            pStmt.setString(4, "刚刚注册");
-            pStmt.setInt(5, 100);
+            pStmt.setString(1, u_no);
+            pStmt.setInt(2, 0);
+            pStmt.setString(3, "湖大微设备欢迎你。期待能为你带来愉快的体验");
+            pStmt.setInt(4, score);
 
-            pStmt.executeUpdate();
+            flag = pStmt.executeUpdate();
         }
         catch (SQLException e)
         {
@@ -49,6 +49,7 @@ public class CreditRecordDaoImpl implements CreditRecordDao
         {
             JDBCUtils.closeAll(null, pStmt, con);
         }
+        return flag;
     }
 
     /*
@@ -107,7 +108,7 @@ public class CreditRecordDaoImpl implements CreditRecordDao
         {
             con = JDBCUtils.getConnection();
             sql = "SELECT * FROM credit_record WHERE u_no = ?  " +
-                  "ORDER BY cr_date " +
+                  "ORDER BY cr_no desc" +
                   "LIMIT ? ,?";
             pStmt = con.prepareStatement(sql);
             pStmt.setString(1, u_no);
@@ -118,10 +119,7 @@ public class CreditRecordDaoImpl implements CreditRecordDao
             //返回CreditRecords
             while (rs.next())
             {
-                CreditRecord creditRecord = new CreditRecord();
-                creditRecord.setCr_date(rs.getString("cr_date"));
-                creditRecord.setCr_changeScore(rs.getInt("cr_change_score"));
-                creditRecord.setCr_changeReason(rs.getString("cr_change_reason"));
+                CreditRecord creditRecord = new CreditRecord(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getString(4),rs.getDate(5),rs.getInt(6));
                 creditRecordList.add(creditRecord);
             }
             System.out.println("查找信用积分变动信息成功！");
@@ -161,10 +159,7 @@ public class CreditRecordDaoImpl implements CreditRecordDao
             //返回所有的CreditRecords
             while (rs.next())
             {
-                CreditRecord creditRecord = new CreditRecord();
-                creditRecord.setCr_date(rs.getString("cr_date"));
-                creditRecord.setCr_changeScore(rs.getInt("cr_change_score"));
-                creditRecord.setCr_changeReason(rs.getString("cr_change_reason"));
+                CreditRecord creditRecord = new CreditRecord(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getString(4),rs.getDate(5),rs.getInt(6));
                 creditRecordList.add(creditRecord);
             }
             System.out.println("查找所有的信用积分变动信息成功！");

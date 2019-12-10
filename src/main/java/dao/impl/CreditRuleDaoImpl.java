@@ -17,6 +17,7 @@ public class CreditRuleDaoImpl implements CreditRuleDao
     private ResultSet rs;
     private String sql;
 
+    //添加规则
     public void addCreditRule(CreditRule cr)
     {
         //初始化
@@ -26,13 +27,12 @@ public class CreditRuleDaoImpl implements CreditRuleDao
         try
         {
             Connection conn = JDBCUtils.getConnection();
-            String sql = "insert into credit_rule(cr_no, ce_content, cr_score) values(?,?,?)";
+            String sql = "insert into credit_rule(ce_content, cr_score) values(?,?)";
             PreparedStatement ps = conn.prepareStatement(sql);
 
             //执行操作
-            ps.setInt(1, cr.getCr_no());
-            ps.setString(2, cr.getCr_content());
-            ps.setInt(3, cr.getCr_score());
+            ps.setString(1, cr.getCr_content());
+            ps.setInt(2, cr.getCr_score());
             ps.executeUpdate();
         }
         catch (Exception e)
@@ -45,7 +45,8 @@ public class CreditRuleDaoImpl implements CreditRuleDao
         }
     }
 
-    public List<CreditRule> getAllCreditRules()
+    //分页查询所有的规则
+    public List<CreditRule> getAllCreditRules(int page, int count)
     {
         //初始化
         con = null;
@@ -56,8 +57,10 @@ public class CreditRuleDaoImpl implements CreditRuleDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT * FROM credit_rule ";
+            sql = "SELECT * FROM credit_rule order by cr_no limit ?,? ";
             pStmt = con.prepareStatement(sql);
+            pStmt.setInt(1,(page-1)*count);
+            pStmt.setInt(2,count);
 
             //执行操作
             rs = pStmt.executeQuery();
@@ -79,6 +82,7 @@ public class CreditRuleDaoImpl implements CreditRuleDao
         return creditRuleList;
     }
 
+    //查询某一条规则
     @Override
     public CreditRule getCreditRule(int cr_no)
     {
@@ -114,6 +118,7 @@ public class CreditRuleDaoImpl implements CreditRuleDao
         return creditRule;
     }
 
+    //查询规则的数量
     @Override
     public int getCreditNum()
     {
@@ -147,6 +152,7 @@ public class CreditRuleDaoImpl implements CreditRuleDao
         return num;
     }
 
+    //更改某一条规则
     @Override
     public void changeCreditRule(CreditRule cr)
     {

@@ -74,7 +74,7 @@ public class UserDaoImpl implements UserDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "INSERT INT user VALUES (?,?,?,?,?,?,?,?,?,?)";
+            sql = "INSERT INTO user VALUES (?,?,?,?,?,?,?,?,?,?)";
             pStmt = con.prepareStatement(sql);
 
             pStmt.setString(1, user.getU_no());
@@ -186,5 +186,39 @@ public class UserDaoImpl implements UserDao
         }
         return user;
 
+    }
+
+    /*
+     * @Description: 更新增加或减少信誉分数
+     * @Param score
+     * @Return: int
+     */
+    public int updateCreditGrade(String u_no, int score)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        int flag = 0;
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "UPDATE user SET u_credit_grade = u_credit_grade + ? WHERE u_no = ?";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            pStmt.setString(1, u_no);
+            flag = pStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return flag;
     }
 }

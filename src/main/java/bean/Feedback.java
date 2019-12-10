@@ -29,17 +29,6 @@ public class Feedback
     {
     }
 
-    @Override
-    public String toString()
-    {
-        return "Feedback{" +
-                "f_no=" + fb_no +
-                ", u_no='" + u_no + '\'' +
-                ", f_content='" + fb_content + '\'' +
-                ", f_date=" + fb_date +
-                '}';
-    }
-
     public int getFb_no()
     {
         return fb_no;
@@ -78,5 +67,16 @@ public class Feedback
     public void setFb_date(Date fb_date)
     {
         this.fb_date = fb_date;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Feedback{" +
+                "f_no=" + fb_no +
+                ", u_no='" + u_no + '\'' +
+                ", f_content='" + fb_content + '\'' +
+                ", f_date=" + fb_date +
+                '}';
     }
 }

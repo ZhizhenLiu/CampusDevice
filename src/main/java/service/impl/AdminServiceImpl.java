@@ -1,8 +1,6 @@
 package service.impl;
 
-import bean.Borrow;
-import bean.Reservation;
-import bean.User;
+import bean.*;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -11,6 +9,9 @@ import dao.impl.*;
 import service.AdminService;
 import utils.MessageUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class AdminServiceImpl implements AdminService
@@ -23,6 +24,8 @@ public class AdminServiceImpl implements AdminService
     private ReturnDeviceDao returnDeviceDao = new ReturnDeviceDaoImpl();
     private MessageDao messageDao = new MessageDaoImpl();
     private TrackDao trackDao = new TrackDaoImpl();
+    private CreditRecordDao creditRecordDao = new CreditRecordDaoImpl();
+    private CreditRuleDao creditRuleDao = new CreditRuleDaoImpl();
 
     /*
      * @Description: 登陆校验。判断管理员是否存在
@@ -285,47 +288,86 @@ public class AdminServiceImpl implements AdminService
 
     /*
      * @Description: 管理员确认用户归还设备
-     * @Param wechatID  d_no
+     * @Param b_no  rd_state
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject confirmReturn(int b_no)
+    public JSONObject confirmReturn(int b_no, String rd_state, String comment)
     {
         JSONObject info = new JSONObject();
         JSONArray errMsg = new JSONArray();
 
         Borrow borrow = borrowDao.getBorrowByNo(b_no);
         String u_no = borrow.getU_no();
-        String u_name = userDao.getUserByNo(u_no).getU_name() + (userDao.getUserByNo(u_no).getU_type().equals("学生")?"同学":"老师");
+        User user = userDao.getUserByNo(u_no);
+        String u_name = user.getU_name() + (user.getU_type().equals("学生")?"同学":"老师");
         String d_no = borrow.getD_no();
         String d_name = deviceDao.getDeviceByNo(d_no).getD_name();
+        Date now = new Date();
+        Date returnDate = new Date();
 
-        int flag = borrowDao.returnOnTime(b_no);
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try
+        {
+            returnDate = simpleDateFormat.parse(borrow.getB_returnDate());
+        }
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        int flag = 1;
+
+        //修改借用表状态
+        flag = borrowDao.returnOnTime(b_no);
         if (flag == 0)
         {
             errMsg.add("修改借用记录状态为归还失败");
         }
-        flag = messageDao.sendMessage(u_no, u_name +"，管理员已确认你归还设备："+ d_name+"，感谢你的合作");
-        if(flag == 0)
-        {
-            errMsg.add("发送提示信息失败");
-        }
-        //归还设备
-        flag = returnDeviceDao.returnDevice(u_no, d_no, b_no);
-        if (flag == 0)
-        {
-            errMsg.add("添加到已归还设备失败");
-        }
-        flag = deviceDao.setDeviceState("在库", d_no);
-        if (flag == 0)
-        {
-            errMsg.add("修改设备状态失败");
-        }
-        flag = deviceDao.addBorrowedTimes(d_no);
-        if (flag == 0)
-        {
-            errMsg.add("设备借用次数增长失败");
-        }
 
+        //添加到归还表
+        flag = returnDeviceDao.returnDevice(u_no, d_no, b_no, rd_state, comment);
+        if (flag == 0)
+        {
+            errMsg.add("确认设备归还失败");
+        }
+        else
+        {
+            if (rd_state.equals("正常") || rd_state.equals("其他"))
+            {
+                deviceDao.setDeviceState("在库", d_no);
+                List<String> trackingUserNoList = trackDao.getTrackingUserNoList(d_no);
+                for (String userNo : trackingUserNoList)
+                {
+                    flag = messageDao.sendMessage(userNo,  "你跟踪的设备："+ d_name+ "已经归还。如需借用，请及时预约");
+                    if(flag == 0)
+                    {
+                        errMsg.add("发送提示信息失败");
+                    }
+                }
+            }
+            else  deviceDao.setDeviceState(rd_state, d_no);
+
+            //修改信誉分
+            if (returnDate.getTime() <= now.getTime() && rd_state.equals("正常"))
+            {
+                CreditRule creditRule = creditRuleDao.getCreditRule(1);
+                creditRecordDao.updateCredit(u_no, creditRule.getCr_content(), user.getU_creditGrade(), creditRule.getCr_score());
+                userDao.updateCreditGrade(u_no, creditRule.getCr_score());
+            }
+
+            flag = messageDao.sendMessage(u_no, u_name +"，管理员已确认你归还设备："+ d_name+"，感谢你的合作");
+            if(flag == 0)
+            {
+                errMsg.add("发送提示信息失败");
+            }
+
+            flag = deviceDao.addBorrowedTimes(d_no);
+            if (flag == 0)
+            {
+                errMsg.add("设备借用次数增长失败");
+            }
+        }
         info.put("flag", flag);
         info.put("errMsg", errMsg);
         return info;
@@ -377,6 +419,61 @@ public class AdminServiceImpl implements AdminService
             info.put("flag", 0);
         }
         else  info.put("flag", 1);
+        info.put("errMsg", errMsg);
+
+        return info;
+    }
+
+    /*
+     * @Description: 管理员获取反馈信息
+     * @Param page,count
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    @Override
+    public JSONObject getFeedbackByPage(int page, int count)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        FeedbackDao feedbackDao = new FeedbackDaoImpl();
+        List<Feedback> feedbackList = feedbackDao.getFeedbackByPage(page,count);
+        if (feedbackList.isEmpty())
+        {
+            info.put("flag", 0);
+            errMsg.add("当前页数没有反馈信息了");
+        }
+        else
+        {
+            info.put("flag", 1);
+            info.put("feedback", JSONArray.parseArray(JSON.toJSONString(feedbackList)));
+        }
+        info.put("errMsg", errMsg);
+
+        return info;
+    }
+
+    /*
+     * @Description: 管理员回复用户的意见
+     * @Param u_no,m_content,f_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    @Override
+    public JSONObject respondToUserFeedback(String m_content, int f_no)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        FeedbackDao feedbackDao = new FeedbackDaoImpl();
+        int flag = feedbackDao.respondToUserFeedback(m_content,f_no);
+        if (flag == -1 || flag == 0)
+        {
+            info.put("flag", 0);
+            errMsg.add("对用户反馈信息进行回复错误");
+        }
+        else
+        {
+            info.put("flag", 1);
+        }
         info.put("errMsg", errMsg);
 
         return info;

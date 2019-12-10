@@ -10,12 +10,8 @@ public interface CreditRuleDao
     //添加规则
     void addCreditRule(CreditRule cr);
 
-    /*
-     * @Description: 显示所有的规则
-     * @Param
-     * @Return: java.util.List<bean.CreditRule>
-     */
-    List<CreditRule> getAllCreditRules();
+    //分页查询所有的规则
+    List<CreditRule> getAllCreditRules(int page,int count);
 
     //查询某一条规则
     CreditRule getCreditRule(int cr_no);

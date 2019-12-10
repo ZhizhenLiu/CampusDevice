@@ -1,3 +1,4 @@
+import bean.User;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import dao.*;
@@ -6,6 +7,10 @@ import service.AdminService;
 import service.UserService;
 import service.impl.AdminServiceImpl;
 import service.impl.UserServiceImpl;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class Test {
@@ -61,6 +66,19 @@ public class Test {
 //       System.out.println(userService.getReservationByPage(wechatID,1,10,true));
 //       System.out.println();
 //       System.out.println(userService.getReservationByPage(wechatID,1,10,false));
-       System.out.println(userService.getDeviceDetails("1905399S"));
+       String returnDate = "2017-12-11";
+       SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+       Date now = new Date();
+       Date re = new Date();
+       try
+       {
+            re = simpleDateFormat.parse(returnDate);
+       }
+       catch (ParseException e)
+       {
+           e.printStackTrace();
+       }
+       System.out.println(now + " " + re);
+       System.out.println(re.getTime() > now.getTime());
    }
 }

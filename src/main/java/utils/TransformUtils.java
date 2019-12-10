@@ -1,9 +1,9 @@
 package utils;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
 
 public class TransformUtils
 {
@@ -46,6 +46,11 @@ public class TransformUtils
     //将字符串变成整数Int
     public static int StringTransInt(String str)
     {
+        if(!str.matches("^[0-9]*$"))  //如果字符串不是数字型
+        {
+            System.out.println("字符串不是数字型，含其他字符");
+            return -1;
+        }
         if (!str.equals(""))
         {
             int num = Integer.parseInt(str);

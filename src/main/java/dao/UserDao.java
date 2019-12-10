@@ -36,4 +36,11 @@ public interface UserDao
      * @Return: bean.User
      */
     User getUserByNo(String u_no);
+
+    /*
+     * @Description: 更新增加或减少信誉分数
+     * @Param score
+     * @Return: int
+     */
+    int updateCreditGrade(String u_no, int score);
 }

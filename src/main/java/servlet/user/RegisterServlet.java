@@ -30,9 +30,9 @@ public class RegisterServlet extends HttpServlet
         String u_email = request.getParameter("u_email");
         String u_phone = request.getParameter("u_phone");
         String u_type = request.getParameter("u_type");
-        String u_classMajor = request.getParameter("u_class_major");
-        String u_mentorName = request.getParameter("u_mentor_name");
-        String u_mentorPhone = request.getParameter("u_mentor_phone");
+        String u_majorClass = request.getParameter("u_majorClass");
+        String u_mentorName = request.getParameter("u_mentorName");
+        String u_mentorPhone = request.getParameter("u_mentorPhone");
         String code = request.getParameter("code");
 
         //向微信服务器接口发送code，获取用户唯一标识openid, 返回参数
@@ -46,8 +46,7 @@ public class RegisterServlet extends HttpServlet
         if (result.containsKey("openid"))
         {
             wechatId = (String) result.get("openid");
-            System.out.println(result);
-            User user = new User(u_no, u_name, wechatId, u_email, u_phone, 100, u_type, u_mentorName, u_mentorPhone, u_classMajor);
+            User user = new User(u_no, u_name, wechatId, u_email, u_phone, 100, u_type, u_mentorName, u_mentorPhone, u_majorClass);
             System.out.println(user);
             info = userService.registerUser(user);
             printWriter.write(info.toJSONString());

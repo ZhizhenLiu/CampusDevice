@@ -1,5 +1,7 @@
 package bean;
 
+import java.util.Date;
+
 /**
  * 信用记录
  */
@@ -15,11 +17,11 @@ public class CreditRecord
     //信用记录_变化原因
     private String cr_changeReason;
     //信用记录_日期(自动填写)
-    private String cr_date;
+    private Date cr_date;
     //信用记录_变化后分数
     private int cr_afterGrade;
 
-    public CreditRecord(int cr_no, String u_no, int cr_changeScore, String cr_changeReason, String cr_date, int cr_afterGrade)
+    public CreditRecord(int cr_no, String u_no, int cr_changeScore, String cr_changeReason, Date cr_date, int cr_afterGrade)
     {
         this.cr_no = cr_no;
         this.u_no = u_no;
@@ -73,12 +75,12 @@ public class CreditRecord
         this.cr_changeReason = cr_changeReason;
     }
 
-    public String getCr_date()
+    public Date getCr_date()
     {
         return cr_date;
     }
 
-    public void setCr_date(String cr_date)
+    public void setCr_date(Date cr_date)
     {
         this.cr_date = cr_date;
     }

@@ -3,8 +3,6 @@ package service;
 import bean.User;
 import com.alibaba.fastjson.JSONObject;
 
-import java.util.Date;
-
 public interface UserService
 {
 
@@ -134,4 +132,11 @@ public interface UserService
      * @Return: com.alibaba.fastjson.JSONObject
      */
     JSONObject cancelTrack(int t_no);
+
+    /*
+     * @Description: 用户反馈意见给管理员
+     * @Param wechatId,f_content
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject feedbackToAdmin(String wechatId,String f_content);
 }

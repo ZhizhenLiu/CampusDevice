@@ -20,7 +20,7 @@ public class ReturnDeviceDaoImpl implements ReturnDeviceDao
      * @Param u_no  d_no
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public int returnDevice(String u_no, String d_no, int b_bo)
+    public int returnDevice(String u_no, String d_no, int b_no, String rd_state, String comment)
     {
         //初始化
         con = null;
@@ -31,12 +31,14 @@ public class ReturnDeviceDaoImpl implements ReturnDeviceDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "INSERT INTO return_device(u_no, d_no, b_no, rd_date) " +
-                    "VALUES (?, ?, ?, CURRENT_DATE )";
+            sql = "INSERT INTO return_device(u_no, d_no, b_no, rd_date, rd_device_state, rd_comment) " +
+                  "VALUES (?, ?, ?, CURRENT_DATE, ? , ?)";
             pStmt = con.prepareStatement(sql);
             pStmt.setString(1, u_no);
             pStmt.setString(2, d_no);
-            pStmt.setInt(3, b_bo);
+            pStmt.setInt(3, b_no);
+            pStmt.setString(4, rd_state);
+            pStmt.setString(5, comment);
 
             //返回执行状态
             flag = pStmt.executeUpdate();

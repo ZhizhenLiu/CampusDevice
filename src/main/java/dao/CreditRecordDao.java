@@ -6,9 +6,8 @@ import java.util.List;
 
 public interface CreditRecordDao
 {
-
     //初始化信用积分
-    void initCredit(String u_no);
+    int initCredit(String u_no, int score);
 
     /*
      * @Description: 信用积分变动

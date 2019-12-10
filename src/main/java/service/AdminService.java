@@ -1,7 +1,5 @@
 package service;
 
-import bean.Admin;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 public interface AdminService
@@ -65,10 +63,10 @@ public interface AdminService
 
     /*
      * @Description: 管理员确认用户归还设备
-     * @Param b_no
+     * @Param b_no  rd_state
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject confirmReturn(int b_no);
+    JSONObject confirmReturn(int b_no, String rd_state, String comment);
 
     /*
      * @Description: 管理员主动提醒逾期未还用户
@@ -80,7 +78,21 @@ public interface AdminService
     /*
      * @Description: 设置设备图片url
      * @Param d_no  url
-     * @Return: int
+     * @Return: com.alibaba.fastjson.JSONObject
      */
     JSONObject setDeviceImgUrl(String d_no, String url);
+
+    /*
+     * @Description: 管理员获取反馈信息
+     * @Param page,count
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject getFeedbackByPage(int page,int count);
+
+    /*
+     * @Description: 管理员回复用户的意见
+     * @Param u_no,m_content,f_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject respondToUserFeedback(String m_content,int f_no);
 }

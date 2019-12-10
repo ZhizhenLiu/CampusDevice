@@ -64,13 +64,24 @@ public class UserServiceImpl implements UserService
      */
     public JSONObject registerUser(User user)
     {
-        int flag = userDao.registerUser(user);
         JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        int flag = 1;
+        flag = userDao.registerUser(user);
         info.put("flag", flag);
         if (flag == 0)
         {
             info.put("errMsg", "注册用户失败");
         }
+        flag = creditRecordDao.initCredit(user.getU_no(), user.getU_type().equals("学生")?100:200);
+        if (flag == 0 )
+        {
+            errMsg.add("用户信用分初始化失败");
+        }
+        info.put("errMsg", errMsg);
+
+        info.put("flag", flag);
         return info;
     }
 
@@ -526,6 +537,37 @@ public class UserServiceImpl implements UserService
             errMsg.add("取消失败");
         }
         info.put("errMsg", errMsg);
+
+        return info;
+    }
+
+    /*
+     * @Description: 用户反馈意见给管理员
+     * @Param wecharId,f_content
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    @Override
+    public JSONObject feedbackToAdmin(String wechatId,String f_content)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+        FeedbackDao feedbackDao = new FeedbackDaoImpl();
+        UserDao userDao = new UserDaoImpl();
+
+        User user = userDao.getUserByWechatID(wechatId);
+        String u_no = user.getU_no();
+        int f_no = feedbackDao.addUserFeedbackToDb(u_no,f_content);
+        int flag = 0;
+        if(f_no > 0)
+        {
+            flag = 1;
+        }
+        info.put("flag",flag);
+        if(flag == 0)
+        {
+            errMsg.add("添加用户反馈到反馈表错误");
+        }
+        info.put("errMsg",errMsg);
 
         return info;
     }
