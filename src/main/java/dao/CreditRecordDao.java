@@ -29,4 +29,11 @@ public interface CreditRecordDao
      * @Return: java.util.List<bean.CreditRecord>
      */
     List<CreditRecord> getAllCreditRecord(String u_no);
+
+    /*
+     * @Description: 添加信用积分变动，逾期一个星期扣1分，超过一个星期小于等于一个月再扣2分，大于一个月再扣2分，之后每个月
+     * @Param u_no
+     * @Return: java.util.List<bean.CreditRecord>
+     */
+    int addRecord(String u_no, int days);
 }

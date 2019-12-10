@@ -43,4 +43,11 @@ public interface UserDao
      * @Return: int
      */
     int updateCreditGrade(String u_no, int score);
+
+    /*
+     * @Description: 通过用户学号获取用户当前信用积分
+     * @Param u_no
+     * @Return: int
+     */
+    int getCreditScore(String u_no);
 }

@@ -208,7 +208,8 @@ public class UserDaoImpl implements UserDao
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
-            pStmt.setString(1, u_no);
+            pStmt.setInt(1, score);
+            pStmt.setString(2, u_no);
             flag = pStmt.executeUpdate();
         }
         catch (SQLException e)
@@ -220,5 +221,41 @@ public class UserDaoImpl implements UserDao
             JDBCUtils.closeAll(rs, pStmt, con);
         }
         return flag;
+    }
+
+    /*
+     * @Description: 通过用户学号获取用户当前信用积分
+     * @Param u_no
+     * @Return: int
+     */
+    @Override
+    public int getCreditScore(String u_no)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        int flag = 0;
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "select u_credit_grade from user WHERE u_no = ?";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            pStmt.setString(1, u_no);
+            int score = pStmt.executeUpdate();
+            return score;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return 0;
     }
 }

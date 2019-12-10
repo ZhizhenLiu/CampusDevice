@@ -1,7 +1,12 @@
 package dao.impl;
 
 import bean.CreditRecord;
+import bean.CreditRule;
+import bean.Message;
 import dao.CreditRecordDao;
+import dao.CreditRuleDao;
+import dao.MessageDao;
+import dao.UserDao;
 import utils.JDBCUtils;
 
 import java.sql.Connection;
@@ -31,7 +36,7 @@ public class CreditRecordDaoImpl implements CreditRecordDao
         {
             con = JDBCUtils.getConnection();
             sql = "INSERT INTO credit_record(u_no, cr_change_score, cr_change_reason, cr_date, cr_after_grade) " +
-                  "VALUES (?,?,?, CURRENT_DATE ,?)";
+                    "VALUES (?,?,?, CURRENT_DATE ,?)";
             pStmt = con.prepareStatement(sql);
 
             pStmt.setString(1, u_no);
@@ -108,8 +113,8 @@ public class CreditRecordDaoImpl implements CreditRecordDao
         {
             con = JDBCUtils.getConnection();
             sql = "SELECT * FROM credit_record WHERE u_no = ?  " +
-                  "ORDER BY cr_no desc" +
-                  "LIMIT ? ,?";
+                    "ORDER BY cr_no desc" +
+                    "LIMIT ? ,?";
             pStmt = con.prepareStatement(sql);
             pStmt.setString(1, u_no);
             pStmt.setInt(2, (page - 1) * count);
@@ -174,5 +179,83 @@ public class CreditRecordDaoImpl implements CreditRecordDao
             JDBCUtils.closeAll(rs, pStmt, con);
         }
         return creditRecordList;
+    }
+
+    /*
+     * @Description: 添加信用积分变动，逾期一个星期扣1分，超过一个星期小于等于一个月再扣2分，大于一个月再扣2分，之后每个月扣5分
+     * @Param u_no
+     * @Return: java.util.List<bean.CreditRecord>
+     */
+    @Override
+    public int addRecord(String u_no,int days) {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "insert into credit_record(u_no, cr_change_score, cr_change_reason, cr_date, cr_after_grade) values(?,?,?,CURRENT_DATE ,?)";
+            pStmt = con.prepareStatement(sql);
+            int breakRuleNo = 0;
+            if(days == 0)
+            {
+                breakRuleNo = 1;
+            }
+            else if(days <= 7)
+            {
+                breakRuleNo = 2;
+            }
+            else if(days > 7 && days <= 30)
+            {
+                breakRuleNo = 3;
+            }
+            else
+            {
+                breakRuleNo = 4;
+            }
+
+            CreditRuleDao creditRuleDao = new CreditRuleDaoImpl();
+            UserDao userDao = new UserDaoImpl();
+            MessageDao messageDao = new MessageDaoImpl();
+
+            pStmt.setString(1,u_no);
+            pStmt.setInt(2,creditRuleDao.getCreditRule(breakRuleNo).getCr_score());
+            pStmt.setString(3,creditRuleDao.getCreditRule(breakRuleNo).getCr_content());
+            pStmt.setInt(4,creditRuleDao.getCreditRule(breakRuleNo).getCr_score()+userDao.getCreditScore(u_no));
+
+            pStmt.executeUpdate();
+            //立即更改当前学生的信用分
+            int flag = userDao.updateCreditGrade(u_no,creditRuleDao.getCreditRule(breakRuleNo).getCr_score()+userDao.getCreditScore(u_no));
+            if(flag == 0)
+            {
+                System.out.println("更改当前学生的信用分失败");
+            }
+            //给用户发消息告诉他他的信用分被扣了
+            String str = userDao.getUserByNo(u_no).getU_name();
+            char name[] = str.toCharArray();
+            String message = "尊敬的"+name[0]+"同学，由于您"+creditRuleDao.getCreditRule(breakRuleNo)+"，所以导致您当前的信用分发生了变化\r\n" +
+                    "您当前的信用分为"+userDao.getCreditScore(u_no)+"\r\n"+"具体的细节请您查看历史信用分变动查看具体情况！";
+            flag = messageDao.sendMessage(u_no,message);
+            if(flag == 0 || flag == -1)
+            {
+                System.out.println("发送短信失败");
+            }
+            else
+            {
+                return flag;
+            }
+
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return 0;
     }
 }

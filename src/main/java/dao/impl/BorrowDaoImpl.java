@@ -130,7 +130,7 @@ public class BorrowDaoImpl implements BorrowDao
     }
 
     /*
-     * @Description: 管理员查看管辖范围内外借中记录
+     * @Description: 管理员查看管辖范围内外借中记录(逾期归还:-2  逾期借用: -1  借用中:0  归还未评价:1 归还评价:2)
      * @Param a_no
      * @Return: java.util.List<bean.Borrow>
      */
@@ -149,7 +149,7 @@ public class BorrowDaoImpl implements BorrowDao
                   "FROM borrow b, administrator a, user u ,device d  " +
                   "WHERE a.a_no = ? " +
                   "AND b.u_no = u.u_no " +
-                  "AND b.d_no = d.d_no " +
+                  "AND b.d_no = d.d_no AND b_state IN (-1, 0) " +
                   "ORDER BY b_return_date " ;
             pStmt = con.prepareStatement(sql);
 

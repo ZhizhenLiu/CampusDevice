@@ -53,7 +53,7 @@ public class Test {
        System.out.println();
        System.out.println();
 
-       String wechatID = "o0ug242ge55sufbQW0xHk7KTmq60";
+       String wechatID = "o0ug241yqbsjM0N5xR5qhLxi8gH0";
 
 
 //       System.out.println(userService.getReservationByPage("o0ug241yqbsjM0N5xR5qhLxi8gH0",1 ,10, true));
@@ -66,19 +66,10 @@ public class Test {
 //       System.out.println(userService.getReservationByPage(wechatID,1,10,true));
 //       System.out.println();
 //       System.out.println(userService.getReservationByPage(wechatID,1,10,false));
-       String returnDate = "2017-12-11";
-       SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-       Date now = new Date();
-       Date re = new Date();
-       try
-       {
-            re = simpleDateFormat.parse(returnDate);
-       }
-       catch (ParseException e)
-       {
-           e.printStackTrace();
-       }
-       System.out.println(now + " " + re);
-       System.out.println(re.getTime() > now.getTime());
+
+//     System.out.println(userService.reserveDevice("1905399S",wechatID,"2019-12-01", "2019-12-08"));
+//       System.out.println(adminService.confirmBorrow(56));
+
+
    }
 }

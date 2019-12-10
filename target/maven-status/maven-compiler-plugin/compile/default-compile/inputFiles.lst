@@ -7,6 +7,7 @@ E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\UnfinishedReservatio
 E:\IDEA WorkStation\CampusDevice\src\main\java\service\impl\AdminServiceImpl.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\admin\UploadServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\utils\ExcelUtils.java
+E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\admin\GetFeedbackContentServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\dao\CommentDao.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\MessageServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\listener\timer\TimerManager.java
@@ -37,12 +38,14 @@ E:\IDEA WorkStation\CampusDevice\src\main\java\dao\impl\UserDaoImpl.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\admin\RefuseReservationServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\TrackDeviceServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\AllServlet.java
+E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\admin\RespondToFeedbackServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\admin\HandleBorrowServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\HotServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\service\AdminService.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\bean\Reservation.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\utils\JDBCUtils.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\DeviceCommentServlet.java
+E:\IDEA WorkStation\CampusDevice\src\main\java\dao\impl\FeedbackDaoImpl.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\listener\task\SetOverDueTask.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\DeviceDetailServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\dao\impl\ReservationDaoImpl.java
@@ -54,6 +57,8 @@ E:\IDEA WorkStation\CampusDevice\src\main\java\dao\MessageDao.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\dao\AdminDao.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\bean\Feedback.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\UserInfoServlet.java
+E:\IDEA WorkStation\CampusDevice\src\main\java\dao\FeedbackDao.java
+E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\FeedbackToAdminServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\bean\Device.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\CommentOnBorrowServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\ReserveServlet.java

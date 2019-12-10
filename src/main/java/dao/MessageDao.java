@@ -27,4 +27,11 @@ public interface MessageDao
      * @Return: int
      */
     int getAllMessageNum(String u_no);
+
+    /*
+     * @Description: 将消息的状态设为已读
+     * @Param m_no
+     * @Return: int
+     */
+    int setMessageHaveRead(int m_no);
 }

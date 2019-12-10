@@ -34,7 +34,8 @@ public class MessageDaoImpl implements MessageDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT * FROM message WHERE u_no = ? ORDER BY m_no DESC LIMIT ?,?";
+            //按照最近的未读消息先展示的顺序
+            sql = "SELECT * FROM message WHERE u_no = ? ORDER BY m_state asc, m_no DESC LIMIT ?,?";
             pStmt = con.prepareStatement(sql);
             //执行操作
             pStmt.setString(1, u_no);
@@ -43,7 +44,7 @@ public class MessageDaoImpl implements MessageDao
             rs = pStmt.executeQuery();
             while (rs.next())
             {
-                messageList.add(new Message(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));
+                messageList.add(new Message(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),rs.getInt(5)));
             }
 
         }
@@ -74,8 +75,9 @@ public class MessageDaoImpl implements MessageDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "INSERT INTO message(u_no, m_content, m_date) " +
-                    "VALUES (?, ?, CURRENT_DATE)";
+            //刚发的message的状态为未读
+            sql = "INSERT INTO message(u_no, m_content, m_date, m_state) " +
+                    "VALUES (?, ?, CURRENT_DATE,0)";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
@@ -122,6 +124,41 @@ public class MessageDaoImpl implements MessageDao
             {
                 num = rs.getInt(1);
             }
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return num;
+    }
+
+    /*
+     * @Description: 将消息的状态设为已读
+     * @Param m_no
+     * @Return: int
+     */
+    @Override
+    public int setMessageHaveRead(int m_no) {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+        int num = 0;
+
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "update message set m_state = 1 where m_no = ?";
+            pStmt = con.prepareStatement(sql);
+
+            //执行操作
+            pStmt.setInt(1, m_no);
+            num = pStmt.executeUpdate();
 
         }
         catch (Exception e)
