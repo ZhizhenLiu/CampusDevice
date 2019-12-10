@@ -22,16 +22,16 @@ public interface MessageDao
     int sendMessage(String u_no, String m_content);
 
     /*
-     * @Description: 获取所有信息的数量
+     * @Description: 获取所有未读信息的数量
      * @Param u_no
      * @Return: int
      */
-    int getAllMessageNum(String u_no);
+    int getAllUnReadMessageNum(String u_no);
 
     /*
-     * @Description: 将消息的状态设为已读
-     * @Param m_no
+     * @Description: 将所有消息的状态设为已读
+     * @Param u_no
      * @Return: int
      */
-    int setMessageHaveRead(int m_no);
+    int setAllMessageHaveRead(String u_no);
 }

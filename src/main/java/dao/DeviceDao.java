@@ -30,10 +30,10 @@ public interface DeviceDao
 
     /*
      * @Description: 改变设备状态
-     * @Param state  d_no
+     * @Param d_no  d_state
      * @Return: int
      */
-    int setDeviceState(String state, String d_no);
+    int setDeviceState(String d_no, String d_state);
 
     /*
      * @Description: 获取设备状态
@@ -76,4 +76,12 @@ public interface DeviceDao
      * @Return: int
      */
     int setDeviceImgUrl(String d_no, String url);
+
+    /*
+     * @Description: 修改设备名称
+     * @Param d_no  d_name
+     * @Return: int
+     */
+    int setDeviceName(String d_no, String d_name);
+
 }

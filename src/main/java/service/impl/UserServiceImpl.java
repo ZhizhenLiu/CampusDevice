@@ -349,17 +349,21 @@ public class UserServiceImpl implements UserService
         User user = userDao.getUserByWechatID(wechatID);
         String u_no = user.getU_no();
 
+        int flag = 1;
+        flag = messageDao.setAllMessageHaveRead(u_no);
+        if (flag == 0) errMsg.add("设置消息已读失败");
+
         List<Message> messageList = messageDao.getMessageByPage(u_no, page, count);
         if (messageList.isEmpty())
         {
-            info.put("flag", 0);
+            flag = 0;
             errMsg.add("当前页数没有消息");
         }
         else
         {
-            info.put("flag", 1);
             info.put("messages", JSONArray.parseArray(JSON.toJSONString(messageList)));
         }
+        info.put("flag", flag);
         info.put("errMsg", errMsg);
         return info;
     }
@@ -446,9 +450,10 @@ public class UserServiceImpl implements UserService
         JSONArray errMsg = new JSONArray();
         Borrow borrow = borrowDao.getBorrowByNo(b_no);
 
+        int flag = 1;
         if (borrow == null)
         {
-            info.put("flag", 0);
+            flag = 0;
             errMsg.add("不存在该借用记录");
         }
         else
@@ -456,13 +461,17 @@ public class UserServiceImpl implements UserService
             info.put("flag", 1);
             String u_no = borrow.getU_no();
             String d_no = borrow.getD_no();
-            int flag = commentDao.addComment(u_no, d_no, comment);
-            info.put("flag", flag);
-            if (flag == 0)
-            {
-                errMsg.add("评论失败");
-            }
+
+            //添加评论
+            flag = commentDao.addComment(u_no, d_no, comment);
+            if (flag == 0) errMsg.add("插入评论记录失败");
+
+            //修改借用状态为归还评价
+            flag =borrowDao.finishComment(b_no);
+            if (flag == 0) errMsg.add("修改已评价状态失败");
         }
+
+        info.put("flag", flag);
         info.put("errMsg", errMsg);
         return info;
     }

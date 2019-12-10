@@ -70,6 +70,6 @@ public class Test {
 //     System.out.println(userService.reserveDevice("1905399S",wechatID,"2019-12-01", "2019-12-08"));
 //       System.out.println(adminService.confirmBorrow(56));
 
-
+       System.out.println(userService.getCreditRecordByPage(wechatID, 1 , 10));
    }
 }

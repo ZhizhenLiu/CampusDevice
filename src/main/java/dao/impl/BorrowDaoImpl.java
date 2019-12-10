@@ -324,7 +324,7 @@ public class BorrowDaoImpl implements BorrowDao
             con = JDBCUtils.getConnection();
             sql = "UPDATE borrow SET b_state = 1 " +
                   "WHERE b_no = ? " +
-                  "AND b_state <> 1";
+                  "AND b_state <> 1 ";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
@@ -360,7 +360,44 @@ public class BorrowDaoImpl implements BorrowDao
             con = JDBCUtils.getConnection();
             sql = "UPDATE borrow SET b_state = -2 " +
                   "WHERE b_no = ? " +
-                  "AND b_state <> 1";
+                  "AND b_state <> -2";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            pStmt.setInt(1, b_no);
+
+            flag = pStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return flag;
+    }
+
+    /*
+     * @Description: 修改借用表 借用状态 （逾期归还:-2  逾期借用: -1  借用中:0  归还:1 归还评价:2）
+     * @Param b_no
+     * @Return: int
+     */
+    public int finishComment(int b_no)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        int flag = 0;
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "UPDATE borrow SET b_state = 2 " +
+                  "WHERE b_no = ? " +
+                  "AND b_state <> 2";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始

@@ -160,7 +160,7 @@ public class DeviceDaoImpl implements DeviceDao
      * @Param state  d_no
      * @Return: int
      */
-    public int setDeviceState(String state, String d_no)
+    public int setDeviceState(String d_no, String d_state)
     {
         //初始化
         con = null;
@@ -173,7 +173,7 @@ public class DeviceDaoImpl implements DeviceDao
             con = JDBCUtils.getConnection();
             String sql = "UPDATE device SET d_state = ? WHERE d_no = ?";
             pStmt = con.prepareStatement(sql);
-            pStmt.setString(1, state);
+            pStmt.setString(1, d_state);
             pStmt.setString(2, d_no);
 
             //更新状态
@@ -448,4 +448,40 @@ public class DeviceDaoImpl implements DeviceDao
         }
         return flag;
     }
+
+    /*
+     * @Description: 修改设备名称
+     * @Param d_no  d_name
+     * @Return: int
+     */
+    public int setDeviceName(String d_no, String d_name)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        int flag = 0;
+        try
+        {
+            con = JDBCUtils.getConnection();
+            String sql = "UPDATE device SET d_name = ? WHERE d_no = ?";
+            pStmt = con.prepareStatement(sql);
+            pStmt.setString(1, d_name);
+            pStmt.setString(2, d_no);
+
+            //更新状态
+            flag = pStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return flag;
+    }
+
 }

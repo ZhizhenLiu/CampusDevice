@@ -183,7 +183,7 @@ public class AdminServiceImpl implements AdminService
                 info.put("flag", 0);
                 errMsg.add("修改预约状态失败");
             }
-            flag = deviceDao.setDeviceState("外借", d_no);
+            flag = deviceDao.setDeviceState(d_no, "外借");
             if (flag == 0)
             {
                 info.put("flag", 0);
@@ -341,20 +341,20 @@ public class AdminServiceImpl implements AdminService
         {
             case "damaged":
             {
-                deviceDao.setDeviceState("损坏", d_no);
+                deviceDao.setDeviceState(d_no, "损坏");
                 creditRule = creditRuleDao.getCreditRule(6);
                 break;
             }
             case "scrapped":
             {
-                deviceDao.setDeviceState("报废", d_no);
+                deviceDao.setDeviceState(d_no, "报废");
                 creditRule = creditRuleDao.getCreditRule(7);
                 break;
             }
             //正常归还
             default:
             {
-                deviceDao.setDeviceState("在库", d_no);
+                deviceDao.setDeviceState(d_no, "在库");
                 creditRule = creditRuleDao.getCreditRule(1);
                 break;
             }
@@ -491,6 +491,33 @@ public class AdminServiceImpl implements AdminService
         }
         info.put("errMsg", errMsg);
 
+        return info;
+    }
+
+    /*
+     * @Description: 管理员修改设备
+     * @Param d_no  d_name  d_state  d_importantParam  d_mainUse
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject editDevice(String d_no, String d_name, String d_state)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        int flag = 1;
+        if (d_name != null)
+        {
+            flag = deviceDao.setDeviceName(d_no, d_name);
+            if (flag == 0) errMsg.add("修改设备名称失败");
+        }
+        if (d_state != null)
+        {
+            flag = deviceDao.setDeviceState(d_no, d_state);
+            if (flag == 0) errMsg.add("修改设备名称失败");
+        }
+
+        info.put("flag", flag);
+        info.put("errMsg", errMsg);
         return info;
     }
 }

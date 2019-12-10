@@ -102,7 +102,7 @@ public class MessageDaoImpl implements MessageDao
      * @Param userNo
      * @Return: int
      */
-    public int getAllMessageNum(String u_no)
+    public int getAllUnReadMessageNum(String u_no)
     {
         //初始化
         con = null;
@@ -113,7 +113,7 @@ public class MessageDaoImpl implements MessageDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "select count(*) from message where u_no = ?";
+            sql = "SELECT count(*) FROM message WHERE u_no = ? AND m_state = 0";
             pStmt = con.prepareStatement(sql);
 
             //执行操作
@@ -138,27 +138,28 @@ public class MessageDaoImpl implements MessageDao
     }
 
     /*
-     * @Description: 将消息的状态设为已读
-     * @Param m_no
+     * @Description: 将所有消息的状态设为已读
+     * @Param u_no
      * @Return: int
      */
     @Override
-    public int setMessageHaveRead(int m_no) {
+    public int setAllMessageHaveRead(String u_no)
+    {
         //初始化
         con = null;
         pStmt = null;
         rs = null;
-        int num = 0;
+        int flag = 0;
 
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "update message set m_state = 1 where m_no = ?";
+            sql = "UPDATE message SET m_state = 1 WHERE u_no = ? AND m_state = 0";
             pStmt = con.prepareStatement(sql);
 
             //执行操作
-            pStmt.setInt(1, m_no);
-            num = pStmt.executeUpdate();
+            pStmt.setString(1, u_no);
+            flag = pStmt.executeUpdate();
 
         }
         catch (Exception e)
@@ -169,6 +170,6 @@ public class MessageDaoImpl implements MessageDao
         {
             JDBCUtils.closeAll(rs, pStmt, con);
         }
-        return num;
+        return flag;
     }
 }

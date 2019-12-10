@@ -95,4 +95,11 @@ public interface AdminService
      * @Return: com.alibaba.fastjson.JSONObject
      */
     JSONObject respondToUserFeedback(String m_content,int f_no);
+
+    /*
+     * @Description: 管理员修改设备
+     * @Param d_no  d_name  d_state  importantParameter  mainUse
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject editDevice(String d_no, String d_name, String d_state);
 }

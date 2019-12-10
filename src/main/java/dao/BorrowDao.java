@@ -65,6 +65,13 @@ public interface BorrowDao
     int returnOutOfTime(int b_no);
 
     /*
+     * @Description: 完成评价（逾期归还:-2  逾期借用: -1  借用中:0  归还:1 归还评价:2）
+     * @Param b_no  b_state
+     * @Return: int
+     */
+    int finishComment(int b_no);
+
+    /*
      * @Description: 根据借用编号查询借用记录
      * @Param b_no
      * @Return: bean.Borrow

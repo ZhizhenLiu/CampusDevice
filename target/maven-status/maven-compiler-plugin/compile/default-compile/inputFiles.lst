@@ -37,6 +37,7 @@ E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\CancelReservationSer
 E:\IDEA WorkStation\CampusDevice\src\main\java\dao\impl\UserDaoImpl.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\admin\RefuseReservationServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\TrackDeviceServlet.java
+E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\admin\EditDeviceServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\AllServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\admin\RespondToFeedbackServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\admin\HandleBorrowServlet.java
