@@ -64,7 +64,6 @@ public class ReservationDaoImpl implements ReservationDao
                 //设备附加属性
                 reservation.setD_name(rs.getString("d_name"));
                 reservation.setD_saveSite(rs.getString("d_save_site"));
-                reservation.setD_mainUse(rs.getString("d_main_use"));
             }
         }
         catch (SQLException e)
@@ -223,7 +222,6 @@ public class ReservationDaoImpl implements ReservationDao
                 Reservation reservatioin = new Reservation();
                 reservatioin.setD_no(rs.getString("d_no"));
                 reservatioin.setD_name(rs.getString("d_name"));
-                reservatioin.setD_mainUse(rs.getString("d_model"));
                 reservatioin.setR_sum(rs.getInt("r_sum"));
                 reservationList.add(reservatioin);
             }
@@ -507,7 +505,7 @@ public class ReservationDaoImpl implements ReservationDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT r_no,r_reservation_date, r_start_date, r_return_date, d.d_no, d_name, d_main_use, r_state, r_feedback " +
+            sql = "SELECT r_no,r_reservation_date, r_start_date, r_return_date, d.d_no, d_name, r_state, r_feedback " +
                     "FROM reservation r,device d " +
                     "WHERE r.d_no = d.d_no " +
                     "AND u_no = ? AND r_state IN(0, 2, 3) " +
@@ -562,7 +560,7 @@ public class ReservationDaoImpl implements ReservationDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT r_no,r_reservation_date, r_start_date, r_return_date, d.d_no, d_name, d_main_use, r_state, r_feedback " +
+            sql = "SELECT r_no,r_reservation_date, r_start_date, r_return_date, d.d_no, d_name, r_state, r_feedback " +
                     "FROM reservation r,device d " +
                     "WHERE r.d_no = d.d_no " +
                     "AND u_no = ? AND r_state IN(-2, -1, 1) " +

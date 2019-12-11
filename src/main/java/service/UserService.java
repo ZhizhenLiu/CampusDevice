@@ -139,4 +139,11 @@ public interface UserService
      * @Return: com.alibaba.fastjson.JSONObject
      */
     JSONObject feedbackToAdmin(String wechatId, String f_content);
+
+    /*
+     * @Description: 用户首页获取未读信息
+     * @Param wechatID
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject getAllUnReadMessage(String wechatID);
 }

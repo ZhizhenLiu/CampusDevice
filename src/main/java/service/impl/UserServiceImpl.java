@@ -578,4 +578,23 @@ public class UserServiceImpl implements UserService
 
         return info;
     }
+
+    /*
+     * @Description: 用户首页获取未读信息
+     * @Param wechatID
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject getAllUnReadMessage(String wechatID)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        User user = userDao.getUserByWechatID(wechatID);
+        List<Message> messageList = messageDao.getAllUnReadMessage(user.getU_no());
+        if (messageList.isEmpty()) errMsg.add("当前无未读消息");
+        info.put("errMsg", errMsg);
+        info.put("flag", 1);
+
+        return info;
+    }
 }

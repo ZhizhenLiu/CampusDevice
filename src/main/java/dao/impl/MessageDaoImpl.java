@@ -102,28 +102,28 @@ public class MessageDaoImpl implements MessageDao
      * @Param userNo
      * @Return: int
      */
-    public int getAllUnReadMessageNum(String u_no)
+    public List<Message> getAllUnReadMessage(String u_no)
     {
         //初始化
         con = null;
         pStmt = null;
         rs = null;
-        int num = 0;
 
+        List<Message> messageList = new ArrayList<>();
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT count(*) FROM message WHERE u_no = ? AND m_state = 0";
+            sql = "SELECT * FROM message WHERE u_no = ? AND m_state = 0";
             pStmt = con.prepareStatement(sql);
 
             //执行操作
             pStmt.setString(1, u_no);
             rs = pStmt.executeQuery();
 
-            if (rs.next())
-            {
-                num = rs.getInt(1);
-            }
+           while (rs.next())
+           {
+               messageList.add(new Message(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5)));
+           }
 
         }
         catch (Exception e)
@@ -134,7 +134,7 @@ public class MessageDaoImpl implements MessageDao
         {
             JDBCUtils.closeAll(rs, pStmt, con);
         }
-        return num;
+        return messageList;
     }
 
     /*

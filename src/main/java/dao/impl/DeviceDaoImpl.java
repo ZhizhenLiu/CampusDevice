@@ -122,7 +122,7 @@ public class DeviceDaoImpl implements DeviceDao
         try
         {
             con = JDBCUtils.getConnection();
-            String sql = "SELECT d_no, d_name, d_model, d_main_use, d_important_param, d_save_site, d_state, d_photo, " +
+            String sql = "SELECT d_no, d_name, d_model, d_save_site, d_state, d_photo, " +
                     "(SELECT a_name FROM administrator a1 WHERE a1.a_no = d.a_no ) a_name, " +
                     "(SELECT a_phone FROM administrator a2 WHERE a2.a_no = d.a_no ) a_phone  " +
                     "FROM device d WHERE d_no = ? ";
@@ -338,8 +338,6 @@ public class DeviceDaoImpl implements DeviceDao
                 list.add(rs.getString("d_state"));
                 list.add(String.valueOf(rs.getInt("d_borrowed_times")));
                 list.add(rs.getString("d_name"));
-                list.add(rs.getString("d_important_param"));
-                list.add(rs.getString("d_main_use"));
                 list.add(rs.getString("d_save_site"));
             }
 

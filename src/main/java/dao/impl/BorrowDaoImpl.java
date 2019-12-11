@@ -36,7 +36,7 @@ public class BorrowDaoImpl implements BorrowDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT b_no, b_borrow_date, b_return_date, d_save_site, device.d_no, d_name, d_main_use, b_state " +
+            sql = "SELECT b_no, b_borrow_date, b_return_date, d_save_site, device.d_no, d_name, b_state " +
                     "FROM borrow, device " +
                     "WHERE u_no = ?" +
                     "AND borrow.d_no = device.d_no AND b_state IN(-2, 1, 2) " +
@@ -59,7 +59,6 @@ public class BorrowDaoImpl implements BorrowDao
                 borrow.setD_saveSite(rs.getString("d_save_site"));
                 borrow.setD_no(rs.getString("d_no"));
                 borrow.setD_name(rs.getString("d_name"));
-                borrow.setD_mainUse(rs.getString("d_main_use"));
                 borrow.setB_state(rs.getInt("b_state"));
                 borrowList.add(borrow);
             }
@@ -91,7 +90,7 @@ public class BorrowDaoImpl implements BorrowDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT b_no, b_borrow_date, b_return_date, d_save_site, device.d_no, d_name, d_main_use, b_state " +
+            sql = "SELECT b_no, b_borrow_date, b_return_date, d_save_site, device.d_no, d_name, b_state " +
                     "FROM borrow, device " +
                     "WHERE u_no = ?" +
                     "AND borrow.d_no = device.d_no AND b_state IN(-1, 0) " +
@@ -114,7 +113,6 @@ public class BorrowDaoImpl implements BorrowDao
                 borrow.setD_saveSite(rs.getString("d_save_site"));
                 borrow.setD_no(rs.getString("d_no"));
                 borrow.setD_name(rs.getString("d_name"));
-                borrow.setD_mainUse(rs.getString("d_main_use"));
                 borrow.setB_state(rs.getInt("b_state"));
                 borrowList.add(borrow);
             }
