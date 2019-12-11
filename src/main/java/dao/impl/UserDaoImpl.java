@@ -258,4 +258,179 @@ public class UserDaoImpl implements UserDao
         }
         return 0;
     }
+
+    /*
+     * @Description: 修改用户名称
+     * @Param u_no  u_name
+     * @Return: int
+     */
+    public int setUserName(String u_no, String u_name)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        int flag = 0;
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "UPDATE user SET u_name = ? WHERE u_no = ?";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            pStmt.setString(1, u_name);
+            pStmt.setString(2, u_no);
+            flag = pStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return flag;
+    }
+
+    /*
+     * @Description: 设置用户手机号码
+     * @Param u_no  u_phone
+     * @Return: int
+     */
+    public int setUserPhone(String u_no, String u_phone)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        int flag = 0;
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "UPDATE user SET u_phone = ? WHERE u_no = ?";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            pStmt.setString(1, u_phone);
+            pStmt.setString(2, u_no);
+            flag = pStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return flag;
+    }
+
+    /*
+     * @Description: 修改用户邮箱
+     * @Param u_no  u_email
+     * @Return: int
+     */
+    public int setUserEmail(String u_no, String u_email)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        int flag = 0;
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "UPDATE user SET u_email = ? WHERE u_no = ?";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            pStmt.setString(1, u_email);
+            pStmt.setString(2, u_no);
+            flag = pStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return flag;
+    }
+
+    /*
+     * @Description: 修改用户导师姓名
+     * @Param u_no  u_mentorName
+     * @Return: int
+     */
+    public int setUserMentorName(String u_no, String u_mentorName)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        int flag = 0;
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "UPDATE user SET u_mentor_name = ? WHERE u_no = ?";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            pStmt.setString(1, u_mentorName);
+            pStmt.setString(2, u_no);
+            flag = pStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return flag;
+    }
+
+    /*
+     * @Description: 修改用户导师联系方式
+     * @Param u_no  u_mentorPhone
+     * @Return: int
+     */
+    public int setUserMentorPhone(String u_no, String u_mentorPhone)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        int flag = 0;
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "UPDATE user SET u_mentor_phone = ? WHERE u_no = ?";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            pStmt.setString(1, u_mentorPhone);
+            pStmt.setString(2, u_no);
+            flag = pStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return flag;
+    }
 }

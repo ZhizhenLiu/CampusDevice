@@ -30,7 +30,6 @@ public class RegisterServlet extends HttpServlet
         String u_email = request.getParameter("u_email");
         String u_phone = request.getParameter("u_phone");
         String u_type = request.getParameter("u_type");
-        String u_majorClass = request.getParameter("u_majorClass");
         int s_no = Integer.parseInt(request.getParameter("s_no"));
         String u_mentorName = request.getParameter("u_mentorName");
         String u_mentorPhone = request.getParameter("u_mentorPhone");
@@ -47,7 +46,7 @@ public class RegisterServlet extends HttpServlet
         if (result.containsKey("openid"))
         {
             wechatID = (String) result.get("openid");
-            User user = new User(u_no, u_name, wechatID, u_email, u_phone, u_type.equals("学生")?100:200, u_type, u_mentorName, u_mentorPhone, u_majorClass, s_no);
+            User user = new User(u_no, u_name, wechatID, u_email, u_phone, u_type.equals("student")?100:200, u_type.equals("student")?"学生":"老师", u_mentorName, u_mentorPhone, null, s_no);
             System.out.println(user);
             info = userService.registerUser(user);
             printWriter.write(info.toJSONString());

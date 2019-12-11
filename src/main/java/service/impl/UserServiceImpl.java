@@ -597,4 +597,48 @@ public class UserServiceImpl implements UserService
 
         return info;
     }
+
+    /*
+     * @Description: 用户修改个人信息
+     * @Param user
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject editUserInfo(User user)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        int flag = 1;
+        String u_no = user.getU_no();
+        if (user.getU_name() != null)
+        {
+            flag = userDao.setUserName(u_no, user.getU_name());
+            if (flag == 0) errMsg.add("修改用户姓名失败");
+        }
+        if (user.getU_phone() != null)
+        {
+            flag = userDao.setUserPhone(u_no, user.getU_phone());
+            if (flag == 0) errMsg.add("修改用户手机号码失败");
+        }
+        if (user.getU_email() != null)
+        {
+            flag = userDao.setUserEmail(u_no, user.getU_email());
+            if (flag == 0) errMsg.add("修改用户邮箱失败失败");
+        }
+        if (user.getU_mentorName() != null)
+        {
+            flag = userDao.setUserMentorName(u_no, user.getU_mentorName());
+            if (flag == 0) errMsg.add("修改用户导师姓名失败");
+        }
+        if (user.getU_mentorPhone() != null)
+        {
+            flag = userDao.setUserMentorPhone(u_no, user.getU_mentorPhone());
+            if (flag == 0) errMsg.add("修改用户导师手机号码失败");
+        }
+
+        info.put("flag", flag);
+        info.put("errMsg", errMsg);
+
+        return info;
+    }
 }

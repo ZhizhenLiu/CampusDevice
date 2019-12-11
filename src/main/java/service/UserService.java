@@ -146,4 +146,11 @@ public interface UserService
      * @Return: com.alibaba.fastjson.JSONObject
      */
     JSONObject getAllUnReadMessage(String wechatID);
+
+    /*
+     * @Description: 用户修改个人信息
+     * @Param user
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject editUserInfo(User user);
 }

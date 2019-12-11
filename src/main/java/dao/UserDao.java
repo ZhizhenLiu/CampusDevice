@@ -50,4 +50,39 @@ public interface UserDao
      * @Return: int
      */
     int getCreditScore(String u_no);
+
+    /*
+     * @Description: 修改用户名称
+     * @Param u_no  u_name
+     * @Return: int
+     */
+    int setUserName(String u_no, String u_name);
+
+    /*
+     * @Description: 设置用户手机号码
+     * @Param u_no  u_phone
+     * @Return: int
+     */
+    int setUserPhone(String u_no, String u_phone);
+
+    /*
+     * @Description: 修改用户邮箱
+     * @Param u_no  u_email
+     * @Return: int
+     */
+    int setUserEmail(String u_no, String u_email);
+
+    /*
+     * @Description: 修改用户导师姓名
+     * @Param u_no  u_mentorName
+     * @Return: int
+     */
+    int setUserMentorName(String u_no, String u_mentorName);
+
+    /*
+     * @Description: 修改用户导师联系方式
+     * @Param u_no  u_mentorPhone
+     * @Return: int
+     */
+    int setUserMentorPhone(String u_no, String u_mentorPhone);
 }

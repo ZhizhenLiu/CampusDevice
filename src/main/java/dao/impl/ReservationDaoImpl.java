@@ -204,9 +204,8 @@ public class ReservationDaoImpl implements ReservationDao
             con = JDBCUtils.getConnection();
             sql = "SELECT d.d_no, d.d_name, d.d_model, COUNT(*) r_sum " +
                     "FROM reservation r, device d " +
-                    "WHERE " +
-                    "r.d_no = d.d_no " +
-                    "AND d.a_no = ? AND r_state = 0 " +
+                    "WHERE r.d_no = d.d_no " +
+                    "AND d.a_no = ? AND r_state IN(0, 2, 3) " +
                     "GROUP BY d.d_no, d.d_name, d.d_model " +
                     "ORDER BY r_sum DESC ";
             pStmt = con.prepareStatement(sql);
@@ -220,6 +219,7 @@ public class ReservationDaoImpl implements ReservationDao
             while (rs.next())
             {
                 Reservation reservatioin = new Reservation();
+                reservatioin.setR_state(rs.getInt("r_state"));
                 reservatioin.setD_no(rs.getString("d_no"));
                 reservatioin.setD_name(rs.getString("d_name"));
                 reservatioin.setR_sum(rs.getInt("r_sum"));
@@ -257,7 +257,7 @@ public class ReservationDaoImpl implements ReservationDao
                     "FROM user u, reservation r " +
                     "WHERE u.u_no = r.u_no " +
                     "AND d_no = ? " +
-                    "AND r_state IN(0, 2) " +
+                    "AND r_state IN(0, 2, 3) " +
                     "ORDER BY r_reservation_date DESC,u_credit_grade DESC";
             pStmt = con.prepareStatement(sql);
 
@@ -307,7 +307,7 @@ public class ReservationDaoImpl implements ReservationDao
         {
             con = JDBCUtils.getConnection();
             sql = "UPDATE reservation SET r_start_date = ? , r_return_date = ?, r_state = 2 , r_feedback = ? " +
-                    "WHERE r_no = ? ";
+                  "WHERE r_no = ? ";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
