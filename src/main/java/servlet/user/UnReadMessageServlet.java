@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "UnReadMessageServlet")
+@WebServlet(name = "UnReadMessageServlet", urlPatterns = "/user/getUnReadMessage")
 public class UnReadMessageServlet extends HttpServlet
 {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
