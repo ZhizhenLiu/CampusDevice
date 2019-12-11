@@ -14,9 +14,10 @@ public class User
     private String u_type;
     private String u_mentorName;
     private String u_mentorPhone;
-    private int u_majorClass;
+    private String u_majorClass;
+    private int s_no;
 
-    public User(String u_no, String u_name, String u_wechatID, String u_email, String u_phone, int u_creditGrade, String u_type, String u_mentorName, String u_mentorPhone, int u_majorClass)
+    public User(String u_no, String u_name, String u_wechatID, String u_email, String u_phone, int u_creditGrade, String u_type, String u_mentorName, String u_mentorPhone, String u_majorClass, int s_no)
     {
         this.u_no = u_no;
         this.u_name = u_name;
@@ -28,6 +29,7 @@ public class User
         this.u_mentorName = u_mentorName;
         this.u_mentorPhone = u_mentorPhone;
         this.u_majorClass = u_majorClass;
+        this.s_no = s_no;
     }
 
     public User()
@@ -124,14 +126,24 @@ public class User
         this.u_mentorPhone = u_mentorPhone;
     }
 
-    public int getU_majorClass()
+    public String getU_majorClass()
     {
         return u_majorClass;
     }
 
-    public void setU_majorClass(int u_majorClass)
+    public void setU_majorClass(String u_majorClass)
     {
         this.u_majorClass = u_majorClass;
+    }
+
+    public int getS_no()
+    {
+        return s_no;
+    }
+
+    public void setS_no(int s_no)
+    {
+        this.s_no = s_no;
     }
 
     @Override
@@ -147,7 +159,8 @@ public class User
                 ", u_type='" + u_type + '\'' +
                 ", u_mentorName='" + u_mentorName + '\'' +
                 ", u_mentorPhone='" + u_mentorPhone + '\'' +
-                ", u_majorClass=" + u_majorClass +
+                ", u_majorClass='" + u_majorClass + '\'' +
+                ", s_no=" + s_no +
                 '}';
     }
 }

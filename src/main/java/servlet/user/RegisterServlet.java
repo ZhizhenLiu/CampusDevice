@@ -30,7 +30,8 @@ public class RegisterServlet extends HttpServlet
         String u_email = request.getParameter("u_email");
         String u_phone = request.getParameter("u_phone");
         String u_type = request.getParameter("u_type");
-        int u_majorClass = Integer.parseInt(request.getParameter("u_majorClass"));
+        String u_majorClass = request.getParameter("u_majorClass");
+        int s_no = Integer.parseInt(request.getParameter("s_no"));
         String u_mentorName = request.getParameter("u_mentorName");
         String u_mentorPhone = request.getParameter("u_mentorPhone");
         String code = request.getParameter("code");
@@ -40,13 +41,13 @@ public class RegisterServlet extends HttpServlet
         JSONObject info = null;
         PrintWriter printWriter = response.getWriter();
         UserService userService = new UserServiceImpl();
-        String wechatId = "";
+        String wechatID = "";
 
         //请求成功
         if (result.containsKey("openid"))
         {
-            wechatId = (String) result.get("openid");
-            User user = new User(u_no, u_name, wechatId, u_email, u_phone, 100, u_type, u_mentorName, u_mentorPhone, u_majorClass);
+            wechatID = (String) result.get("openid");
+            User user = new User(u_no, u_name, wechatID, u_email, u_phone, u_type.equals("学生")?100:200, u_type, u_mentorName, u_mentorPhone, u_majorClass, s_no);
             System.out.println(user);
             info = userService.registerUser(user);
             printWriter.write(info.toJSONString());

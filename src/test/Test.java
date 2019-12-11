@@ -75,6 +75,6 @@ public class Test {
 //       System.out.println(adminService.confirmBorrow(56));
 
 //       System.out.println(adminService.setDeviceImgUrl("1713714S", "http://49.235.73.29:8083/img/device/1905399S.png"));
-       System.out.println(systemService.isUserExist("1"));
+       System.out.println(userService.getJSONUserByWechatID(wechatID));
    }
 }

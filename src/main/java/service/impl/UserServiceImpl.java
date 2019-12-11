@@ -244,7 +244,7 @@ public class UserServiceImpl implements UserService
         String startDate = reservation.getR_startDate();
         String returnDate = reservation.getR_returnDate();
 
-        flag = reservationDao.setReservationState(r_no, 0);
+        flag = reservationDao.setReservationState(r_no, 3);
         if (flag == 0)
         {
             info.put("flag", 0);

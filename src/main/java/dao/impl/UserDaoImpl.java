@@ -32,7 +32,7 @@ public class UserDaoImpl implements UserDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT * FROM user WHERE u_wechatid = ?";
+            sql = "SELECT * FROM user u, specialty s WHERE u_wechatid = ? AND u.u_major_class = s.s_no";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
@@ -43,7 +43,7 @@ public class UserDaoImpl implements UserDao
             {
                 user = new User(rs.getString("u_no"), rs.getString("u_name"), rs.getString("u_wechatid"), rs.getString("u_email"),
                         rs.getString("u_phone"), rs.getInt("u_credit_grade"), rs.getString("u_type"), rs.getString("u_mentor_name"),
-                        rs.getString("u_mentor_phone"), rs.getInt("u_major_class"));
+                        rs.getString("u_mentor_phone"), rs.getString("s_name"), rs.getInt("s_no"));
             }
         }
         catch (SQLException e)
@@ -86,7 +86,7 @@ public class UserDaoImpl implements UserDao
             pStmt.setString(7, user.getU_type());
             pStmt.setString(8, user.getU_mentorName());
             pStmt.setString(9, user.getU_mentorPhone());
-            pStmt.setInt(10, user.getU_majorClass());
+            pStmt.setInt(10, user.getS_no());
 
             flag = pStmt.executeUpdate();
 
@@ -129,7 +129,7 @@ public class UserDaoImpl implements UserDao
             pStmt.setInt(4, user.getU_creditGrade());
             pStmt.setString(5, user.getU_mentorName());
             pStmt.setString(6, user.getU_phone());
-            pStmt.setInt(7, user.getU_majorClass());
+            pStmt.setInt(7, user.getS_no());
             pStmt.setString(8, user.getU_no());
 
             flag = pStmt.executeUpdate();
@@ -162,7 +162,7 @@ public class UserDaoImpl implements UserDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT * FROM user WHERE u_no = ?";
+            sql = "SELECT * FROM user u, specialty s WHERE u_no = ? AND u.u_major_class = s.s_no";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
@@ -173,7 +173,7 @@ public class UserDaoImpl implements UserDao
             {
                 user = new User(rs.getString("u_no"), rs.getString("u_name"), rs.getString("u_wechatid"), rs.getString("u_email"),
                         rs.getString("u_phone"), rs.getInt("u_credit_grade"), rs.getString("u_type"), rs.getString("u_mentor_name"),
-                        rs.getString("u_mentor_phone"), rs.getInt("u_major_class"));
+                        rs.getString("u_mentor_phone"), rs.getString("s_name"), rs.getInt("s_no"));
             }
         }
         catch (SQLException e)
