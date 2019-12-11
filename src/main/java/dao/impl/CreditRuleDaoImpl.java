@@ -59,8 +59,8 @@ public class CreditRuleDaoImpl implements CreditRuleDao
             con = JDBCUtils.getConnection();
             sql = "SELECT * FROM credit_rule order by cr_no limit ?,? ";
             pStmt = con.prepareStatement(sql);
-            pStmt.setInt(1,(page-1)*count);
-            pStmt.setInt(2,count);
+            pStmt.setInt(1, (page - 1) * count);
+            pStmt.setInt(2, count);
 
             //执行操作
             rs = pStmt.executeQuery();

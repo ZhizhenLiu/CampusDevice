@@ -30,7 +30,7 @@ public class RegisterServlet extends HttpServlet
         String u_email = request.getParameter("u_email");
         String u_phone = request.getParameter("u_phone");
         String u_type = request.getParameter("u_type");
-        String u_majorClass = request.getParameter("u_majorClass");
+        int u_majorClass = Integer.parseInt(request.getParameter("u_majorClass"));
         String u_mentorName = request.getParameter("u_mentorName");
         String u_mentorPhone = request.getParameter("u_mentorPhone");
         String code = request.getParameter("code");

@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class BorrowDaoImpl implements BorrowDao
@@ -36,16 +37,16 @@ public class BorrowDaoImpl implements BorrowDao
         {
             con = JDBCUtils.getConnection();
             sql = "SELECT b_no, b_borrow_date, b_return_date, d_save_site, device.d_no, d_name, d_main_use, b_state " +
-                  "FROM borrow, device " +
-                  "WHERE u_no = ?" +
-                  "AND borrow.d_no = device.d_no AND b_state IN(-2, 1, 2) " +
-                  "ORDER BY b_borrow_date DESC  " +
-                  "LIMIT ?, ?";
+                    "FROM borrow, device " +
+                    "WHERE u_no = ?" +
+                    "AND borrow.d_no = device.d_no AND b_state IN(-2, 1, 2) " +
+                    "ORDER BY b_borrow_date DESC  " +
+                    "LIMIT ?, ?";
             pStmt = con.prepareStatement(sql);
 
             //执行操作
             pStmt.setString(1, u_no);
-            pStmt.setInt(2, (page-1)*count);
+            pStmt.setInt(2, (page - 1) * count);
             pStmt.setInt(3, count);
 
             rs = pStmt.executeQuery();
@@ -91,16 +92,16 @@ public class BorrowDaoImpl implements BorrowDao
         {
             con = JDBCUtils.getConnection();
             sql = "SELECT b_no, b_borrow_date, b_return_date, d_save_site, device.d_no, d_name, d_main_use, b_state " +
-                  "FROM borrow, device " +
-                  "WHERE u_no = ?" +
-                  "AND borrow.d_no = device.d_no AND b_state IN(-1, 0) " +
-                  "ORDER BY b_borrow_date DESC " +
-                  "LIMIT ?, ?";
+                    "FROM borrow, device " +
+                    "WHERE u_no = ?" +
+                    "AND borrow.d_no = device.d_no AND b_state IN(-1, 0) " +
+                    "ORDER BY b_borrow_date DESC " +
+                    "LIMIT ?, ?";
             pStmt = con.prepareStatement(sql);
 
             //执行操作
             pStmt.setString(1, u_no);
-            pStmt.setInt(2, (page-1)*count);
+            pStmt.setInt(2, (page - 1) * count);
             pStmt.setInt(3, count);
 
             rs = pStmt.executeQuery();
@@ -145,12 +146,12 @@ public class BorrowDaoImpl implements BorrowDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT b_no, b.b_state,b.b_no, d.d_name, d.d_no, u.u_no, u.u_name, u_credit_grade, b_borrow_date, b_return_date " +
-                  "FROM borrow b, administrator a, user u ,device d  " +
-                  "WHERE a.a_no = ? " +
-                  "AND b.u_no = u.u_no " +
-                  "AND b.d_no = d.d_no AND b_state IN (-1, 0) " +
-                  "ORDER BY b_return_date " ;
+            sql = "SELECT b_no, b.b_state,b.b_no, d.d_name, d.d_no, u.u_no, u.u_name, u.u_phone, u.u_mentor_name, u.u_mentor_phone, u_credit_grade, b_borrow_date, b_return_date " +
+                    "FROM borrow b, administrator a, user u ,device d  " +
+                    "WHERE a.a_no = ? " +
+                    "AND b.u_no = u.u_no " +
+                    "AND b.d_no = d.d_no AND b_state IN (-1, 0) " +
+                    "ORDER BY b_return_date ";
             pStmt = con.prepareStatement(sql);
 
             //执行操作
@@ -165,6 +166,9 @@ public class BorrowDaoImpl implements BorrowDao
                 borrow.setD_no(rs.getString("d_no"));
                 borrow.setU_no(rs.getString("u_no"));
                 borrow.setU_name(rs.getString("u_name"));
+                borrow.setU_phone(rs.getString("u_phone"));
+                borrow.setU_mentorName(rs.getString("u_mentor_name"));
+                borrow.setU_mentorPhone(rs.getString("u_mentor_phone"));
                 borrow.setU_creditGrade(rs.getInt("u_credit_grade"));
                 borrow.setB_borrowDate(rs.getString("b_borrow_date"));
                 borrow.setB_returnDate(rs.getString("b_return_date"));
@@ -197,7 +201,7 @@ public class BorrowDaoImpl implements BorrowDao
         int flag = 0;
         con = JDBCUtils.getConnection();
         sql = "INSERT INTO borrow(d_no, u_no, b_borrow_date, b_return_date) " +
-              "VALUES (?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?)";
         try
         {
             pStmt = con.prepareStatement(sql);
@@ -238,8 +242,8 @@ public class BorrowDaoImpl implements BorrowDao
         {
             con = JDBCUtils.getConnection();
             sql = "UPDATE borrow SET b_state = -1 " +
-                  "WHERE b_return_date < CURRENT_DATE " +
-                  "AND b_state = 0";
+                    "WHERE b_return_date <= CURRENT_DATE " +
+                    "AND b_state = 0";
             pStmt = con.prepareStatement(sql);
 
             result = pStmt.executeUpdate();
@@ -323,8 +327,8 @@ public class BorrowDaoImpl implements BorrowDao
         {
             con = JDBCUtils.getConnection();
             sql = "UPDATE borrow SET b_state = 1 " +
-                  "WHERE b_no = ? " +
-                  "AND b_state <> 1 ";
+                    "WHERE b_no = ? " +
+                    "AND b_state <> 1 ";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
@@ -342,6 +346,7 @@ public class BorrowDaoImpl implements BorrowDao
         }
         return flag;
     }
+
     /*
      * @Description: 借用中设备逾期归还 （0:借用中，1:按时归还 -1:逾期未还 -2:逾期归还）
      * @Param b_no
@@ -359,8 +364,8 @@ public class BorrowDaoImpl implements BorrowDao
         {
             con = JDBCUtils.getConnection();
             sql = "UPDATE borrow SET b_state = -2 " +
-                  "WHERE b_no = ? " +
-                  "AND b_state <> -2";
+                    "WHERE b_no = ? " +
+                    "AND b_state <> -2";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
@@ -396,8 +401,8 @@ public class BorrowDaoImpl implements BorrowDao
         {
             con = JDBCUtils.getConnection();
             sql = "UPDATE borrow SET b_state = 2 " +
-                  "WHERE b_no = ? " +
-                  "AND b_state <> 2";
+                    "WHERE b_no = ? " +
+                    "AND b_state <> 2";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
@@ -433,9 +438,9 @@ public class BorrowDaoImpl implements BorrowDao
         {
             con = JDBCUtils.getConnection();
             sql = "SELECT * FROM borrow b, device d, user u " +
-                  "WHERE b.d_no = d.d_no " +
-                  "AND b.u_no = u.u_no " +
-                  "AND b_no = ?";
+                    "WHERE b.d_no = d.d_no " +
+                    "AND b.u_no = u.u_no " +
+                    "AND b_no = ?";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
@@ -480,18 +485,19 @@ public class BorrowDaoImpl implements BorrowDao
         pStmt = null;
         rs = null;
 
-        try{
+        try
+        {
             con = JDBCUtils.getConnection();
             //第一种是已归还，但实际归还日期大于应当归还日期
-            String firstSQL =   "select u.u_no, u.u_name, d.d_no, d.d_name, b.b_borrow_date, b.b_return_date, rd.rd_date, u.u_credit_grade, a.a_name "+
-                    "from user u, device d, borrow b, return_device rd, administrator a "+
-                    "where u.u_no=b.u_no and d.d_no=b.d_no and rd.u_no=u.u_no and rd.d_no=d.d_no and d.a_no=a.a_no and b.b_state=-2 "+
+            String firstSQL = "select u.u_no, u.u_name, d.d_no, d.d_name, b.b_borrow_date, b.b_return_date, rd.rd_date, u.u_credit_grade, a.a_name " +
+                    "from user u, device d, borrow b, return_device rd, administrator a " +
+                    "where u.u_no=b.u_no and d.d_no=b.d_no and rd.u_no=u.u_no and rd.d_no=d.d_no and d.a_no=a.a_no and b.b_state=-2 " +
                     "order by u.u_no";
 
             //第二种是未归还，但b_state=-1
-            String secondSQL =  "select u.u_no, u.u_name, d.d_no, d.d_name, b.b_borrow_date, b.b_return_date, u.u_credit_grade, a.a_name "+
-                    "from user u, device d, borrow b, administrator a "+
-                    "where u.u_no=b.u_no and d.d_no=b.d_no and d.a_no=a.a_no and b.b_state=-1 "+
+            String secondSQL = "select u.u_no, u.u_name, d.d_no, d.d_name, b.b_borrow_date, b.b_return_date, u.u_credit_grade, a.a_name " +
+                    "from user u, device d, borrow b, administrator a " +
+                    "where u.u_no=b.u_no and d.d_no=b.d_no and d.a_no=a.a_no and b.b_state=-1 " +
                     "order by u.u_no";
 
             List<String> list = new ArrayList<>();
@@ -499,7 +505,7 @@ public class BorrowDaoImpl implements BorrowDao
             //执行
             pStmt = con.prepareStatement(firstSQL);
             rs = pStmt.executeQuery();
-            while(rs.next())
+            while (rs.next())
             {
                 list.add(rs.getString(1));
                 list.add(rs.getString(2));
@@ -514,7 +520,7 @@ public class BorrowDaoImpl implements BorrowDao
 
             pStmt = con.prepareStatement(secondSQL);
             rs = pStmt.executeQuery();
-            while(rs.next())
+            while (rs.next())
             {
                 list.add(rs.getString(1));
                 list.add(rs.getString(2));
@@ -529,10 +535,53 @@ public class BorrowDaoImpl implements BorrowDao
 
             return list;
 
-        }catch (Exception e){
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
 
         return null;
+    }
+
+    /*
+     * @Description: 获得逾期的用户借用天数以及他未还的天数
+     * @Param b_no
+     * @Return: int
+     */
+    @Override
+    public List<Integer> getOverDueBorrowAndDays()
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        List<Integer> list = new ArrayList<>();
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "select b_no, b_return_date from borrow where b_state = -1";
+            Date date = new Date();
+            pStmt = con.prepareStatement(sql);
+
+            rs = pStmt.executeQuery();
+            while (rs.next())
+            {
+                int days = (int) ((date.getTime() - rs.getDate(2).getTime()) / (1000 * 3600 * 24));
+                list.add(rs.getInt(1));
+                list.add(days);
+            }
+
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return list;
     }
 }

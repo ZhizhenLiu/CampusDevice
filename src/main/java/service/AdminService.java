@@ -1,5 +1,6 @@
 package service;
 
+import bean.Device;
 import com.alibaba.fastjson.JSONObject;
 
 public interface AdminService
@@ -87,14 +88,21 @@ public interface AdminService
      * @Param page,count
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject getFeedbackByPage(int page,int count);
+    JSONObject getFeedbackByPage(int page, int count);
 
     /*
      * @Description: 管理员回复用户的意见
      * @Param u_no,m_content,f_no
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject respondToUserFeedback(String m_content,int f_no);
+    JSONObject respondToUserFeedback(String m_content, int f_no);
+
+    /*
+     * @Description: 添加设备
+     * @Param device
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject addDevice(Device device);
 
     /*
      * @Description: 管理员修改设备

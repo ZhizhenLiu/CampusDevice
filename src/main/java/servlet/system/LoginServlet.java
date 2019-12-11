@@ -1,9 +1,11 @@
-package servlet;
+package servlet.system;
 
 import com.alibaba.fastjson.JSONObject;
 import service.AdminService;
+import service.SystemService;
 import service.UserService;
 import service.impl.AdminServiceImpl;
+import service.impl.SystemServiceImpl;
 import service.impl.UserServiceImpl;
 import utils.HttpUtils;
 
@@ -34,31 +36,13 @@ public class LoginServlet extends HttpServlet
 
         JSONObject info = new JSONObject();
         PrintWriter printWriter = response.getWriter();
-        UserService userService = new UserServiceImpl();
-        AdminService adminService = new AdminServiceImpl();
+        SystemService systemService = new SystemServiceImpl();
 
         //请求成功,获取用户openid
         if (result.containsKey("openid"))
         {
             String wechatID = (String) result.get("openid");
-            int flag = -1;
-            /*
-            1、查询对应openid的用户是否存在
-            2、返回查询：flag为-1：不存在用户。
-                         flag为0：用户身份为普通用户。
-                         flag为1：用户身份为管理员。
-             */
-            if (adminService.isAdminExist(wechatID))
-            {
-                flag = 1;
-            }
-            else if (userService.isUserExist(wechatID))
-            {
-                flag = 0;
-            }
-            else flag = -1;
-            info.put("flag", "1");
-            info.put("identity", flag);
+            info = systemService.isUserExist(wechatID);
         }
         //请求失败，返回错误信息
         else

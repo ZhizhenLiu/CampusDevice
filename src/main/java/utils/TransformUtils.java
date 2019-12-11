@@ -30,13 +30,16 @@ public class TransformUtils
     //将数据库SQL变成字符串
     public static String SQLDateTransString(java.sql.Date dateTime)
     {
-        try{
+        try
+        {
             Date date = new java.util.Date(dateTime.getTime());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String stringDate = sdf.format(date);
             return stringDate;
 
-        }catch (Exception e){
+        }
+        catch (Exception e)
+        {
             System.out.println("数据库时间转字符串错误！");
             e.printStackTrace();
         }
@@ -46,7 +49,7 @@ public class TransformUtils
     //将字符串变成整数Int
     public static int StringTransInt(String str)
     {
-        if(!str.matches("^[0-9]*$"))  //如果字符串不是数字型
+        if (!str.matches("^[0-9]*$"))  //如果字符串不是数字型
         {
             System.out.println("字符串不是数字型，含其他字符");
             return -1;

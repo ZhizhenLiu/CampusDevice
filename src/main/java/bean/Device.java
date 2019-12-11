@@ -14,15 +14,13 @@ public class Device
     private String d_state;
     private String d_storeDate;
     private int d_borrowedTimes;
-    private String d_importantParam;
-    private String d_mainUse;
     private String d_photo;
 
     //扩展属性
     private String a_name;
     private String a_phone;
 
-    public Device(String d_no, String d_name, String d_model, String d_saveSite, String a_no, String d_factoryNo, String d_state, String d_storeDate, int d_borrowedTimes, String d_importantParam, String d_mainUse, String d_photo, String a_name, String a_phone)
+    public Device(String d_no, String d_name, String d_model, String d_saveSite, String a_no, String d_factoryNo, String d_state, String d_storeDate, int d_borrowedTimes, String d_photo, String a_name, String a_phone)
     {
         this.d_no = d_no;
         this.d_name = d_name;
@@ -33,8 +31,6 @@ public class Device
         this.d_state = d_state;
         this.d_storeDate = d_storeDate;
         this.d_borrowedTimes = d_borrowedTimes;
-        this.d_importantParam = d_importantParam;
-        this.d_mainUse = d_mainUse;
         this.d_photo = d_photo;
         this.a_name = a_name;
         this.a_phone = a_phone;
@@ -134,26 +130,6 @@ public class Device
         this.d_borrowedTimes = d_borrowedTimes;
     }
 
-    public String getD_importantParam()
-    {
-        return d_importantParam;
-    }
-
-    public void setD_importantParam(String d_importantParam)
-    {
-        this.d_importantParam = d_importantParam;
-    }
-
-    public String getD_mainUse()
-    {
-        return d_mainUse;
-    }
-
-    public void setD_mainUse(String d_mainUse)
-    {
-        this.d_mainUse = d_mainUse;
-    }
-
     public String getD_photo()
     {
         return d_photo;
@@ -197,8 +173,6 @@ public class Device
                 ", d_state='" + d_state + '\'' +
                 ", d_storeDate='" + d_storeDate + '\'' +
                 ", d_borrowedTimes=" + d_borrowedTimes +
-                ", d_importantParam='" + d_importantParam + '\'' +
-                ", d_mainUse='" + d_mainUse + '\'' +
                 ", d_photo='" + d_photo + '\'' +
                 ", a_name='" + a_name + '\'' +
                 ", a_phone='" + a_phone + '\'' +

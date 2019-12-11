@@ -84,4 +84,11 @@ public interface DeviceDao
      */
     int setDeviceName(String d_no, String d_name);
 
+    /*
+     * @Description: 添加设备
+     * @Param device
+     * @Return: int
+     */
+    int addDevice(Device device);
+
 }

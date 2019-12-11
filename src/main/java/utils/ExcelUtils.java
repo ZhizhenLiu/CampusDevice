@@ -26,41 +26,50 @@ public class ExcelUtils
     private static Device device;
 
     //将excel变成Workbook
-    public static Workbook excelToWorkbook(String filePath,String fileName) {
-        try {
+    public static Workbook excelToWorkbook(String filePath, String fileName)
+    {
+        try
+        {
             //将excel加载到内存，获取excel的路径和名字
             File file = new File(filePath, fileName);
             InputStream inputStream = new FileInputStream(file);
 
             Workbook workbook = null;
             //判断excel是新版还是旧版
-            if (fileName.endsWith("xlsx")) {
+            if (fileName.endsWith("xlsx"))
+            {
                 workbook = new XSSFWorkbook(inputStream);  //新版
-            } else if (fileName.endsWith("xls")) {
+            }
+            else if (fileName.endsWith("xls"))
+            {
                 workbook = new HSSFWorkbook(inputStream);  //旧版
             }
             return workbook;
 
-        }catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
         return null;
     }
 
     //读取Workbook内容存到list<String>中
-    public static List<String> workbookToList(String filePath,String fileName) {
+    public static List<String> workbookToList(String filePath, String fileName)
+    {
 
         //判断excel表是否可用，不可用则返回一个空的list数组
-        if(!isTitleValid(filePath,fileName))
+        if (!isTitleValid(filePath, fileName))
         {
             return new ArrayList<>();
         }
-        if(!isContentValid(filePath,fileName))
+        if (!isContentValid(filePath, fileName))
         {
             return new ArrayList<>();
         }
-        Workbook workbook = excelToWorkbook(filePath,fileName);
-        try{
+        Workbook workbook = excelToWorkbook(filePath, fileName);
+        try
+        {
             List<String> list = new ArrayList<>();
             //将导入的仪器放在device表中
             //通过循环工作表Sheet
@@ -81,7 +90,7 @@ public class ExcelUtils
 
                 //循环获取j行第k列的内容
                 //j=rowStart+1开头即去掉第1行的标题
-                for (int j = rowStart+1; j <= rowEnd; j++)
+                for (int j = rowStart + 1; j <= rowEnd; j++)
                 {
                     for (int k = columnStart; k < columnEnd; k++)
                     {
@@ -106,12 +115,14 @@ public class ExcelUtils
     }
 
     //判断excel表标题是否合格(必须有标题)
-    public static boolean isTitleValid(String filePath,String fileName){
-        Workbook workbook = excelToWorkbook(filePath,fileName);
-        try{
+    public static boolean isTitleValid(String filePath, String fileName)
+    {
+        Workbook workbook = excelToWorkbook(filePath, fileName);
+        try
+        {
             int flag = 1;
             //规定excel表的顺序
-            String title[] = {"仪器标号","仪器名称","型号","存放地","出厂号","状态","入库日期"};
+            String title[] = {"仪器标号", "仪器名称", "型号", "存放地", "出厂号", "状态", "入库日期"};
             //将导入的仪器放在device表中
             //通过循环工作表Sheet
             for (int i = 0; i < workbook.getNumberOfSheets(); i++)
@@ -129,25 +140,25 @@ public class ExcelUtils
                 int columnStart = workSheet.getRow(rowStart).getFirstCellNum();
                 int columnEnd = workSheet.getRow(rowStart).getLastCellNum();
                 //检查标题是否有前后缺失
-                for (int j = rowStart;  j <= rowEnd; j++)
+                for (int j = rowStart; j <= rowEnd; j++)
                 {
-                    if(workSheet.getRow(j).getLastCellNum()-workSheet.getRow(j).getFirstCellNum() > columnEnd-columnStart)
+                    if (workSheet.getRow(j).getLastCellNum() - workSheet.getRow(j).getFirstCellNum() > columnEnd - columnStart)
                     {
-                        System.out.println(filePath+fileName+"的 第"+(i+1)+"页 的标题缺失！");
+                        System.out.println(filePath + fileName + "的 第" + (i + 1) + "页 的标题缺失！");
                         System.out.println("请补充标题后输入");
                         flag = 0;
                         break;
                     }
                 }
                 //若标题没有前后缺失
-                if(flag == 1)
+                if (flag == 1)
                 {
                     for (int j = columnStart; j < columnEnd; j++)
                     {
                         //检查标题是否中间部分有缺失
-                        if(workSheet.getRow(0).getCell(j).getStringCellValue().equals(""))
+                        if (workSheet.getRow(0).getCell(j).getStringCellValue().equals(""))
                         {
-                            System.out.println(filePath+fileName+"的 第"+(i+1)+"页 的标题缺失！");
+                            System.out.println(filePath + fileName + "的 第" + (i + 1) + "页 的标题缺失！");
                             System.out.println("请补充标题后输入");
                             flag = 0;
                             break;
@@ -168,7 +179,7 @@ public class ExcelUtils
                 }
             }
 
-            if(flag == 0)
+            if (flag == 0)
             {
                 return false;
             }
@@ -183,12 +194,14 @@ public class ExcelUtils
     }
 
     //判断excel表的内容是否有效，主要判断状态等部分
-    public static boolean isContentValid(String filePath,String fileName){
-        Workbook workbook = excelToWorkbook(filePath,fileName);
-        try{
+    public static boolean isContentValid(String filePath, String fileName)
+    {
+        Workbook workbook = excelToWorkbook(filePath, fileName);
+        try
+        {
             int flag = 1;
             //规定状态只能为：在库、外借、损坏、报废
-            String state[] = {"在库","外借","损坏","报废"};
+            String state[] = {"在库", "外借", "损坏", "报废"};
             //将导入的仪器放在device表中
             //通过循环工作表Sheet
             for (int i = 0; i < workbook.getNumberOfSheets(); i++)
@@ -203,7 +216,7 @@ public class ExcelUtils
                 int rowStart = workSheet.getFirstRowNum();
                 int rowEnd = workSheet.getLastRowNum();
                 //检查标题为状态栏的情况
-                for (int j = rowStart+1; j < rowEnd; j++)
+                for (int j = rowStart + 1; j < rowEnd; j++)
                 {
                     String str = workSheet.getRow(j).getCell(5).getStringCellValue();
                     //检查标题是否中间部分有缺失
@@ -211,11 +224,11 @@ public class ExcelUtils
                     {
                         System.out.println(filePath + fileName + "的 第" + (i + 1) + "页 的状态错误！");
                         System.out.print("状态只能为：");
-                        for (int k = 0; k < state.length-1; k++)
+                        for (int k = 0; k < state.length - 1; k++)
                         {
                             System.out.print(state[k] + "、");
                         }
-                        System.out.println(state[state.length-1]);
+                        System.out.println(state[state.length - 1]);
                         System.out.println();
                         flag = 0;
                         break;
@@ -223,7 +236,7 @@ public class ExcelUtils
                 }
             }
 
-            if(flag == 0)
+            if (flag == 0)
             {
                 return false;
             }
@@ -238,7 +251,7 @@ public class ExcelUtils
     }
 
     //从数据库中导出excel，注意这里生成的文件是.xlsx格式的
-    public static void dbToExcel(String filePath,String fileName)
+    public static void dbToExcel(String filePath, String fileName)
     {
         //创建HSSFWorkbook对象
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -248,18 +261,18 @@ public class ExcelUtils
         BorrowDao borrowDao = new BorrowDaoImpl();
         List<String> list = borrowDao.getOverDueList();
         //设置格子宽高
-        for(int i = 0; i < 8; i++)
+        for (int i = 0; i < 8; i++)
         {
-            sheet.setColumnWidth(i,4000);
+            sheet.setColumnWidth(i, 4000);
         }
-        sheet.setColumnWidth(8,7000);
+        sheet.setColumnWidth(8, 7000);
         //获取行数和列数
         int row = list.size() / 9;
         int column = 9;
         //第0行为标题部分
-        String title[] = {"逾期人学工号","逾期人名","设备编号","设备名","借用日期","应当归还日期","实际归还日期","借用人信用分","管理仪器的管理员的姓名"};
+        String title[] = {"逾期人学工号", "逾期人名", "设备编号", "设备名", "借用日期", "应当归还日期", "实际归还日期", "借用人信用分", "管理仪器的管理员的姓名"};
         XSSFRow firstRow = sheet.createRow(0);
-        for(int i = 0; i < 9; i++)
+        for (int i = 0; i < 9; i++)
         {
             firstRow.createCell(i).setCellValue(title[i]);
         }
@@ -269,12 +282,12 @@ public class ExcelUtils
             XSSFRow xssfRow = sheet.createRow(i);
             for (int j = 0; j < 9; j++)
             {
-                xssfRow.createCell(j).setCellValue(list.get(j+9*(i-1)));
+                xssfRow.createCell(j).setCellValue(list.get(j + 9 * (i - 1)));
             }
         }
 
         //输出Excel文件
-        File file = new File(filePath,fileName);
+        File file = new File(filePath, fileName);
         try
         {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
@@ -291,15 +304,15 @@ public class ExcelUtils
     }
 
     //导入excel，这里照片不通过excel导入数据库
-    public static void excelToDb(String filePath,String fileName,String adminNo)
+    public static void excelToDb(String filePath, String fileName, String adminNo)
     {
-        List<String> list = workbookToList(filePath,fileName);
+        List<String> list = workbookToList(filePath, fileName);
         try
         {
             Connection conn = JDBCUtils.getConnection();
             //根据需要改sql
             String sql = "insert into device(a_no, d_no, d_name, d_model, d_save_site, d_factory_no, d_state, d_store_date) values";
-            for(int i = 0; i < list.size()/7-1; i++)
+            for (int i = 0; i < list.size() / 7 - 1; i++)
             {
                 sql += "(?,?,?,?,?,?,?,?),";
             }
@@ -308,11 +321,11 @@ public class ExcelUtils
 
             //添加值
             int t = 1;
-            for(int i = 0; i < list.size(); i ++)
+            for (int i = 0; i < list.size(); i++)
             {
-                if(i%7 == 0)
+                if (i % 7 == 0)
                 {
-                    ps.setString(t,adminNo);
+                    ps.setString(t, adminNo);
                     t++;
                 }
                 ps.setString(t, list.get(i));

@@ -24,7 +24,7 @@ public class CreditRecordServlet extends HttpServlet
 
         //获取参数
         String code = request.getParameter("code");
-        int page= Integer.parseInt(request.getParameter("page"));
+        int page = Integer.parseInt(request.getParameter("page"));
 
         //向微信服务器接口发送code，获取用户唯一标识openid, 返回参数
         JSONObject result = JSONObject.parseObject(HttpUtils.sendGet(code));

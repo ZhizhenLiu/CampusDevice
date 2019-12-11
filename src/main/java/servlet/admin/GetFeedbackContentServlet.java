@@ -26,7 +26,7 @@ public class GetFeedbackContentServlet extends HttpServlet
         //返回参数
         AdminService adminService = new AdminServiceImpl();
         PrintWriter printWriter = response.getWriter();
-        printWriter.write(adminService.getFeedbackByPage(page,10).toJSONString());
+        printWriter.write(adminService.getFeedbackByPage(page, 10).toJSONString());
 
         printWriter.flush();
         printWriter.close();

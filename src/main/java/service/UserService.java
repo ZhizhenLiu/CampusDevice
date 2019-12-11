@@ -125,7 +125,7 @@ public interface UserService
      * @Return: com.alibaba.fastjson.JSONObject
      */
     JSONObject trackDevice(String wechatID, String d_no);
-    
+
     /*
      * @Description: 用户取消跟踪设备
      * @Param t_no
@@ -138,5 +138,5 @@ public interface UserService
      * @Param wechatId,f_content
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject feedbackToAdmin(String wechatId,String f_content);
+    JSONObject feedbackToAdmin(String wechatId, String f_content);
 }

@@ -14,10 +14,9 @@ public class User
     private String u_type;
     private String u_mentorName;
     private String u_mentorPhone;
-    private String u_majorClass;
+    private int u_majorClass;
 
-
-    public User(String u_no, String u_name, String u_wechatID, String u_email, String u_phone, int u_creditGrade, String u_type, String u_mentorName, String u_mentorPhone, String u_majorClass)
+    public User(String u_no, String u_name, String u_wechatID, String u_email, String u_phone, int u_creditGrade, String u_type, String u_mentorName, String u_mentorPhone, int u_majorClass)
     {
         this.u_no = u_no;
         this.u_name = u_name;
@@ -125,12 +124,12 @@ public class User
         this.u_mentorPhone = u_mentorPhone;
     }
 
-    public String getU_majorClass()
+    public int getU_majorClass()
     {
         return u_majorClass;
     }
 
-    public void setU_majorClass(String u_majorClass)
+    public void setU_majorClass(int u_majorClass)
     {
         this.u_majorClass = u_majorClass;
     }
@@ -141,14 +140,15 @@ public class User
         return "User{" +
                 "u_no='" + u_no + '\'' +
                 ", u_name='" + u_name + '\'' +
-                ", u_wechatId='" + u_wechatID + '\'' +
+                ", u_wechatID='" + u_wechatID + '\'' +
                 ", u_email='" + u_email + '\'' +
                 ", u_phone='" + u_phone + '\'' +
-                ", u_credit_grade=" + u_creditGrade +
+                ", u_creditGrade=" + u_creditGrade +
                 ", u_type='" + u_type + '\'' +
-                ", u_mentor_name='" + u_mentorName + '\'' +
-                ", u_mentor_phone='" + u_mentorPhone + '\'' +
-                ", u_major_class='" + u_majorClass + '\'' +
+                ", u_mentorName='" + u_mentorName + '\'' +
+                ", u_mentorPhone='" + u_mentorPhone + '\'' +
+                ", u_majorClass=" + u_majorClass +
                 '}';
     }
 }
+

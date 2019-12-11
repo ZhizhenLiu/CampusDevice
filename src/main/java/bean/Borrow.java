@@ -15,11 +15,33 @@ public class Borrow
     private int u_creditGrade;
     private String u_phone;
     private String u_email;
+    private String u_mentorName;
+    private String u_mentorPhone;
 
     //附加设备属性
     private String d_saveSite;
     private String d_name;
     private String d_mainUse;
+
+    public Borrow(int b_no, String d_no, String u_no, String b_borrowDate, String b_returnDate, int b_state, String u_name, String u_type, int u_creditGrade, String u_phone, String u_email, String u_mentorName, String u_mentorPhone, String d_saveSite, String d_name, String d_mainUse)
+    {
+        this.b_no = b_no;
+        this.d_no = d_no;
+        this.u_no = u_no;
+        this.b_borrowDate = b_borrowDate;
+        this.b_returnDate = b_returnDate;
+        this.b_state = b_state;
+        this.u_name = u_name;
+        this.u_type = u_type;
+        this.u_creditGrade = u_creditGrade;
+        this.u_phone = u_phone;
+        this.u_email = u_email;
+        this.u_mentorName = u_mentorName;
+        this.u_mentorPhone = u_mentorPhone;
+        this.d_saveSite = d_saveSite;
+        this.d_name = d_name;
+        this.d_mainUse = d_mainUse;
+    }
 
     public Borrow()
     {
@@ -135,6 +157,26 @@ public class Borrow
         this.u_email = u_email;
     }
 
+    public String getU_mentorName()
+    {
+        return u_mentorName;
+    }
+
+    public void setU_mentorName(String u_mentorName)
+    {
+        this.u_mentorName = u_mentorName;
+    }
+
+    public String getU_mentorPhone()
+    {
+        return u_mentorPhone;
+    }
+
+    public void setU_mentorPhone(String u_mentorPhone)
+    {
+        this.u_mentorPhone = u_mentorPhone;
+    }
+
     public String getD_saveSite()
     {
         return d_saveSite;
@@ -180,6 +222,8 @@ public class Borrow
                 ", u_creditGrade=" + u_creditGrade +
                 ", u_phone='" + u_phone + '\'' +
                 ", u_email='" + u_email + '\'' +
+                ", u_mentorName='" + u_mentorName + '\'' +
+                ", u_mentorPhone='" + u_mentorPhone + '\'' +
                 ", d_saveSite='" + d_saveSite + '\'' +
                 ", d_name='" + d_name + '\'' +
                 ", d_mainUse='" + d_mainUse + '\'' +

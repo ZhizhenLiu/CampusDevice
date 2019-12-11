@@ -44,7 +44,7 @@ public class MessageDaoImpl implements MessageDao
             rs = pStmt.executeQuery();
             while (rs.next())
             {
-                messageList.add(new Message(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),rs.getInt(5)));
+                messageList.add(new Message(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5)));
             }
 
         }

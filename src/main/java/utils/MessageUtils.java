@@ -33,7 +33,7 @@ public class MessageUtils
             JSONObject result = JSONObject.parseObject(client.send(phone, message));
 
             //返回结果是json格式的字符串, code: 发送状态，0为成功。非0为发送失败，可从data中查看错误信息
-            if (result.getInteger("code") !=  0) verifyCode = null;
+            if (result.getInteger("code") != 0) verifyCode = null;
             System.out.println(result);
         }
         catch (Exception e)
@@ -50,7 +50,7 @@ public class MessageUtils
      */
     public static void sendRemindMessage(Borrow borrow)
     {
-        String u_name = borrow.getU_name() + (borrow.getU_type().equals("学生")?"同学":"老师");
+        String u_name = borrow.getU_name() + (borrow.getU_type().equals("学生") ? "同学" : "老师");
         String u_phone = borrow.getU_phone();
         String d_name = borrow.getD_name();
         String d_saveSite = borrow.getD_saveSite();

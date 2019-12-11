@@ -31,7 +31,7 @@ public class RespondToFeedbackServlet extends HttpServlet
         //返回参数
         AdminService adminService = new AdminServiceImpl();
         PrintWriter printWriter = response.getWriter();
-        printWriter.write(adminService.respondToUserFeedback(content,f_no).toJSONString());
+        printWriter.write(adminService.respondToUserFeedback(content, f_no).toJSONString());
 
         printWriter.flush();
         printWriter.close();

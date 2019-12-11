@@ -5,6 +5,9 @@ E:\IDEA WorkStation\CampusDevice\src\main\java\bean\Message.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\admin\OverDueServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\UnfinishedReservationServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\service\impl\AdminServiceImpl.java
+E:\IDEA WorkStation\CampusDevice\src\main\java\bean\Specialty.java
+E:\IDEA WorkStation\CampusDevice\src\main\java\dao\impl\SpecialtyDaoImpl.java
+E:\IDEA WorkStation\CampusDevice\src\main\java\bean\Academy.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\admin\UploadServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\utils\ExcelUtils.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\admin\GetFeedbackContentServlet.java
@@ -26,19 +29,21 @@ E:\IDEA WorkStation\CampusDevice\src\main\java\dao\impl\CommentDaoImpl.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\dao\impl\CreditRecordDaoImpl.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\dao\impl\ReturnDeviceDaoImpl.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\dao\ReservationDao.java
-E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\LoginServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\service\UserService.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\admin\RemindOverDueServlet.java
+E:\IDEA WorkStation\CampusDevice\src\main\java\dao\AcademyDao.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\dao\ReturnDeviceDao.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\FinishedReservationServlet.java
-E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\VerifyCodeServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\utils\MessageUtils.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\CancelReservationServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\dao\impl\UserDaoImpl.java
+E:\IDEA WorkStation\CampusDevice\src\main\java\service\impl\SystemServiceImpl.java
+E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\system\VerifyCodeServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\admin\RefuseReservationServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\TrackDeviceServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\admin\EditDeviceServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\AllServlet.java
+E:\IDEA WorkStation\CampusDevice\src\main\java\dao\impl\AcademyDaoImpl.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\admin\RespondToFeedbackServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\admin\HandleBorrowServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\HotServlet.java
@@ -49,6 +54,7 @@ E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\DeviceCommentServlet
 E:\IDEA WorkStation\CampusDevice\src\main\java\dao\impl\FeedbackDaoImpl.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\listener\task\SetOverDueTask.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\DeviceDetailServlet.java
+E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\system\LoginServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\dao\impl\ReservationDaoImpl.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\admin\HandleReservationServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\admin\ReservationDetailServlet.java
@@ -57,6 +63,7 @@ E:\IDEA WorkStation\CampusDevice\src\main\java\dao\impl\TrackDaoImpl.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\dao\MessageDao.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\dao\AdminDao.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\bean\Feedback.java
+E:\IDEA WorkStation\CampusDevice\src\main\java\service\SystemService.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\UserInfoServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\dao\FeedbackDao.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\FeedbackToAdminServlet.java
@@ -74,6 +81,7 @@ E:\IDEA WorkStation\CampusDevice\src\main\java\bean\Comment.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\bean\CreditRule.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\dao\CreditRuleDao.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\utils\FtpUtils.java
+E:\IDEA WorkStation\CampusDevice\src\main\java\dao\SpecialtyDao.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\CreditRecordServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\user\RegisterServlet.java
 E:\IDEA WorkStation\CampusDevice\src\main\java\servlet\admin\ConfirmReturnServlet.java

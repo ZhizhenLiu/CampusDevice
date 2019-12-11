@@ -11,7 +11,7 @@ public interface CreditRuleDao
     void addCreditRule(CreditRule cr);
 
     //分页查询所有的规则
-    List<CreditRule> getAllCreditRules(int page,int count);
+    List<CreditRule> getAllCreditRules(int page, int count);
 
     //查询某一条规则
     CreditRule getCreditRule(int cr_no);

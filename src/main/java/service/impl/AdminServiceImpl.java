@@ -112,7 +112,8 @@ public class AdminServiceImpl implements AdminService
         if (reservationList.isEmpty())
         {
             info.put("flag", 0);
-            errMsg.add("该设备没有预约队列");        }
+            errMsg.add("该设备没有预约队列");
+        }
         else
         {
             info.put("flag", 1);
@@ -195,7 +196,7 @@ public class AdminServiceImpl implements AdminService
                 info.put("flag", 0);
                 errMsg.add("借用表中插入记录失败");
             }
-            flag = messageDao.sendMessage(u_no, u_name+"，管理员已批准你的预约，设备："+d_name+"。请在今日内到"+d_saveSite+"领取设备");
+            flag = messageDao.sendMessage(u_no, u_name + "，管理员已批准你的预约，设备：" + d_name + "。请在今日内到" + d_saveSite + "领取设备");
             if (flag == 0)
             {
                 info.put("flag", 0);
@@ -223,7 +224,7 @@ public class AdminServiceImpl implements AdminService
 
         Reservation reservation = reservationDao.getReservation(r_no);
         String u_no = reservation.getU_no();
-        String u_name = reservation.getU_name() + (reservation.getU_type().equals("学生")?"同学":"老师");
+        String u_name = reservation.getU_name() + (reservation.getU_type().equals("学生") ? "同学" : "老师");
         String d_name = reservation.getD_name();
         info.put("flag", 1);
 
@@ -293,7 +294,7 @@ public class AdminServiceImpl implements AdminService
         Borrow borrow = borrowDao.getBorrowByNo(b_no);
         String u_no = borrow.getU_no();
         User user = userDao.getUserByNo(u_no);
-        String u_name = user.getU_name() + (user.getU_type().equals("学生")?"同学":"老师");
+        String u_name = user.getU_name() + (user.getU_type().equals("学生") ? "同学" : "老师");
         String d_no = borrow.getD_no();
         String d_name = deviceDao.getDeviceByNo(d_no).getD_name();
         Date now = new Date();
@@ -329,8 +330,8 @@ public class AdminServiceImpl implements AdminService
         if (flag == 0) errMsg.add("确认设备归还失败");
 
         //发送成功归还提示信息
-        flag = messageDao.sendMessage(u_no, u_name +"，管理员已确认你归还设备："+ d_name+"，感谢你的合作");
-        if(flag == 0)
+        flag = messageDao.sendMessage(u_no, u_name + "，管理员已确认你归还设备：" + d_name + "，感谢你的合作");
+        if (flag == 0)
         {
             errMsg.add("发送提示信息失败");
         }
@@ -372,8 +373,8 @@ public class AdminServiceImpl implements AdminService
         List<String> trackingUserNoList = trackDao.getTrackingUserNoList(d_no);
         for (String userNo : trackingUserNoList)
         {
-            flag = messageDao.sendMessage(userNo,  "你跟踪的设备："+ d_name+ "已经归还。如需借用，请及时预约");
-            if(flag == 0) errMsg.add("发送提示信息失败");
+            flag = messageDao.sendMessage(userNo, "你跟踪的设备：" + d_name + "已经归还。如需借用，请及时预约");
+            if (flag == 0) errMsg.add("发送提示信息失败");
         }
 
         //设备借用次数增长
@@ -401,7 +402,7 @@ public class AdminServiceImpl implements AdminService
         //根据借用记录查找借用记录
         Borrow borrow = borrowDao.getBorrowByNo(b_no);
         String u_no = borrow.getU_no() + borrow.getU_type();
-        String u_name = borrow.getU_name() + (borrow.getU_type().equals("学生")?"同学":"老师");
+        String u_name = borrow.getU_name() + (borrow.getU_type().equals("学生") ? "同学" : "老师");
         String d_name = borrow.getD_name();
         String d_saveSite = borrow.getD_saveSite();
 
@@ -417,6 +418,7 @@ public class AdminServiceImpl implements AdminService
 
         return info;
     }
+
     /*
      * @Description: 设置设备图片url
      * @Param d_no  url
@@ -433,7 +435,7 @@ public class AdminServiceImpl implements AdminService
             errMsg.add("设置设备url错误");
             info.put("flag", 0);
         }
-        else  info.put("flag", 1);
+        else info.put("flag", 1);
         info.put("errMsg", errMsg);
 
         return info;
@@ -451,7 +453,7 @@ public class AdminServiceImpl implements AdminService
         JSONArray errMsg = new JSONArray();
 
         FeedbackDao feedbackDao = new FeedbackDaoImpl();
-        List<Feedback> feedbackList = feedbackDao.getFeedbackByPage(page,count);
+        List<Feedback> feedbackList = feedbackDao.getFeedbackByPage(page, count);
         if (feedbackList.isEmpty())
         {
             info.put("flag", 0);
@@ -479,7 +481,7 @@ public class AdminServiceImpl implements AdminService
         JSONArray errMsg = new JSONArray();
 
         FeedbackDao feedbackDao = new FeedbackDaoImpl();
-        int flag = feedbackDao.respondToUserFeedback(m_content,f_no);
+        int flag = feedbackDao.respondToUserFeedback(m_content, f_no);
         if (flag == -1 || flag == 0)
         {
             info.put("flag", 0);
@@ -491,6 +493,25 @@ public class AdminServiceImpl implements AdminService
         }
         info.put("errMsg", errMsg);
 
+        return info;
+    }
+
+    /*
+     * @Description: 添加设备
+     * @Param device
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject addDevice(Device device)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+        DeviceDao deviceDao = new DeviceDaoImpl();
+
+        int flag = 1;
+        flag = deviceDao.addDevice(device);
+        if (flag == 0) errMsg.add("添加设备失败");
+        info.put("flag", flag);
+        info.put("errMsg", errMsg);
         return info;
     }
 

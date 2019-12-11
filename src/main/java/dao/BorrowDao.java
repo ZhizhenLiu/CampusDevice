@@ -85,4 +85,11 @@ public interface BorrowDao
      */
     List<String> getOverDueList();
 
+    /*
+     * @Description: 获得逾期的用户借用信息以及他未还的天数
+     * @Param b_no
+     * @Return: int
+     */
+    List<Integer> getOverDueBorrowAndDays();
+
 }

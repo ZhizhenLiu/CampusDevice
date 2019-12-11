@@ -74,8 +74,8 @@ public class UserServiceImpl implements UserService
         {
             info.put("errMsg", "注册用户失败");
         }
-        flag = creditRecordDao.initCredit(user.getU_no(), user.getU_type().equals("学生")?100:200);
-        if (flag == 0 )
+        flag = creditRecordDao.initCredit(user.getU_no(), user.getU_type().equals("学生") ? 100 : 200);
+        if (flag == 0)
         {
             errMsg.add("用户信用分初始化失败");
         }
@@ -250,7 +250,7 @@ public class UserServiceImpl implements UserService
             info.put("flag", 0);
             errMsg.add("用户同意协商申请失败");
         }
-        flag = messageDao.sendMessage(u_no, "你已同意预约协商：" + d_name +"。预约时间修改为：" + startDate + " ~ " + returnDate);
+        flag = messageDao.sendMessage(u_no, "你已同意预约协商：" + d_name + "。预约时间修改为：" + startDate + " ~ " + returnDate);
         if (flag == 0)
         {
             info.put("flag", 0);
@@ -350,9 +350,7 @@ public class UserServiceImpl implements UserService
         String u_no = user.getU_no();
 
         int flag = 1;
-        flag = messageDao.setAllMessageHaveRead(u_no);
-        if (flag == 0) errMsg.add("设置消息已读失败");
-
+        messageDao.setAllMessageHaveRead(u_no);
         List<Message> messageList = messageDao.getMessageByPage(u_no, page, count);
         if (messageList.isEmpty())
         {
@@ -467,7 +465,7 @@ public class UserServiceImpl implements UserService
             if (flag == 0) errMsg.add("插入评论记录失败");
 
             //修改借用状态为归还评价
-            flag =borrowDao.finishComment(b_no);
+            flag = borrowDao.finishComment(b_no);
             if (flag == 0) errMsg.add("修改已评价状态失败");
         }
 
@@ -556,7 +554,7 @@ public class UserServiceImpl implements UserService
      * @Return: com.alibaba.fastjson.JSONObject
      */
     @Override
-    public JSONObject feedbackToAdmin(String wechatId,String f_content)
+    public JSONObject feedbackToAdmin(String wechatId, String f_content)
     {
         JSONObject info = new JSONObject();
         JSONArray errMsg = new JSONArray();
@@ -565,18 +563,18 @@ public class UserServiceImpl implements UserService
 
         User user = userDao.getUserByWechatID(wechatId);
         String u_no = user.getU_no();
-        int f_no = feedbackDao.addUserFeedbackToDb(u_no,f_content);
+        int f_no = feedbackDao.addUserFeedbackToDb(u_no, f_content);
         int flag = 0;
-        if(f_no > 0)
+        if (f_no > 0)
         {
             flag = 1;
         }
-        info.put("flag",flag);
-        if(flag == 0)
+        info.put("flag", flag);
+        if (flag == 0)
         {
             errMsg.add("添加用户反馈到反馈表错误");
         }
-        info.put("errMsg",errMsg);
+        info.put("errMsg", errMsg);
 
         return info;
     }

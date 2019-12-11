@@ -25,7 +25,8 @@ public class UploadServlet extends HttpServlet
         response.setCharacterEncoding("utf-8");
 
         //获取文件需要上传到的路径
-        String path = getServletContext().getRealPath("/") + "img/device";;
+        String path = getServletContext().getRealPath("/") + "img/device";
+        ;
         System.out.println(path);
         File dir = new File(path);
         if (!dir.exists())
@@ -65,10 +66,11 @@ public class UploadServlet extends HttpServlet
                 {
                     //获取具体输入的字符串
                     d_no = item.getString();
-                    destPath = path + "/"+ d_no + ".png";
-                    deviceUrl = deviceUrl + "/"+ d_no + ".png";
+                    destPath = path + "/" + d_no + ".png";
+                    deviceUrl = deviceUrl + "/" + d_no + ".png";
                 }
-                else {
+                else
+                {
                     picture = item;
                 }
             }
@@ -101,6 +103,7 @@ public class UploadServlet extends HttpServlet
 
         PrintWriter printWriter = response.getWriter();
         AdminService adminService = new AdminServiceImpl();
+        System.out.println(d_no +" "+ deviceUrl);
         printWriter.write(adminService.setDeviceImgUrl(d_no, deviceUrl).toJSONString());
 
         printWriter.flush();

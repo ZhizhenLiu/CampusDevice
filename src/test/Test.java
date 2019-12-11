@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONArray;
 import dao.*;
 import dao.impl.*;
 import service.AdminService;
+import service.SystemService;
 import service.UserService;
 import service.impl.AdminServiceImpl;
+import service.impl.SystemServiceImpl;
 import service.impl.UserServiceImpl;
 
 import java.text.ParseException;
@@ -42,11 +44,13 @@ public class Test {
 
        UserService userService = new UserServiceImpl();
        AdminService adminService = new AdminServiceImpl();
+       SystemService systemService = new SystemServiceImpl();
        UserDao userDao = new UserDaoImpl();
        DeviceDao deviceDao = new DeviceDaoImpl();
        BorrowDao borrowDao = new BorrowDaoImpl();
        CommentDao  commentDao = new CommentDaoImpl();
        ReservationDao reservationDao = new ReservationDaoImpl();
+       SpecialtyDao specialtyDao = new SpecialtyDaoImpl();
 //      System.out.println(userService.reserveDevice("1713714S","o0ug241yqbsjM0N5xR5qhLxi8gH0","2019-10-01","2019-10-07"));
 //       System.out.println(adminService.getReservedDevice(""));
 
@@ -70,6 +74,7 @@ public class Test {
 //     System.out.println(userService.reserveDevice("1905399S",wechatID,"2019-12-01", "2019-12-08"));
 //       System.out.println(adminService.confirmBorrow(56));
 
-       System.out.println(userService.getCreditRecordByPage(wechatID, 1 , 10));
+//       System.out.println(adminService.setDeviceImgUrl("1713714S", "http://49.235.73.29:8083/img/device/1905399S.png"));
+       System.out.println(systemService.isUserExist("1"));
    }
 }

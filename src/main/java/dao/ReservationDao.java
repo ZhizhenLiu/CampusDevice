@@ -84,7 +84,7 @@ public interface ReservationDao
      * @Param u_no  d_no  r_feedBack
      * @Return: int
      */
-    int refuseReserve(int r_no , String r_feedBack);
+    int refuseReserve(int r_no, String r_feedBack);
 
     /*
      * @Description: 用户查看申请中预约：预约中、协商中

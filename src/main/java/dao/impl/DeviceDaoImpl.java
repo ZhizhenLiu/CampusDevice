@@ -79,7 +79,7 @@ public class DeviceDaoImpl implements DeviceDao
         try
         {
             pStmt = con.prepareStatement(sql);
-            pStmt.setInt(1, (page-1)*count);
+            pStmt.setInt(1, (page - 1) * count);
             pStmt.setInt(2, count);
             rs = pStmt.executeQuery();
 
@@ -135,8 +135,6 @@ public class DeviceDaoImpl implements DeviceDao
                 device.setD_no(rs.getString("d_no"));
                 device.setD_name(rs.getString("d_name"));
                 device.setD_model(rs.getString("d_model"));
-                device.setD_mainUse(rs.getString("d_main_use"));
-                device.setD_importantParam(rs.getString("d_important_param"));
                 device.setD_saveSite(rs.getString("d_save_site"));
                 device.setD_state(rs.getString("d_state"));
                 device.setA_name(rs.getString("a_name"));
@@ -296,8 +294,6 @@ public class DeviceDaoImpl implements DeviceDao
                 device.setD_state(rs.getString("d_state"));
                 device.setD_storeDate(rs.getString("d_store_date"));
                 device.setD_borrowedTimes(rs.getInt("d_borrowed_times"));
-                device.setD_importantParam(rs.getString("d_important_param"));
-                device.setD_mainUse(rs.getString("d_main_use"));
                 device.setD_photo(rs.getString("d_photo"));
             }
         }
@@ -378,11 +374,11 @@ public class DeviceDaoImpl implements DeviceDao
             con = JDBCUtils.getConnection();
             //参数不太好用setString替换，直接字符串代替也没错
             sql = "SELECT * FROM device WHERE d_name LIKE '%" + keyword + "%' OR " +
-                  "d_model like '%" + keyword + "%' OR " +
-                  "d_save_site LIKE '%" + keyword + "%' " +
-                  "LIMIT ?, ?";
+                    "d_model like '%" + keyword + "%' OR " +
+                    "d_save_site LIKE '%" + keyword + "%' " +
+                    "LIMIT ?, ?";
             pStmt = con.prepareStatement(sql);
-            pStmt.setInt(1, (page-1)*count);
+            pStmt.setInt(1, (page - 1) * count);
             pStmt.setInt(2, count);
 
             //替换参数，从1开始
@@ -420,7 +416,6 @@ public class DeviceDaoImpl implements DeviceDao
      */
     public int setDeviceImgUrl(String d_no, String url)
     {
-
         //初始化
         con = null;
         pStmt = null;
@@ -435,8 +430,10 @@ public class DeviceDaoImpl implements DeviceDao
             pStmt.setString(1, url);
             pStmt.setString(2, d_no);
 
+            System.out.println(url + " " + d_no);
             //替换参数，从1开始
             flag = pStmt.executeUpdate();
+            System.out.println(flag);
         }
         catch (SQLException e)
         {
@@ -482,6 +479,51 @@ public class DeviceDaoImpl implements DeviceDao
             JDBCUtils.closeAll(rs, pStmt, con);
         }
         return flag;
+    }
+
+
+    /*
+     * @Description: 添加设备
+     * @Param device
+     * @Return: int
+     */
+    public int addDevice(Device device)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        int flag = 0;
+        try
+        {
+            con = JDBCUtils.getConnection();
+            String sql = "INSERT INTO device VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            pStmt = con.prepareStatement(sql);
+            pStmt.setString(1, device.getD_no());
+            pStmt.setString(2, device.getD_name());
+            pStmt.setString(3, device.getD_model());
+            pStmt.setString(4, device.getD_saveSite());
+            pStmt.setString(5, device.getA_no());
+            pStmt.setString(6, device.getD_factoryNo());
+            pStmt.setString(7, device.getD_state());
+            pStmt.setString(8, device.getD_storeDate());
+            pStmt.setInt(9, 0);
+            pStmt.setString(10, device.getD_photo());
+
+            //更新状态
+            flag = pStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return flag;
+
     }
 
 }

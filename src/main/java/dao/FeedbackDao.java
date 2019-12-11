@@ -5,10 +5,11 @@ import bean.Message;
 
 import java.util.List;
 
-public interface FeedbackDao {
+public interface FeedbackDao
+{
 
     //将用户的反馈信息添加到feedback表中并返回f_no
-    int addUserFeedbackToDb(String u_no,String f_content);
+    int addUserFeedbackToDb(String u_no, String f_content);
 
     //通过用户的f_no查找到用户的反馈信息
     Feedback getUserByFeedback(int f_no);
@@ -20,5 +21,5 @@ public interface FeedbackDao {
     List<String> getFeedbackByStatistics();
 
     //管理员回复用户的反馈（提供模板，方便操作）
-    int respondToUserFeedback(String m_content,int f_no);
+    int respondToUserFeedback(String m_content, int f_no);
 }
