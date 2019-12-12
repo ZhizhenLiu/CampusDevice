@@ -32,7 +32,7 @@ public class EditUserInfoServlet extends javax.servlet.http.HttpServlet
         user.setU_phone(u_phone);
         user.setU_email(u_email);
         user.setU_mentorName(u_mentorName);
-        user.setU_mentorName(u_mentorPhone);
+        user.setU_mentorPhone(u_mentorPhone);
 
         UserService userService = new UserServiceImpl();
         printWriter.write(userService.editUserInfo(user).toJSONString());
