@@ -595,7 +595,7 @@ public class AdminServiceImpl implements AdminService
                     break;
                 }
             }
-            flag = deviceDao.setDeviceName(d_no, d_name);
+            flag = deviceDao.setDeviceState(d_no, d_state);
             if (flag == 0) errMsg.add("修改设备状态失败");
         }
 
