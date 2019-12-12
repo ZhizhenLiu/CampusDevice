@@ -1,5 +1,6 @@
 package servlet.admin;
 
+import bean.Device;
 import service.AdminService;
 import service.impl.AdminServiceImpl;
 
@@ -24,11 +25,15 @@ public class EditDeviceServlet extends HttpServlet
         String d_no = request.getParameter("d_no");
         String d_name = request.getParameter("d_name");
         String d_state = request.getParameter("d_state");
+        Device device = new Device();
+        device.setD_no(d_no);
+        device.setD_name(d_name);
+        device.setD_state(d_state);
 
         //返回结果
         PrintWriter printWriter = response.getWriter();
         AdminService adminService = new AdminServiceImpl();
-        printWriter.write(adminService.editDevice(d_no, d_name, d_state).toJSONString());
+        printWriter.write(adminService.editDevice(device).toJSONString());
 
         printWriter.flush();
         printWriter.close();
@@ -36,6 +41,6 @@ public class EditDeviceServlet extends HttpServlet
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-
+        doPost(request, response);
     }
 }

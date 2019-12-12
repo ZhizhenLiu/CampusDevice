@@ -11,6 +11,7 @@ import utils.MessageUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -136,19 +137,26 @@ public class AdminServiceImpl implements AdminService
         String u_no = reservation.getU_no();
         String u_name = reservation.getU_name() + reservation.getU_type();
         String d_name = reservation.getD_name();
-        info.put("flag", 1);
-        int flag = reservationDao.editReservation(r_no, startDate, endDate, feedBack);
-        if (flag == 0)
+
+        int flag = 1;
+        //判断是否已经确认借用给用户: 防止web端小程序端同时借用
+        if (reservation.getR_state() != 2)
         {
-            info.put("flag", 0);
-            errMsg.add("编辑修改预约失败");
+            //编辑预约，修改预约状态
+            flag = reservationDao.editReservation(r_no, startDate, endDate, feedBack);
+            if (flag == 0)  errMsg.add("编辑修改预约失败");
+
+            //向用户发送提示消息
+            flag = messageDao.sendMessage(u_no, u_name + "，你有一条来自管理员的预约协商：" + d_name + "，请在我的预约中查看详情");
+            if (flag == 0) errMsg.add("发送提示消息失败");
         }
-        flag = messageDao.sendMessage(u_no, u_name + "，你有一条来自管理员的预约协商：" + d_name + "，请在我的预约中查看详情");
-        if (flag == 0)
+        else
         {
-            info.put("flag", 0);
-            errMsg.add("发送提示消息失败");
+            flag = 0;
+            errMsg.add("该预约请求已被处理");
         }
+
+        info.put("flag", flag);
         info.put("errMsg", errMsg);
 
         return info;
@@ -324,7 +332,8 @@ public class AdminServiceImpl implements AdminService
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try
         {
-            returnDate = simpleDateFormat.parse(borrow.getB_returnDate());
+            //归还日期加一天，防止当天归还设置为逾期归还
+            returnDate = new Date(simpleDateFormat.parse(borrow.getB_returnDate()).getTime() + 24*3600*1000);
         }
         catch (ParseException e)
         {
@@ -332,21 +341,22 @@ public class AdminServiceImpl implements AdminService
         }
 
         int flag = 1;
-        System.out.println(returnDate + " " + now);
-
         //判断是否已经确认设备归还: 防止web端小程序端同时确认归还
         int b_state = borrowDao.getBorrowByNo(b_no).getB_state();
         if (b_state == -1 || b_state == 0)
         {
+            System.out.println(returnDate + " " + now);
             //及时归还
-            if (returnDate.getTime() >= now.getTime())
+            if (now.getTime() <= returnDate.getTime())
             {
+                System.out.println(1);
                 flag = borrowDao.returnOnTime(b_no);
                 if (flag == 0) errMsg.add("修改借用记录状态为按时归还失败");
             }
             //逾期归还
             else
             {
+                System.out.println(2);
                 flag = borrowDao.returnOutOfTime(b_no);
                 if (flag == 0) errMsg.add("修改借用表记录状态为逾期归还失败");
             }
@@ -548,13 +558,16 @@ public class AdminServiceImpl implements AdminService
 
     /*
      * @Description: 管理员修改设备
-     * @Param d_no  d_name  d_state  d_importantParam  d_mainUse
+     * @Param device
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject editDevice(String d_no, String d_name, String d_state)
+    public JSONObject editDevice(Device device)
     {
         JSONObject info = new JSONObject();
         JSONArray errMsg = new JSONArray();
+        String d_no = device.getD_no();
+        String d_name = device.getD_name();
+        String d_state = device.getD_state();
 
         int flag = 1;
         if (d_name != null)
@@ -564,8 +577,26 @@ public class AdminServiceImpl implements AdminService
         }
         if (d_state != null)
         {
-            flag = deviceDao.setDeviceState(d_no, d_state);
-            if (flag == 0) errMsg.add("修改设备名称失败");
+            switch (d_state)
+            {
+                case "inStore":
+                {
+                    d_state = "在库";
+                    break;
+                }
+                case "damaged":
+                {
+                    d_state = "损坏";
+                    break;
+                }
+                case "scrapped":
+                {
+                    d_state = "报废";
+                    break;
+                }
+            }
+            flag = deviceDao.setDeviceName(d_no, d_name);
+            if (flag == 0) errMsg.add("修改设备状态失败");
         }
 
         info.put("flag", flag);

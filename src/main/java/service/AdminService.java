@@ -106,8 +106,8 @@ public interface AdminService
 
     /*
      * @Description: 管理员修改设备
-     * @Param d_no  d_name  d_state  importantParameter  mainUse
+     * @Param device
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject editDevice(String d_no, String d_name, String d_state);
+    JSONObject editDevice(Device device);
 }

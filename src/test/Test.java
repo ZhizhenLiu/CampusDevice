@@ -1,3 +1,4 @@
+import bean.Borrow;
 import bean.User;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -42,7 +43,6 @@ public class Test {
    @org.junit.jupiter.api.Test
    void Test3()
    {
-
        UserService userService = new UserServiceImpl();
        AdminService adminService = new AdminServiceImpl();
        SystemService systemService = new SystemServiceImpl();
@@ -52,16 +52,14 @@ public class Test {
        CommentDao  commentDao = new CommentDaoImpl();
        ReservationDao reservationDao = new ReservationDaoImpl();
        SpecialtyDao specialtyDao = new SpecialtyDaoImpl();
-//      System.out.println(userService.reserveDevice("1713714S","o0ug241yqbsjM0N5xR5qhLxi8gH0","2019-10-01","2019-10-07"));
-//       System.out.println(adminService.getReservedDevice(""));
 
-       System.out.println();
-       System.out.println();
+//         User user = new User("u_no", "u_name", "wechatID", "u_email", "u_phone", "teacher".equals("student")?100:200, "teacher".equals("student")?"学生":"老师", "u_mentorName", "u_mentorPhone", -1, "sname",-1, "amname");
+        String wechatID = "wechatID";
+        String d_no = "1905399S";
 
-       String wechatID = "o0ug241yqbsjM0N5xR5qhLxi8gH0";
-
-     User user = new User("u_no", "u_name", "wechatID", "u_email", "u_phone", "teacher".equals("student")?100:200, "teacher".equals("student")?"学生":"老师", "u_mentorName", "u_mentorPhone", -1, "sname",-1, "amname");
-
-
+        User user = new User();
+        user.setU_no("u_no");
+        user.setU_name("戏子");
+       System.out.println(userService.editUserInfo(user));
    }
 }

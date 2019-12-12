@@ -93,7 +93,7 @@ public class ReservationDaoImpl implements ReservationDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT * FROM reservation WHERE u_no = ? AND d_no = ? AND r_state = 0 ";
+            sql = "SELECT * FROM reservation WHERE u_no = ? AND d_no = ? AND r_state IN (0, 2, 3) ";
             pStmt = con.prepareStatement(sql);
             pStmt.setString(1, u_no);
             pStmt.setString(2, d_no);
@@ -205,7 +205,7 @@ public class ReservationDaoImpl implements ReservationDao
             sql = "SELECT d.d_no, d.d_name, d.d_model, COUNT(*) r_sum " +
                     "FROM reservation r, device d " +
                     "WHERE r.d_no = d.d_no " +
-                    "AND d.a_no = ? AND r_state IN(0, 2, 3) " +
+                    "AND d.a_no = ? AND r_state IN(0, 3) " +
                     "GROUP BY d.d_no, d.d_name, d.d_model " +
                     "ORDER BY r_sum DESC ";
             pStmt = con.prepareStatement(sql);
@@ -256,7 +256,7 @@ public class ReservationDaoImpl implements ReservationDao
                     "FROM user u, reservation r " +
                     "WHERE u.u_no = r.u_no " +
                     "AND d_no = ? " +
-                    "AND r_state IN(0, 2, 3) " +
+                    "AND r_state IN(0, 3) " +
                     "ORDER BY r_reservation_date DESC,u_credit_grade DESC";
             pStmt = con.prepareStatement(sql);
 
@@ -267,6 +267,7 @@ public class ReservationDaoImpl implements ReservationDao
             while (rs.next())
             {
                 Reservation reservation = new Reservation();
+                reservation.setR_state(rs.getInt("r_state"));
                 reservation.setU_no(rs.getString("u_no"));
                 reservation.setU_name(rs.getString("u_name"));
                 reservation.setU_type(rs.getString("u_type"));
@@ -431,7 +432,7 @@ public class ReservationDaoImpl implements ReservationDao
             con = JDBCUtils.getConnection();
             sql = "UPDATE reservation SET r_state = 1  " +
                     "WHERE r_no = ? " +
-                    "AND r_state = 0";
+                    "AND r_state IN (0, 3)";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
