@@ -9,6 +9,7 @@ import service.UserService;
 import service.impl.AdminServiceImpl;
 import service.impl.SystemServiceImpl;
 import service.impl.UserServiceImpl;
+import utils.MessageUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -59,22 +60,8 @@ public class Test {
 
        String wechatID = "o0ug241yqbsjM0N5xR5qhLxi8gH0";
 
+     User user = new User("u_no", "u_name", "wechatID", "u_email", "u_phone", "teacher".equals("student")?100:200, "teacher".equals("student")?"学生":"老师", "u_mentorName", "u_mentorPhone", -1, "sname",-1, "amname");
 
-//       System.out.println(userService.getReservationByPage("o0ug241yqbsjM0N5xR5qhLxi8gH0",1 ,10, true));
-//       System.out.println(reservationDao.getFinishedReservationByPage("201726010310", 1, 10));
-//       System.out.println();
-//       System.out.println(userService.getReservationByPage("",1 ,10, false));
-//       System.out.println(reservationDao.getUnfinishedReservationByPage("201726010310", 1, 10));
-//       System.out.println(userService.reserveDevice("1905399S", "o0ug241yqbsjM0N5xR5qhLxi8gH0", "2019-12-06", "2019-12-12"));
-//       System.out.println(adminService.editReservation(39, "2019-12-15", "2019-12-30", "原借用时间段有人外借"));
-//       System.out.println(userService.getReservationByPage(wechatID,1,10,true));
-//       System.out.println();
-//       System.out.println(userService.getReservationByPage(wechatID,1,10,false));
 
-//     System.out.println(userService.reserveDevice("1905399S",wechatID,"2019-12-01", "2019-12-08"));
-//       System.out.println(adminService.confirmBorrow(56));
-
-//       System.out.println(adminService.setDeviceImgUrl("1713714S", "http://49.235.73.29:8083/img/device/1905399S.png"));
-       System.out.println(userService.getJSONUserByWechatID(wechatID));
    }
 }

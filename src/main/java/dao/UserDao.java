@@ -15,6 +15,20 @@ public interface UserDao
      */
     User getUserByWechatID(String wechatID);
 
+    /*
+     * @Description: 用户信息需要获取专业名称
+     * @Param u_no
+     * @Return: java.lang.String
+     */
+    String getUserSpecialityName(String u_no);
+
+    /*
+     * @Description: 用户信息需要获取院系名称
+     * @Param u_no
+     * @Return: int
+     */
+    String getUserAcademyName(String u_no);
+
 
     /*
      * @Description: 用户首次登陆进行注册添加到user表中
@@ -22,13 +36,6 @@ public interface UserDao
      * @Return: JSONObject
      */
     int registerUser(User user);
-
-    /*
-     * @Description: 用户修改个人信息
-     * @Param user
-     * @Return: int
-     */
-    int changeUserInfo(User user);
 
     /*
      * @Description: 通过用户学工号获取用户对象
@@ -85,4 +92,11 @@ public interface UserDao
      * @Return: int
      */
     int setUserMentorPhone(String u_no, String u_mentorPhone);
+
+    /*
+     * @Description: 设置用户专业班级
+     * @Param u_no  s_no
+     * @Return: int
+     */
+    int setUserSpecialtyNo(String u_no, int s_no);
 }

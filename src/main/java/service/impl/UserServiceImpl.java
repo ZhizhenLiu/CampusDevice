@@ -42,18 +42,27 @@ public class UserServiceImpl implements UserService
      */
     public JSONObject getJSONUserByWechatID(String wechatID)
     {
-        User user = userDao.getUserByWechatID(wechatID);
         JSONObject info = new JSONObject();
+
+        User user = userDao.getUserByWechatID(wechatID);
+        int flag = 1;
         if (user == null)
         {
-            info.put("flag", 0);
+            flag = 0;
             info.put("errMsg", "通过wechatID获取用户失败");
         }
         else
         {
-            info.put("flag", 1);
+            String u_no = user.getU_no();
+            if (user.getU_type().equals("学生"))
+            {
+                user.setS_name(userDao.getUserSpecialityName(u_no));
+                user.setAm_name(userDao.getUserAcademyName(u_no));
+            }
+            flag = 1;
             info.put("user", user);
         }
+        info.put("flag", flag);
         return info;
     }
 
@@ -68,20 +77,38 @@ public class UserServiceImpl implements UserService
         JSONArray errMsg = new JSONArray();
 
         int flag = 1;
-        flag = userDao.registerUser(user);
-        info.put("flag", flag);
-        if (flag == 0)
+        System.out.println(user);
+
+        //判断用户是否已经注册过该学工号
+        if (userDao.getUserByNo(user.getU_no()) == null)
         {
-            info.put("errMsg", "注册用户失败");
+            errMsg.add("该学工号已经注册");
+            flag = 0;
         }
-        flag = creditRecordDao.initCredit(user.getU_no(), user.getU_type().equals("学生") ? 100 : 200);
-        if (flag == 0)
+        else
         {
-            errMsg.add("用户信用分初始化失败");
+            //注册用户表
+            flag = userDao.registerUser(user);
+            if (flag == 0) errMsg.add("注册用户（不含班级）失败");
+            if (user.getU_type().equals("学生"))
+            {
+                //学生班级修改
+                flag = userDao.setUserSpecialtyNo(user.getU_no(), user.getS_no());
+                if (flag == 0) errMsg.add("注册用户班级修改失败");
+            }
+
+            //发送欢迎消息
+            flag = messageDao.sendMessage(user.getU_no(), "微设备系统欢迎你。期待能为你带来愉快的体验");
+            if (flag == 0) errMsg.add("发送欢迎消息失败");
+
+            //信誉积分初始记录
+            flag = creditRecordDao.initCredit(user.getU_no(), user.getU_type().equals("学生") ? 100 : 200);
+            if (flag == 0) errMsg.add("用户信用分初始化失败");
+
         }
-        info.put("errMsg", errMsg);
 
         info.put("flag", flag);
+        info.put("errMsg", errMsg);
         return info;
     }
 
@@ -347,11 +374,13 @@ public class UserServiceImpl implements UserService
         JSONArray errMsg = new JSONArray();
 
         User user = userDao.getUserByWechatID(wechatID);
+        System.out.println(user);
         String u_no = user.getU_no();
 
         int flag = 1;
         messageDao.setAllMessageHaveRead(u_no);
         List<Message> messageList = messageDao.getMessageByPage(u_no, page, count);
+        System.out.println(messageList);
         if (messageList.isEmpty())
         {
             flag = 0;
@@ -592,6 +621,10 @@ public class UserServiceImpl implements UserService
         User user = userDao.getUserByWechatID(wechatID);
         List<Message> messageList = messageDao.getAllUnReadMessage(user.getU_no());
         if (messageList.isEmpty()) errMsg.add("当前无未读消息");
+        else
+        {
+            info.put("messageList", JSONArray.parseArray(JSON.toJSONString(messageList)));
+        }
         info.put("errMsg", errMsg);
         info.put("flag", 1);
 

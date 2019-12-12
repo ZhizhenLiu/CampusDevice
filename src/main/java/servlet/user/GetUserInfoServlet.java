@@ -30,14 +30,14 @@ public class GetUserInfoServlet extends HttpServlet
         JSONObject info = new JSONObject();
         PrintWriter printWriter = response.getWriter();
         UserService userService = new UserServiceImpl();
-        String wechatId = "";
+        String wechatID = "";
 
         //请求成功
         if (result.containsKey("openid"))
         {
-            wechatId = (String) result.get("openid");
-            System.out.println(wechatId);
-            info = userService.getJSONUserByWechatID(wechatId);
+            wechatID = (String) result.get("openid");
+            System.out.println(wechatID);
+            info = userService.getJSONUserByWechatID(wechatID);
             printWriter.write(info.toJSONString());
         }
         //请求失败，返回错误信息

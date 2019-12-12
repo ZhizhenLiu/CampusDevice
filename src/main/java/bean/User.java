@@ -14,10 +14,14 @@ public class User
     private String u_type;
     private String u_mentorName;
     private String u_mentorPhone;
-    private String u_majorClass;
     private int s_no;
 
-    public User(String u_no, String u_name, String u_wechatID, String u_email, String u_phone, int u_creditGrade, String u_type, String u_mentorName, String u_mentorPhone, String u_majorClass, int s_no)
+    //专业学院附加信息
+    private String s_name;
+    private int am_no;
+    private String am_name;
+
+    public User(String u_no, String u_name, String u_wechatID, String u_email, String u_phone, int u_creditGrade, String u_type, String u_mentorName, String u_mentorPhone, int s_no, String s_name, int am_no, String am_name)
     {
         this.u_no = u_no;
         this.u_name = u_name;
@@ -28,8 +32,10 @@ public class User
         this.u_type = u_type;
         this.u_mentorName = u_mentorName;
         this.u_mentorPhone = u_mentorPhone;
-        this.u_majorClass = u_majorClass;
         this.s_no = s_no;
+        this.s_name = s_name;
+        this.am_no = am_no;
+        this.am_name = am_name;
     }
 
     public User()
@@ -126,16 +132,6 @@ public class User
         this.u_mentorPhone = u_mentorPhone;
     }
 
-    public String getU_majorClass()
-    {
-        return u_majorClass;
-    }
-
-    public void setU_majorClass(String u_majorClass)
-    {
-        this.u_majorClass = u_majorClass;
-    }
-
     public int getS_no()
     {
         return s_no;
@@ -144,6 +140,36 @@ public class User
     public void setS_no(int s_no)
     {
         this.s_no = s_no;
+    }
+
+    public String getS_name()
+    {
+        return s_name;
+    }
+
+    public void setS_name(String s_name)
+    {
+        this.s_name = s_name;
+    }
+
+    public int getAm_no()
+    {
+        return am_no;
+    }
+
+    public void setAm_no(int am_no)
+    {
+        this.am_no = am_no;
+    }
+
+    public String getAm_name()
+    {
+        return am_name;
+    }
+
+    public void setAm_name(String am_name)
+    {
+        this.am_name = am_name;
     }
 
     @Override
@@ -159,8 +185,10 @@ public class User
                 ", u_type='" + u_type + '\'' +
                 ", u_mentorName='" + u_mentorName + '\'' +
                 ", u_mentorPhone='" + u_mentorPhone + '\'' +
-                ", u_majorClass='" + u_majorClass + '\'' +
                 ", s_no=" + s_no +
+                ", s_name='" + s_name + '\'' +
+                ", am_no=" + am_no +
+                ", am_name='" + am_name + '\'' +
                 '}';
     }
 }

@@ -37,7 +37,7 @@ public class CreditRecordDaoImpl implements CreditRecordDao
 
             pStmt.setString(1, u_no);
             pStmt.setInt(2, 0);
-            pStmt.setString(3, "湖大微设备欢迎你。期待能为你带来愉快的体验");
+            pStmt.setString(3, "微设备系统欢迎你。期待能为你带来愉快的体验");
             pStmt.setInt(4, score);
 
             flag = pStmt.executeUpdate();

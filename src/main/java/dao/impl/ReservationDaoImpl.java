@@ -219,7 +219,6 @@ public class ReservationDaoImpl implements ReservationDao
             while (rs.next())
             {
                 Reservation reservatioin = new Reservation();
-                reservatioin.setR_state(rs.getInt("r_state"));
                 reservatioin.setD_no(rs.getString("d_no"));
                 reservatioin.setD_name(rs.getString("d_name"));
                 reservatioin.setR_sum(rs.getInt("r_sum"));

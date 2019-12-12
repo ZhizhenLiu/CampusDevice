@@ -172,41 +172,51 @@ public class AdminServiceImpl implements AdminService
         String state = deviceDao.getDeviceState(d_no);
 
         info.put("flag", 1);
-        if (state.equals("在库"))
-        {
-            String borrowDate = reservation.getR_startDate();
-            String returnDate = reservation.getR_returnDate();
 
-            // 预约状态置为1（成功）-> 设备状态修改外借 -> 借用表中插入记录
-            int flag = reservationDao.confirmReserve(r_no);
-            if (flag == 0)
+        //判断是否已经确认借用给用户: 防止web端小程序端同时借用
+        if (reservationDao.getReservation(r_no).getR_state() != 1)
+        {
+            if (state.equals("在库"))
             {
-                info.put("flag", 0);
-                errMsg.add("修改预约状态失败");
+                String borrowDate = reservation.getR_startDate();
+                String returnDate = reservation.getR_returnDate();
+
+                // 预约状态置为1（成功）-> 设备状态修改外借 -> 借用表中插入记录
+                int flag = reservationDao.confirmReserve(r_no);
+                if (flag == 0)
+                {
+                    info.put("flag", 0);
+                    errMsg.add("修改预约状态失败");
+                }
+                flag = deviceDao.setDeviceState(d_no, "外借");
+                if (flag == 0)
+                {
+                    info.put("flag", 0);
+                    errMsg.add("设备状态修改外借失败");
+                }
+                flag = borrowDao.confirmBorrow(u_no, d_no, borrowDate, returnDate);
+                if (flag == 0)
+                {
+                    info.put("flag", 0);
+                    errMsg.add("借用表中插入记录失败");
+                }
+                flag = messageDao.sendMessage(u_no, u_name + "，管理员已批准你的预约，设备：" + d_name + "。请在今日内到" + d_saveSite + "领取设备");
+                if (flag == 0)
+                {
+                    info.put("flag", 0);
+                    errMsg.add("发送成功借用提示失败");
+                }
             }
-            flag = deviceDao.setDeviceState(d_no, "外借");
-            if (flag == 0)
+            else
             {
                 info.put("flag", 0);
-                errMsg.add("设备状态修改外借失败");
-            }
-            flag = borrowDao.confirmBorrow(u_no, d_no, borrowDate, returnDate);
-            if (flag == 0)
-            {
-                info.put("flag", 0);
-                errMsg.add("借用表中插入记录失败");
-            }
-            flag = messageDao.sendMessage(u_no, u_name + "，管理员已批准你的预约，设备：" + d_name + "。请在今日内到" + d_saveSite + "领取设备");
-            if (flag == 0)
-            {
-                info.put("flag", 0);
-                errMsg.add("发送成功借用提示失败");
+                errMsg.add("设备当前状态为" + state + ", 暂不可借用");
             }
         }
         else
         {
             info.put("flag", 0);
-            errMsg.add("设备当前状态为" + state + ", 暂不可借用");
+            errMsg.add("该预约请求已被处理");
         }
         info.put("errMsg", errMsg);
         return info;
@@ -228,22 +238,31 @@ public class AdminServiceImpl implements AdminService
         String d_name = reservation.getD_name();
         info.put("flag", 1);
 
-        int flag = reservationDao.refuseReserve(r_no, r_feedBack);
-        info.put("flag", flag);
-        if (flag == 0)
+        //判断是否已经确认拒绝租借给用户: 防止web端小程序端同时拒绝
+        if (reservation.getR_state() != -1)
         {
-            errMsg.add("拒绝预约失败");
-        }
-
-        //反馈不为空
-        if (r_feedBack != null)
-        {
-            flag = messageDao.sendMessage(u_no, u_name + "，你的预约：" + d_name + "被拒绝。请在我的预约中查看详情");
+            int flag = reservationDao.refuseReserve(r_no, r_feedBack);
             info.put("flag", flag);
             if (flag == 0)
             {
-                errMsg.add("发送消息给用户失败");
+                errMsg.add("拒绝预约失败");
             }
+
+            //反馈不为空
+            if (r_feedBack != null)
+            {
+                flag = messageDao.sendMessage(u_no, u_name + "，你的预约：" + d_name + "被拒绝。请在我的预约中查看详情");
+                info.put("flag", flag);
+                if (flag == 0)
+                {
+                    errMsg.add("发送消息给用户失败");
+                }
+            }
+        }
+        else
+        {
+            info.put("flag", 0);
+            errMsg.add("该预约请求已被处理");
         }
         info.put("errMsg", errMsg);
         return info;
@@ -293,7 +312,9 @@ public class AdminServiceImpl implements AdminService
 
         Borrow borrow = borrowDao.getBorrowByNo(b_no);
         String u_no = borrow.getU_no();
+        System.out.println(u_no);
         User user = userDao.getUserByNo(u_no);
+        System.out.println(user);
         String u_name = user.getU_name() + (user.getU_type().equals("学生") ? "同学" : "老师");
         String d_no = borrow.getD_no();
         String d_name = deviceDao.getDeviceByNo(d_no).getD_name();
@@ -312,78 +333,88 @@ public class AdminServiceImpl implements AdminService
 
         int flag = 1;
         System.out.println(returnDate + " " + now);
-        //及时归还
-        if (returnDate.getTime() >= now.getTime())
+
+        //判断是否已经确认设备归还: 防止web端小程序端同时确认归还
+        int b_state = borrowDao.getBorrowByNo(b_no).getB_state();
+        if (b_state == -1 || b_state == 0)
         {
-            flag = borrowDao.returnOnTime(b_no);
-            if (flag == 0) errMsg.add("修改借用记录状态为按时归还失败");
+            //及时归还
+            if (returnDate.getTime() >= now.getTime())
+            {
+                flag = borrowDao.returnOnTime(b_no);
+                if (flag == 0) errMsg.add("修改借用记录状态为按时归还失败");
+            }
+            //逾期归还
+            else
+            {
+                flag = borrowDao.returnOutOfTime(b_no);
+                if (flag == 0) errMsg.add("修改借用表记录状态为逾期归还失败");
+            }
+
+            //添加到归还表
+            flag = returnDeviceDao.returnDevice(u_no, d_no, b_no, rd_state, comment);
+            if (flag == 0) errMsg.add("确认设备归还失败");
+
+            //发送成功归还提示信息
+            flag = messageDao.sendMessage(u_no, u_name + "，管理员已确认你归还设备：" + d_name + "，感谢你的合作");
+            if (flag == 0)
+            {
+                errMsg.add("发送提示信息失败");
+            }
+
+            //修改设备状态
+            CreditRule creditRule = new CreditRule();
+            switch (rd_state)
+            {
+                case "damaged":
+                {
+                    deviceDao.setDeviceState(d_no, "损坏");
+                    creditRule = creditRuleDao.getCreditRule(6);
+                    break;
+                }
+                case "scrapped":
+                {
+                    deviceDao.setDeviceState(d_no, "报废");
+                    creditRule = creditRuleDao.getCreditRule(7);
+                    break;
+                }
+                //正常归还
+                default:
+                {
+                    deviceDao.setDeviceState(d_no, "在库");
+                    creditRule = creditRuleDao.getCreditRule(1);
+                    break;
+                }
+            }
+
+            //添加信用记录
+            flag = creditRecordDao.updateCredit(u_no, creditRule.getCr_content(), user.getU_creditGrade(), creditRule.getCr_score());
+            if (flag == 0) errMsg.add("更新用户信用记录失败");
+
+            //更新用户信誉分
+            flag = userDao.updateCreditGrade(u_no, creditRule.getCr_score());
+            if (flag == 0) errMsg.add("更新用户信用分数失败");
+
+            //跟踪提醒
+            List<String> trackingUserNoList = trackDao.getTrackingUserNoList(d_no);
+            for (String userNo : trackingUserNoList)
+            {
+                flag = messageDao.sendMessage(userNo, "你跟踪的设备：" + d_name + "已经归还。如需借用，请及时预约");
+                if (flag == 0) errMsg.add("发送提示信息失败");
+            }
+
+            //设备借用次数增长
+            flag = deviceDao.addBorrowedTimes(d_no);
+            if (flag == 0)
+            {
+                errMsg.add("设备借用次数增长失败");
+            }
         }
-        //逾期归还
         else
         {
-            flag = borrowDao.returnOutOfTime(b_no);
-            if (flag == 0) errMsg.add("修改借用表记录状态为逾期归还失败");
+            flag = 0;
+            errMsg.add("该归还请求已被处理");
         }
-
-        //添加到归还表
-        flag = returnDeviceDao.returnDevice(u_no, d_no, b_no, rd_state, comment);
-        if (flag == 0) errMsg.add("确认设备归还失败");
-
-        //发送成功归还提示信息
-        flag = messageDao.sendMessage(u_no, u_name + "，管理员已确认你归还设备：" + d_name + "，感谢你的合作");
-        if (flag == 0)
-        {
-            errMsg.add("发送提示信息失败");
-        }
-
-        //修改设备状态
-        CreditRule creditRule = new CreditRule();
-        switch (rd_state)
-        {
-            case "damaged":
-            {
-                deviceDao.setDeviceState(d_no, "损坏");
-                creditRule = creditRuleDao.getCreditRule(6);
-                break;
-            }
-            case "scrapped":
-            {
-                deviceDao.setDeviceState(d_no, "报废");
-                creditRule = creditRuleDao.getCreditRule(7);
-                break;
-            }
-            //正常归还
-            default:
-            {
-                deviceDao.setDeviceState(d_no, "在库");
-                creditRule = creditRuleDao.getCreditRule(1);
-                break;
-            }
-        }
-
-        //添加信用记录
-        flag = creditRecordDao.updateCredit(u_no, creditRule.getCr_content(), user.getU_creditGrade(), creditRule.getCr_score());
-        if (flag == 0) errMsg.add("更新用户信用记录失败");
-
-        //更新用户信誉分
-        flag = userDao.updateCreditGrade(u_no, creditRule.getCr_score());
-        if (flag == 0) errMsg.add("更新用户信用分数失败");
-
-        //跟踪提醒
-        List<String> trackingUserNoList = trackDao.getTrackingUserNoList(d_no);
-        for (String userNo : trackingUserNoList)
-        {
-            flag = messageDao.sendMessage(userNo, "你跟踪的设备：" + d_name + "已经归还。如需借用，请及时预约");
-            if (flag == 0) errMsg.add("发送提示信息失败");
-        }
-
-        //设备借用次数增长
-        flag = deviceDao.addBorrowedTimes(d_no);
-        if (flag == 0)
-        {
-            errMsg.add("设备借用次数增长失败");
-        }
-
         info.put("flag", flag);
         info.put("errMsg", errMsg);
         return info;

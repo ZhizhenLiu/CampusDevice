@@ -12,7 +12,7 @@ public class MessageUtils
 {
     private static String c_apiUrl = "https://sms_developer.zhenzikj.com";
     private static String c_appId = "102764";
-    private static String c_appSecret = "MWMyOTM1NWItNGYwZS00YThhLWE4NzMtZmVjMzk4MDM5YTQ3";
+    private static String c_appSecret = "NWE1YTg3MTctMWM3ZC00ZjJmLWI5ZWYtYjdhYmMyYTUyY2Q2";
 
     /*
      * @Description: 返回验证码工具类
