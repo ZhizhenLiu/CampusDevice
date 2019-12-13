@@ -8,6 +8,7 @@ import dao.*;
 import dao.impl.*;
 import service.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserServiceImpl implements UserService
@@ -20,6 +21,7 @@ public class UserServiceImpl implements UserService
     private MessageDao messageDao = new MessageDaoImpl();
     private CommentDao commentDao = new CommentDaoImpl();
     private TrackDao trackDao = new TrackDaoImpl();
+    private CreditRuleDao creditRuleDao = new CreditRuleDaoImpl();
 
     /*
      * @Description: 登陆校验，判断用户是否存在
@@ -672,6 +674,30 @@ public class UserServiceImpl implements UserService
         info.put("flag", flag);
         info.put("errMsg", errMsg);
 
+        return info;
+    }
+
+    /*
+     * @Description: 用户查看所有信誉分信息
+     * @Param
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject getAllCreditRules()
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        int flag = 1;
+        List<CreditRule> creditRuleList =  creditRuleDao.getAllCreditRules();
+        if(creditRuleList.isEmpty())
+        {
+            flag = 0;
+            errMsg.add("查询不到信用规则");
+        }
+        else info.put("creditRuleList", JSONArray.parseArray(JSON.toJSONString(creditRuleList)));
+
+        info.put("flag", flag);
+        info.put("errMsg", errMsg);
         return info;
     }
 }

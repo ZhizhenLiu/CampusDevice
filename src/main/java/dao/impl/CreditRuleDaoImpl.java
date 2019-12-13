@@ -27,9 +27,8 @@ public class CreditRuleDaoImpl implements CreditRuleDao
         try
         {
             Connection conn = JDBCUtils.getConnection();
-            String sql = "insert into credit_rule(ce_content, cr_score) values(?,?)";
+            String sql = "INSERT INTO credit_rule(ce_content, cr_score) VALUES (?,?)";
             PreparedStatement ps = conn.prepareStatement(sql);
-
             //执行操作
             ps.setString(1, cr.getCr_content());
             ps.setInt(2, cr.getCr_score());
@@ -46,7 +45,7 @@ public class CreditRuleDaoImpl implements CreditRuleDao
     }
 
     //分页查询所有的规则
-    public List<CreditRule> getAllCreditRules(int page, int count)
+    public List<CreditRule> getAllCreditRules()
     {
         //初始化
         con = null;
@@ -57,10 +56,8 @@ public class CreditRuleDaoImpl implements CreditRuleDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT * FROM credit_rule order by cr_no limit ?,? ";
+            sql = "SELECT * FROM credit_rule ORDER BY cr_no  ";
             pStmt = con.prepareStatement(sql);
-            pStmt.setInt(1, (page - 1) * count);
-            pStmt.setInt(2, count);
 
             //执行操作
             rs = pStmt.executeQuery();

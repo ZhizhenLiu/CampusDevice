@@ -153,4 +153,11 @@ public interface UserService
      * @Return: com.alibaba.fastjson.JSONObject
      */
     JSONObject editUserInfo(User user);
+
+    /*
+     * @Description: 用户查看所有信誉分信息
+     * @Param
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject getAllCreditRules();
 }

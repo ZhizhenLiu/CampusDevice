@@ -61,6 +61,7 @@ public class Test {
         user.setU_no("u_no");
         user.setU_name("戏子");
         user.setU_mentorPhone("123456789");
-       System.out.println(userService.editUserInfo(user));
+
+       System.out.println(userService.getAllCreditRules());
    }
 }
