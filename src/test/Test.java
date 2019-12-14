@@ -1,4 +1,5 @@
 import bean.Borrow;
+import bean.Device;
 import bean.User;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -12,6 +13,7 @@ import service.impl.SystemServiceImpl;
 import service.impl.UserServiceImpl;
 import utils.MessageUtils;
 
+import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -53,15 +55,28 @@ public class Test {
        ReservationDao reservationDao = new ReservationDaoImpl();
        SpecialtyDao specialtyDao = new SpecialtyDaoImpl();
 
-//         User user = new User("u_no", "u_name", "wechatID", "u_email", "u_phone", "teacher".equals("student")?100:200, "teacher".equals("student")?"学生":"老师", "u_mentorName", "u_mentorPhone", -1, "sname",-1, "amname");
-        String wechatID = "wechatID";
-        String d_no = "1905399S";
+         User user = new User("u_no", "u_name", "wechatID", "u_email", "u_phone", "teacher".equals("student")?100:200, "teacher".equals("student")?"学生":"老师", "u_mentorName", "u_mentorPhone", -1, "sname",-1, "amname");
+//        String wechatID = "wechatID";
+//        String d_no = "1905399S";
+//
+//        User user = new User();
+//        user.setU_no("u_no");
+//        user.setU_name("戏子");
+//        user.setU_mentorPhone("123456789");
+//
+//       System.out.println(userService.getAllCreditRules());
 
-        User user = new User();
-        user.setU_no("u_no");
-        user.setU_name("戏子");
-        user.setU_mentorPhone("123456789");
+       Device device = new Device();
+       device.setD_no("d_no");
+       device.setD_name("d_name");
+       device.setD_model("d_model");
+       device.setD_saveSite("d_saveSite");
+       device.setA_no("3");
+       device.setD_factoryNo("d_factoryNo");
+       device.setD_state("damaged");
+       device.setD_storeDate("2019-12-11");
+//       System.out.println(adminService.addDevice(device));
+//       System.out.println(adminService.addDevice(device));
 
-       System.out.println(userService.getAllCreditRules());
    }
 }

@@ -2,6 +2,8 @@ package servlet.system;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import dao.TextRecordDao;
+import dao.impl.TextRecordDaoImpl;
 import utils.MessageUtils;
 
 import javax.servlet.ServletException;

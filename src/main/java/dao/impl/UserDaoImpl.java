@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDaoImpl implements UserDao
 {
@@ -37,6 +39,55 @@ public class UserDaoImpl implements UserDao
 
             //替换参数，从1开始
             pStmt.setString(1, wechatID);
+            rs = pStmt.executeQuery();
+
+            if (rs.next())
+            {
+                user = new User();
+                user.setU_no(rs.getString("u_no"));
+                user.setU_name(rs.getString("u_name"));
+                user.setU_wechatID(rs.getString("u_wechatid"));
+                user.setU_email(rs.getString("u_email"));
+                user.setU_phone(rs.getString("u_phone"));
+                user.setU_creditGrade(rs.getInt("u_credit_grade"));
+                user.setU_type(rs.getString("u_type"));
+                user.setU_mentorName(rs.getString("u_mentor_name"));
+                user.setU_mentorPhone(rs.getString("u_mentor_phone"));
+                user.setS_no(rs.getInt("s_no"));
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return user;
+    }
+
+    /*
+     * @Description: 通过用户手机号获取用户对象
+     * @Param phone
+     * @Return: bean.User
+     */
+    @Override
+    public User getUserByPhone(String phone) {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        User user = null;
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "SELECT * FROM user WHERE u_phone = ? ";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            pStmt.setString(1, phone);
             rs = pStmt.executeQuery();
 
             if (rs.next())
@@ -515,5 +566,50 @@ public class UserDaoImpl implements UserDao
             JDBCUtils.closeAll(rs, pStmt, con);
         }
         return flag;
+    }
+
+    /*
+     * @Description: 获取所有的非管理员、用户列表
+     * @Param
+     * @Return: java.util.List<bean.User>
+     */
+    public List<User> getAllUserList()
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        List<User> userList = new ArrayList<>();
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql = "SELECT * FROM `user` " +
+                  "WHERE u_wechatid NOT IN " +
+                  "( " +
+                  "SELECT a_wechatid FROM administrator " +
+                  ") ";
+            pStmt = con.prepareStatement(sql);
+
+            //替换参数，从1开始
+            rs = pStmt.executeQuery();
+            while (rs.next())
+            {
+                User user = new User();
+                user.setU_no(rs.getString("u_no"));
+                user.setU_name(rs.getString("u_name"));
+                user.setU_type(rs.getString("u_type"));
+                userList.add(user);
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return userList;
     }
 }

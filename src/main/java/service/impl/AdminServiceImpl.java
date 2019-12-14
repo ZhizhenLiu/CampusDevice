@@ -549,8 +549,39 @@ public class AdminServiceImpl implements AdminService
         DeviceDao deviceDao = new DeviceDaoImpl();
 
         int flag = 1;
-        flag = deviceDao.addDevice(device);
-        if (flag == 0) errMsg.add("添加设备失败");
+
+        //不存在相同设备编号
+        if (deviceDao.getDeviceByNo(device.getD_no()) == null)
+        {
+            String d_state = device.getD_state();
+            switch (d_state)
+            {
+                case "inStore":
+                {
+                    d_state = "在库";
+                    break;
+                }
+                case "damaged":
+                {
+                    d_state = "损坏";
+                    break;
+                }
+                case "scrapped":
+                {
+                    d_state = "报废";
+                    break;
+                }
+            }
+            device.setD_state(d_state);
+            flag = deviceDao.addDevice(device);
+            if (flag == 0) errMsg.add("添加设备失败");
+        }
+        else
+        {
+            errMsg.add("存在相同编号设备");
+            flag = 0;
+        }
+
         info.put("flag", flag);
         info.put("errMsg", errMsg);
         return info;
@@ -598,6 +629,118 @@ public class AdminServiceImpl implements AdminService
             flag = deviceDao.setDeviceState(d_no, d_state);
             if (flag == 0) errMsg.add("修改设备状态失败");
         }
+
+        info.put("flag", flag);
+        info.put("errMsg", errMsg);
+        return info;
+    }
+
+    /*
+     * @Description: 管理员删除设备
+     * @Param d_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject deleteDevice(String d_no)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        int flag = 1;
+        if (deviceDao.getDeviceByNo(d_no) != null)
+        {
+            flag = deviceDao.deleteDevice(d_no);
+            if (flag == 0) errMsg.add("删除设备失败");
+        }
+        else
+        {
+            flag = 0;
+            errMsg.add("设备不存在");
+        }
+
+        info.put("flag", flag);
+        info.put("errMsg", errMsg);
+        return info;
+    }
+
+    /*
+     * @Description: 校统管查看所有的用户和非管理员
+     * @Param
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject getUserAndNormalAdminList()
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        int flag = 1;
+        List<User> userList = userDao.getAllUserList();
+        List<Admin> adminList = adminDao.getNormalAdminList();
+        if (userList.isEmpty()) errMsg.add("用户列表为空");
+        if (adminList.isEmpty()) errMsg.add("管理员列表为空");
+
+        info.put("userList", userList);
+        info.put("adminList", adminList);
+        info.put("errMsg", errMsg);
+        info.put("flag", flag);
+        return info;
+    }
+
+    /*
+     * @Description: 设置用户为管理员
+     * @Param u_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject setUserAsAdmin(String u_no)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        int flag = 1;
+        User user = userDao.getUserByNo(u_no);
+
+        //用户不是管理员
+        if (adminDao.getAdminByWechatID(user.getU_wechatID()) == null)
+        {
+            flag = adminDao.setUserAsAdmin(user);
+            if (flag == 0) errMsg.add("设置用户为管理员失败");
+
+            //发送提示信息
+            flag = messageDao.sendMessage(u_no, "你已被赋予管理员权限，期待你的");
+            if (flag == 0) errMsg.add("发送提示信息失败");
+        }
+        else
+        {
+            errMsg.add("用户已是管理员");
+            flag = 0;
+        }
+
+        info.put("flag", flag);
+        info.put("errMsg", errMsg);
+        return info;
+    }
+
+    /*
+     * @Description: 删除管理员
+     * @Param a_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject deleteAdmin(String a_no)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        int flag = 1;
+        //身份仍然为管理员
+        if (adminDao.getAdminByNo(a_no) != null)
+        {
+            flag = adminDao.deleteAdmin(a_no);
+            if (flag == 0) errMsg.add("删除管理员失败");
+
+            //发送提示信息
+            flag = messageDao.sendMessage(a_no, "你已被移除管理员权限，感谢你的服务");
+            if (flag == 0) errMsg.add("发送提示信息失败");
+        }
+        else errMsg.add("管理员不存在");
 
         info.put("flag", flag);
         info.put("errMsg", errMsg);

@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @WebServlet(name = "UploadServlet", urlPatterns = "/admin/upload")
@@ -66,8 +68,13 @@ public class UploadServlet extends HttpServlet
                 {
                     //获取具体输入的字符串
                     d_no = item.getString();
-                    destPath = path + "/" + d_no + ".png";
-                    deviceUrl = deviceUrl + "/" + d_no + ".png";
+
+                    //定义路径: 设置图片的名称为：d_no-yyyy-MM-dd-HH-mm-ss，便于小程序渲染
+                    Date date = new Date();
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("-yyyy-MM-dd-HH-mm-ss");
+                    String time =  simpleDateFormat.format(date);
+                    destPath = path + "/" + d_no + time +".png";
+                    deviceUrl = deviceUrl + "/" + d_no + time + ".png";
                 }
                 else
                 {

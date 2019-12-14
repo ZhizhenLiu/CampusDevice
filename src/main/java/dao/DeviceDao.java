@@ -91,4 +91,11 @@ public interface DeviceDao
      */
     int addDevice(Device device);
 
+    /*
+     * @Description: 删除设备
+     * @Param d_no
+     * @Return: int
+     */
+    int deleteDevice(String d_no);
+
 }

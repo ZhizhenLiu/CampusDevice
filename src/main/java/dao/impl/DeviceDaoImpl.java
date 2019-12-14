@@ -271,7 +271,7 @@ public class DeviceDaoImpl implements DeviceDao
         con = null;
         pStmt = null;
         rs = null;
-        Device device = new Device();
+        Device device = null;
 
         try
         {
@@ -285,6 +285,7 @@ public class DeviceDaoImpl implements DeviceDao
 
             if (rs.next())
             {
+                device = new Device();
                 device.setD_no(rs.getString("d_no"));
                 device.setD_name(rs.getString("d_name"));
                 device.setD_model(rs.getString("d_model"));
@@ -496,7 +497,7 @@ public class DeviceDaoImpl implements DeviceDao
         try
         {
             con = JDBCUtils.getConnection();
-            String sql = "INSERT INTO device VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO device(d_no, d_name, d_model, d_save_site, a_no, d_factory_no, d_state, d_store_date, d_borrowed_times) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
             pStmt = con.prepareStatement(sql);
             pStmt.setString(1, device.getD_no());
             pStmt.setString(2, device.getD_name());
@@ -507,7 +508,41 @@ public class DeviceDaoImpl implements DeviceDao
             pStmt.setString(7, device.getD_state());
             pStmt.setString(8, device.getD_storeDate());
             pStmt.setInt(9, 0);
-            pStmt.setString(10, device.getD_photo());
+
+            //更新状态
+            flag = pStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return flag;
+
+    }
+
+    /*
+     * @Description: 删除设备
+     * @Param d_no
+     * @Return: int
+     */
+    public int deleteDevice(String d_no)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        int flag = 0;
+        try
+        {
+            con = JDBCUtils.getConnection();
+            String sql = "DELETE FROM device WHERE d_no = ?";
+            pStmt = con.prepareStatement(sql);
+            pStmt.setString(1,  d_no);
 
             //更新状态
             flag = pStmt.executeUpdate();

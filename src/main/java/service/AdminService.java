@@ -1,6 +1,7 @@
 package service;
 
 import bean.Device;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 public interface AdminService
@@ -110,4 +111,32 @@ public interface AdminService
      * @Return: com.alibaba.fastjson.JSONObject
      */
     JSONObject editDevice(Device device);
+    
+    /*
+     * @Description: 管理员删除设备
+     * @Param d_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject deleteDevice(String d_no);
+
+    /*
+     * @Description: 校统管查看所有的用户和非管理员
+     * @Param
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject getUserAndNormalAdminList();
+
+    /*
+     * @Description: 设置用户为管理员
+     * @Param u_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject setUserAsAdmin(String u_no);
+
+    /*
+     * @Description: 删除管理员
+     * @Param a_no
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject deleteAdmin(String a_no);
 }

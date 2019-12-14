@@ -2,8 +2,10 @@ package dao;
 
 import bean.User;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.math3.optim.nonlinear.scalar.LineSearch;
 
 import java.util.Date;
+import java.util.List;
 
 public interface UserDao
 {
@@ -14,6 +16,13 @@ public interface UserDao
      * @Return: bean.User
      */
     User getUserByWechatID(String wechatID);
+
+    /*
+     * @Description: 通过用户手机号获取用户对象
+     * @Param phone
+     * @Return: bean.User
+     */
+    User getUserByPhone(String phone);
 
     /*
      * @Description: 用户信息需要获取专业名称
@@ -99,4 +108,11 @@ public interface UserDao
      * @Return: int
      */
     int setUserSpecialtyNo(String u_no, int s_no);
+
+    /*
+     * @Description: 获取所有的非管理员、用户列表
+     * @Param
+     * @Return: java.util.List<bean.User>
+     */
+    List<User> getAllUserList();
 }

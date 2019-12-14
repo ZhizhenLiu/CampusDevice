@@ -16,10 +16,30 @@ public class Reservation
     private String u_name;
     private String u_type;
     private int u_creditGrade;
+
     //附加设备属性
     private String d_name;
     private String d_saveSite;
-    private String d_mainUse;
+    private String d_photo;
+
+    public Reservation(int r_no, String d_no, String u_no, String r_reservationDate, String r_startDate, String r_returnDate, String r_feedBack, int r_state, int r_sum, String u_name, String u_type, int u_creditGrade, String d_name, String d_saveSite, String d_photo)
+    {
+        this.r_no = r_no;
+        this.d_no = d_no;
+        this.u_no = u_no;
+        this.r_reservationDate = r_reservationDate;
+        this.r_startDate = r_startDate;
+        this.r_returnDate = r_returnDate;
+        this.r_feedBack = r_feedBack;
+        this.r_state = r_state;
+        this.r_sum = r_sum;
+        this.u_name = u_name;
+        this.u_type = u_type;
+        this.u_creditGrade = u_creditGrade;
+        this.d_name = d_name;
+        this.d_saveSite = d_saveSite;
+        this.d_photo = d_photo;
+    }
 
     public Reservation()
     {
@@ -165,14 +185,14 @@ public class Reservation
         this.d_saveSite = d_saveSite;
     }
 
-    public String getD_mainUse()
+    public String getD_photo()
     {
-        return d_mainUse;
+        return d_photo;
     }
 
-    public void setD_mainUse(String d_mainUse)
+    public void setD_photo(String d_photo)
     {
-        this.d_mainUse = d_mainUse;
+        this.d_photo = d_photo;
     }
 
     @Override
@@ -193,7 +213,7 @@ public class Reservation
                 ", u_creditGrade=" + u_creditGrade +
                 ", d_name='" + d_name + '\'' +
                 ", d_saveSite='" + d_saveSite + '\'' +
-                ", d_mainUse='" + d_mainUse + '\'' +
+                ", d_photo='" + d_photo + '\'' +
                 '}';
     }
 }

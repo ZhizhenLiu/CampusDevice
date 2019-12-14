@@ -202,12 +202,12 @@ public class ReservationDaoImpl implements ReservationDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT d.d_no, d.d_name, d.d_model, COUNT(*) r_sum " +
-                    "FROM reservation r, device d " +
-                    "WHERE r.d_no = d.d_no " +
-                    "AND d.a_no = ? AND r_state IN(0, 3) " +
-                    "GROUP BY d.d_no, d.d_name, d.d_model " +
-                    "ORDER BY r_sum DESC ";
+            sql = "SELECT d.d_no, d.d_name, d.d_model, d.d_photo COUNT(*) r_sum " +
+                  "FROM reservation r, device d " +
+                  "WHERE r.d_no = d.d_no " +
+                  "AND d.a_no = ? AND r_state IN(0, 3) " +
+                  "GROUP BY d.d_no, d.d_name, d.d_model, d.d_photo " +
+                  "ORDER BY r_sum DESC ";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
@@ -221,6 +221,7 @@ public class ReservationDaoImpl implements ReservationDao
                 Reservation reservatioin = new Reservation();
                 reservatioin.setD_no(rs.getString("d_no"));
                 reservatioin.setD_name(rs.getString("d_name"));
+                reservatioin.setD_photo(rs.getString("d_photo"));
                 reservatioin.setR_sum(rs.getInt("r_sum"));
                 reservationList.add(reservatioin);
             }

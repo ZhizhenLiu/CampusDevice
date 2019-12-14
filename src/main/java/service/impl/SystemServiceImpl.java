@@ -60,14 +60,19 @@ public class SystemServiceImpl implements SystemService
         
         /*
         1、查询对应openid的用户是否存在
-        2、返回查询：flag为-1：不存在用户。
-                     flag为0：用户身份为普通用户。
-                     flag为1：用户身份为管理员。
+        2、返回查询：a).flag为-1：不存在用户。
+                     b).flag为0：用户身份为普通用户。
+                     c).flag为1：用户身份为管理员。
+                        a.superAdmin = 0, 用户身份为普通管理员：院统管
+                        b.superAdmin = 1, 用户身份为超级管理员：校统管
          */
         int flag = -1;
         if (adminDao.getAdminByWechatID(wechatID) != null)
         {
             flag = 1;
+            int superAdmin = 0;
+            if (adminDao.getAdminByWechatID(wechatID).getA_type().equals("校统管")) superAdmin = 1;
+            info.put("superAdmin", superAdmin);
         }
         else if (userDao.getUserByWechatID(wechatID) != null)
         {
@@ -75,7 +80,6 @@ public class SystemServiceImpl implements SystemService
         }
         else
         {
-            flag = -1;
 
             //用户不存在，获取注册所需信息：学院、专业
             List<Academy> academyList = academyDao.getAllAcademy();

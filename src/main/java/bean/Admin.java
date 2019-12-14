@@ -12,11 +12,6 @@ public class Admin
     private String a_phone;
     private String a_email;
 
-    /*
-     * @Description: 管理员构造函数
-     * @Param a_no  a_name  a_wechatId  a_type  a_phone  a_emial
-     * @Return: null
-     */
 
     public Admin(String a_no, String a_name, String a_wechatID, String a_type, String a_phone, String a_email)
     {
@@ -26,6 +21,10 @@ public class Admin
         this.a_type = a_type;
         this.a_phone = a_phone;
         this.a_email = a_email;
+    }
+
+    public Admin()
+    {
     }
 
     public Admin(String a_no)

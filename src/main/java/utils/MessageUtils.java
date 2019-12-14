@@ -2,9 +2,12 @@ package utils;
 
 import bean.Borrow;
 import bean.User;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zhenzi.sms.ZhenziSmsClient;
+import dao.TextRecordDao;
+import dao.UserDao;
+import dao.impl.TextRecordDaoImpl;
+import dao.impl.UserDaoImpl;
 
 import java.util.Random;
 
@@ -22,7 +25,6 @@ public class MessageUtils
     public static String sendVerifyCode(String phone)
     {
         ZhenziSmsClient client = new ZhenziSmsClient(c_apiUrl, c_appId, c_appSecret);
-
         //验证码
         String verifyCode = null;
         try
@@ -60,6 +62,10 @@ public class MessageUtils
             String message = u_name + "，您好！您借用的设备:" + d_name + "，已经逾期未还，请在近日内归还到" + d_saveSite;
             System.out.println(message);
             String result = client.send(u_phone, message);
+            TextRecordDao textRecordDao = new TextRecordDaoImpl();
+            UserDao userDao = new UserDaoImpl();
+            User user = userDao.getUserByPhone(u_phone);
+            textRecordDao.addTextRecord(user.getU_no(),message);
             System.out.println(result);
         }
         catch (Exception e)
