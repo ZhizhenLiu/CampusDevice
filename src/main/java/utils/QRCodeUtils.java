@@ -35,7 +35,7 @@ public class QRCodeUtils
         hints.put(EncodeHintType.MARGIN, 2);    //边距
 
         path = path + "img/code";
-        String codeUrl = "http://49.235.73.29:8083/img/code";
+        String codeUrl = "http://www.tozsy.com:8083/img/code";
         try
         {
             BitMatrix bitMatrix = new MultiFormatWriter().
