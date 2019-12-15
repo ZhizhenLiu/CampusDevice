@@ -115,7 +115,7 @@ public class AdminDaoImpl implements AdminDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT * FROM administrator WHERE u_type = '院统管' ";
+            sql = "SELECT * FROM administrator WHERE a_type = '院统管' ";
             pStmt = con.prepareStatement(sql);
             rs = pStmt.executeQuery();
 
