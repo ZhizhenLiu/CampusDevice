@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "HotServlet", urlPatterns = "/user/hot")
-public class HotServlet extends HttpServlet
+@WebServlet(name = "AllDeviceServlet", urlPatterns = "/user/all")
+public class AllDeviceServlet extends HttpServlet
 {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -20,10 +20,13 @@ public class HotServlet extends HttpServlet
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
 
+        //获取参数
+        int page = Integer.parseInt(request.getParameter("page"));
+
         //返回参数
         UserService userService = new UserServiceImpl();
         PrintWriter printWriter = response.getWriter();
-        printWriter.write(userService.getHotDevice().toJSONString());
+        printWriter.write(userService.getAllDeviceByPage(page, 10).toJSONString());
 
         printWriter.flush();
         printWriter.close();

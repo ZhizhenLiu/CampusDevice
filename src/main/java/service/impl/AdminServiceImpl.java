@@ -11,7 +11,6 @@ import utils.MessageUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +39,33 @@ public class AdminServiceImpl implements AdminService
             return false;
         }
         return true;
+    }
+
+    /*
+     * @Description: 获取管理员管辖范围内所有设备
+     * @Param wechatID  page  count
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject getAllDeviceOfAdmin(String wechatID, int page, int count)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        //通过微信openid获取主键，通过主键查询
+        String a_no = adminDao.getAdminByWechatID(wechatID).getA_no();
+        List<Device> deviceList = deviceDao.getDeviceOfAdminByPage(a_no, page, count);
+        if (deviceList.isEmpty())
+        {
+            info.put("flag", 0);
+            errMsg.add("当前页数没有设备");
+        }
+        else
+        {
+            info.put("flag", 1);
+            info.put("device", JSONArray.parseArray(JSON.toJSONString(deviceList)));
+        }
+        info.put("errMsg", errMsg);
+        return info;
     }
 
     /*
@@ -733,6 +759,14 @@ public class AdminServiceImpl implements AdminService
         //身份仍然为管理员
         if (adminDao.getAdminByNo(a_no) != null)
         {
+            //先删除所属设备
+            List<Device> deviceList = deviceDao.getAllDeviceOfAdmin(a_no);
+            for (Device device : deviceList)
+            {
+                flag = deviceDao.deleteDevice(device.getD_no());
+                if (flag == 0) errMsg.add("删除"+device.getD_name()+"失败");
+            }
+
             flag = adminDao.deleteAdmin(a_no);
             if (flag == 0) errMsg.add("删除管理员失败");
 

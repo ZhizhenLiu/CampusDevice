@@ -92,4 +92,12 @@ public interface BorrowDao
      */
     List<Integer> getOverDueBorrowAndDays();
 
+    /*
+     * @Description: 以String的形式返回逾期人学工号、逾期人名、设备编号、设备名、借用日期、应当归还日期、实际归还日期、借用人信用分、管理仪器的管理员的名字
+     * @Param b_no
+     * @Return: List<String>
+     */
+    //修改：只能导出自己管理的逾期未还人员名单
+    List<String> getOverDueList(String a_no);
+
 }

@@ -15,6 +15,13 @@ public interface AdminService
     boolean isAdminExist(String wechatID);
 
     /*
+     * @Description: 获取管理员管辖范围内所有设备
+     * @Param wechatID  page  count
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject getAllDeviceOfAdmin(String wechatID, int page, int count);
+
+    /*
      * @Description: 通过标识获取管理员管辖范围内的有人预约的设备
      * @Param wechatID
      * @Return: com.alibaba.fastjson.JSONObject

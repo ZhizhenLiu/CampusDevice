@@ -2,7 +2,9 @@ package utils;
 
 import bean.Device;
 import dao.BorrowDao;
+import dao.DeviceDao;
 import dao.impl.BorrowDaoImpl;
+import dao.impl.DeviceDaoImpl;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -57,16 +59,6 @@ public class ExcelUtils
     //读取Workbook内容存到list<String>中
     public static List<String> workbookToList(String filePath, String fileName)
     {
-
-        //判断excel表是否可用，不可用则返回一个空的list数组
-        if (!isTitleValid(filePath, fileName))
-        {
-            return new ArrayList<>();
-        }
-        if (!isContentValid(filePath, fileName))
-        {
-            return new ArrayList<>();
-        }
         Workbook workbook = excelToWorkbook(filePath, fileName);
         try
         {
@@ -144,7 +136,7 @@ public class ExcelUtils
                 {
                     if (workSheet.getRow(j).getLastCellNum() - workSheet.getRow(j).getFirstCellNum() > columnEnd - columnStart)
                     {
-                        System.out.println(filePath + fileName + "的 第" + (i + 1) + "页 的标题缺失！");
+                        System.out.println(fileName + "的 第" + (i + 1) + "页 的标题缺失！");
                         System.out.println("请补充标题后输入");
                         flag = 0;
                         break;
@@ -156,15 +148,15 @@ public class ExcelUtils
                     for (int j = columnStart; j < columnEnd; j++)
                     {
                         //检查标题是否中间部分有缺失
-                        if (workSheet.getRow(0).getCell(j).getStringCellValue().equals(""))
+                        if (getCellValue(workSheet.getRow(0).getCell(j)).equals(""))
                         {
-                            System.out.println(filePath + fileName + "的 第" + (i + 1) + "页 的标题缺失！");
+                            System.out.println(fileName + "的 第" + (i + 1) + "页 的标题缺失！");
                             System.out.println("请补充标题后输入");
                             flag = 0;
                             break;
                         }
                         //检查标题是否正确
-                        if (!title[j].equals(workSheet.getRow(0).getCell(j).getStringCellValue()))
+                        if (!title[j].equals(getCellValue(workSheet.getRow(0).getCell(j))))
                         {
                             System.out.println("标题顺序错误！请按以下顺序调整excel表：");
                             for (int k = 0; k < title.length; k++)
@@ -193,8 +185,8 @@ public class ExcelUtils
         return false;
     }
 
-    //判断excel表的内容是否有效，主要判断状态等部分
-    public static boolean isContentValid(String filePath, String fileName)
+    //判断excel表的内容是否有效，判断状态等部分
+    public static boolean isStateValid(String filePath, String fileName)
     {
         Workbook workbook = excelToWorkbook(filePath, fileName);
         try
@@ -216,13 +208,13 @@ public class ExcelUtils
                 int rowStart = workSheet.getFirstRowNum();
                 int rowEnd = workSheet.getLastRowNum();
                 //检查标题为状态栏的情况
-                for (int j = rowStart + 1; j < rowEnd; j++)
+                for (int j = rowStart + 1; j <= rowEnd; j++)
                 {
-                    String str = workSheet.getRow(j).getCell(5).getStringCellValue();
+                    String str = getCellValue(workSheet.getRow(j).getCell(5));
                     //检查标题是否中间部分有缺失
                     if (!str.equals("在库") && !str.equals("外借") && !str.equals("损坏") && !str.equals("报废"))
                     {
-                        System.out.println(filePath + fileName + "的 第" + (i + 1) + "页 的状态错误！");
+                        System.out.println(fileName+"的 第" + (i + 1) + "页 的状态错误！");
                         System.out.print("状态只能为：");
                         for (int k = 0; k < state.length - 1; k++)
                         {
@@ -250,8 +242,56 @@ public class ExcelUtils
         return false;
     }
 
+    //判断excel表的内容是否有效，判断编号是否重复
+    public static boolean isDeviceNoValid(String filePath, String fileName)
+    {
+        Workbook workbook = excelToWorkbook(filePath, fileName);
+        DeviceDao deviceDao = new DeviceDaoImpl();
+        try
+        {
+            int flag = 1;
+            //通过循环工作表Sheet
+            for (int i = 0; i < workbook.getNumberOfSheets(); i++)
+            {
+                //获取第i页
+                Sheet workSheet = workbook.getSheetAt(i);
+                if (workSheet == null)
+                {
+                    continue;
+                }
+                //第i页表有rowEnd-rowStart行
+                int rowStart = workSheet.getFirstRowNum();
+                int rowEnd = workSheet.getLastRowNum();
+                //检查标题为状态栏的情况
+                for (int j = rowStart + 1; j <= rowEnd; j++)
+                {
+                    String d_no = getCellValue(workSheet.getRow(j).getCell(0));
+                    //判断是否有重复的设备仪器
+                    if(deviceDao.getDeviceState(d_no).equals("在库") || deviceDao.getDeviceState(d_no).equals("外借"))
+                    {
+                        System.out.println(fileName + "的 第" + (i + 1) + "页 的编号为"+d_no+"的仪器已存在! 请勿重复导入");
+                        flag = 0;
+                    }
+                    else if(deviceDao.getDeviceState(d_no).equals("损坏") || deviceDao.getDeviceState(d_no).equals("报废"))
+                    {
+                        System.out.println(fileName + "的 第" + (i + 1) + "页 的编号为"+d_no+"的仪器已存在! 请勿重复导入");
+                        flag = 0;
+                    }
+                }
+            }
+
+            return flag != 0;
+        }
+        catch (Exception e)
+        {
+            System.out.println("读取excel表出现问题");
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     //从数据库中导出excel，注意这里生成的文件是.xlsx格式的
-    public static void dbToExcel(String filePath, String fileName)
+    public static void dbToExcel(String filePath, String fileName, String a_no)
     {
         //创建HSSFWorkbook对象
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -259,7 +299,7 @@ public class ExcelUtils
         XSSFSheet sheet = workbook.createSheet("未归还设备人员名单");
         //获取Device表中的内容
         BorrowDao borrowDao = new BorrowDaoImpl();
-        List<String> list = borrowDao.getOverDueList();
+        List<String> list = borrowDao.getOverDueList(a_no);
         //设置格子宽高
         for (int i = 0; i < 8; i++)
         {
@@ -356,7 +396,7 @@ public class ExcelUtils
                 if (org.apache.poi.ss.usermodel.DateUtil.isCellDateFormatted(cell))
                 {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    cellValue = sdf.format(org.apache.poi.ss.usermodel.DateUtil.getJavaDate(cell.getNumericCellValue())).toString();
+                    cellValue = sdf.format(DateUtil.getJavaDate(cell.getNumericCellValue()));
                 }
                 else
                 {

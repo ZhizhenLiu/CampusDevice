@@ -559,4 +559,95 @@ public class DeviceDaoImpl implements DeviceDao
 
     }
 
+    /*
+     * @Description: 管理员获取管辖范围内管理设备列表: 分页
+     * @Param a_no  page  count
+     * @Return: java.util.List<bean.Device>
+     */
+    public List<Device> getDeviceOfAdminByPage(String a_no, int page, int count)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        List<Device> deviceList = new ArrayList<>();
+        con = JDBCUtils.getConnection();
+        sql = "SELECT * FROM device WHERE a_no = ? LIMIT ?, ?";
+        try
+        {
+            pStmt = con.prepareStatement(sql);
+            pStmt.setString(1, a_no);
+            pStmt.setInt(2, (page - 1) * count);
+            pStmt.setInt(3, count);
+            rs = pStmt.executeQuery();
+
+            //判断是否存在记录
+            while (rs.next())
+            {
+                Device device = new Device();
+                device.setD_no(rs.getString("d_no"));
+                device.setD_model(rs.getString("d_model"));
+                device.setD_name(rs.getString("d_name"));
+                device.setD_state(rs.getString("d_state"));
+                device.setD_photo(rs.getString("d_photo"));
+                deviceList.add(device);
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return deviceList;
+    }
+
+
+    /*
+     * @Description: 管理员获取管辖范围内管理设备列表：所有
+     * @Param a_no
+     * @Return: java.util.List<bean.Device>
+     */
+    public List<Device> getAllDeviceOfAdmin(String a_no)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        List<Device> deviceList = new ArrayList<>();
+        con = JDBCUtils.getConnection();
+        sql = "SELECT * FROM device WHERE a_no = ? ";
+        try
+        {
+            pStmt = con.prepareStatement(sql);
+            pStmt.setString(1, a_no);
+            rs = pStmt.executeQuery();
+
+            //判断是否存在记录
+            while (rs.next())
+            {
+                Device device = new Device();
+                device.setD_no(rs.getString("d_no"));
+                device.setD_model(rs.getString("d_model"));
+                device.setD_name(rs.getString("d_name"));
+                device.setD_state(rs.getString("d_state"));
+                device.setD_photo(rs.getString("d_photo"));
+                deviceList.add(device);
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return deviceList;
+    }
+
 }

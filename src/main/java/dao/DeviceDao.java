@@ -98,4 +98,19 @@ public interface DeviceDao
      */
     int deleteDevice(String d_no);
 
+    /*
+     * @Description: 管理员获取管辖范围内管理设备列表: 分页
+     * @Param a_no  page  count
+     * @Return: java.util.List<bean.Device>
+     */
+    List<Device> getDeviceOfAdminByPage(String a_no, int page, int count);
+
+
+    /*
+     * @Description: 管理员获取管辖范围内管理设备列表：所有
+     * @Param a_no
+     * @Return: java.util.List<bean.Device>
+     */
+    List<Device> getAllDeviceOfAdmin(String a_no);
+
 }
