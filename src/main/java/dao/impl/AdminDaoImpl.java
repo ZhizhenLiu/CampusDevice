@@ -123,8 +123,8 @@ public class AdminDaoImpl implements AdminDao
             {
                 Admin admin = new Admin();
                 admin.setA_no(rs.getString("a_no"));
-                admin.setA_no(rs.getString("a_name"));
-                admin.setA_no(rs.getString("a_type"));
+                admin.setA_name(rs.getString("a_name"));
+                admin.setA_type(rs.getString("a_type"));
                 adminList.add(admin);
             }
         }

@@ -161,12 +161,12 @@ public class UserServiceImpl implements UserService
         return info;
     }
 
-    /*
-     * @Description: 用户浏览获取设备具体信息
-     * @Param deviceNo
-     * @Return: com.alibaba.fastjson.JSONObject
-     */
-    public JSONObject getDeviceDetails(String d_no)
+   /*
+    * @Description: 用户浏览获取设备具体信息
+    * @Param wechatID  d_no
+    * @Return: com.alibaba.fastjson.JSONObject
+    */
+    public JSONObject getDeviceDetails(String wechatID, String d_no)
     {
         JSONObject info = new JSONObject();
         Device device = deviceDao.getDeviceDetails(d_no);
@@ -178,6 +178,11 @@ public class UserServiceImpl implements UserService
         }
         else
         {
+            //添加用户是否跟踪设备中状态
+            String u_no = userDao.getUserByWechatID(wechatID).getU_no();
+            if (trackDao.isTracking(u_no, d_no)) info.put("track", 1);
+            else info.put("track", 0);
+
             info.put("flag", 1);
             info.put("device", device);
         }

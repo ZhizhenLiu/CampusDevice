@@ -202,7 +202,7 @@ public class ReservationDaoImpl implements ReservationDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT d.d_no, d.d_name, d.d_model, d.d_photo COUNT(*) r_sum " +
+            sql = "SELECT d.d_no, d.d_name, d.d_model, d.d_photo, COUNT(*) r_sum " +
                   "FROM reservation r, device d " +
                   "WHERE r.d_no = d.d_no " +
                   "AND d.a_no = ? AND r_state IN(0, 3) " +

@@ -44,10 +44,10 @@ public interface UserService
 
     /*
      * @Description: 用户浏览获取设备具体信息
-     * @Param d_no
+     * @Param wechatID  d_no
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject getDeviceDetails(String d_no);
+    JSONObject getDeviceDetails(String wechatID, String d_no);
 
     /*
      * @Description: 用户预约设备

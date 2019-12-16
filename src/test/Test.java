@@ -77,6 +77,7 @@ public class Test {
        device.setD_storeDate("2019-12-11");
 //       System.out.println(adminService.addDevice(device));
 //       System.out.println(adminService.addDevice(device));
+//       System.out.println(userService.getDeviceDetails("o0ug242ge55sufbQW0xHk7KTmq60", "1713715S"));
        System.out.println(adminService.getUserAndNormalAdminList());
    }
 }
