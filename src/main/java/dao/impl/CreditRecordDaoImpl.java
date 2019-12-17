@@ -237,6 +237,8 @@ public class CreditRecordDaoImpl implements CreditRecordDao
                 //发短信
                 MessageUtils.sendRemindMessage(borrow);
                 System.out.println("已经向手机号为"+user.getU_phone()+"的用户发送短信提醒");
+
+                return 0;
             }
             else if(days == 1 || days == 8 || (days-1)%30 == 0)
             {

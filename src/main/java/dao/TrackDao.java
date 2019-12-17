@@ -20,10 +20,10 @@ public interface TrackDao
 
     /*
      * @Description: 用户取消跟踪设备
-     * @Param t_no
+     * @Param u_no  d_no
      * @Return: int
      */
-    int cancelTrackDevice(int t_no);
+    int cancelTrackDevice(String u_no, String d_no);
 
     /*
      * @Description: 获取该设备所有的正在跟踪者的编号

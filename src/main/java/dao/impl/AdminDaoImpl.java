@@ -45,7 +45,7 @@ public class AdminDaoImpl implements AdminDao
             if (rs.next())
             {
                 admin =  new Admin(rs.getString("a_no"), rs.getString("a_name"), rs.getString("a_wechatid"),
-                        rs.getString("a_type"), rs.getString("a_phone"), rs.getString("a_emial"));
+                        rs.getString("a_type"), rs.getString("a_phone"), rs.getString("a_email"));
             }
         }
         catch (SQLException e)
@@ -125,6 +125,7 @@ public class AdminDaoImpl implements AdminDao
                 admin.setA_no(rs.getString("a_no"));
                 admin.setA_name(rs.getString("a_name"));
                 admin.setA_type(rs.getString("a_type"));
+                admin.setA_phone(rs.getString("a_phone"));
                 adminList.add(admin);
             }
         }

@@ -17,7 +17,7 @@ public class SetOverDueTask extends TimerTask
     {
         BorrowDao borrowDao = new BorrowDaoImpl();
         int flag = borrowDao.setAllOverDueState();
-        if (flag == 1)
+        if (flag != 0)
         {
             System.out.println("自动设置：已设置借用逾期状态为-1");
         }

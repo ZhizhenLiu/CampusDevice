@@ -468,7 +468,7 @@ public class AdminServiceImpl implements AdminService
 
         //根据借用记录查找借用记录
         Borrow borrow = borrowDao.getBorrowByNo(b_no);
-        String u_no = borrow.getU_no() + borrow.getU_type();
+        String u_no = borrow.getU_no();
         String u_name = borrow.getU_name() + (borrow.getU_type().equals("学生") ? "同学" : "老师");
         String d_name = borrow.getD_name();
         String d_saveSite = borrow.getD_saveSite();

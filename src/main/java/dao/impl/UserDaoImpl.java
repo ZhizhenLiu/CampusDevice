@@ -599,6 +599,7 @@ public class UserDaoImpl implements UserDao
                 user.setU_no(rs.getString("u_no"));
                 user.setU_name(rs.getString("u_name"));
                 user.setU_type(rs.getString("u_type"));
+                user.setU_phone(rs.getString("u_phone"));
                 userList.add(user);
             }
         }

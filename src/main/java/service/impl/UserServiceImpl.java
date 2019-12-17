@@ -565,21 +565,29 @@ public class UserServiceImpl implements UserService
 
     /*
      * @Description: 用户取消跟踪设备
-     * @Param t_no
+     * @Param wechatID  d_no
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    public JSONObject cancelTrack(int t_no)
+    public JSONObject cancelTrack(String wechatID, String d_no)
     {
         JSONObject info = new JSONObject();
         JSONArray errMsg = new JSONArray();
 
-        int flag = trackDao.cancelTrackDevice(t_no);
-        info.put("flag", flag);
-        if (flag == 0)
+        String u_no = userDao.getUserByWechatID(wechatID).getU_no();
+        if (trackDao.isTracking(u_no, d_no))
         {
-            errMsg.add("取消失败");
+            int flag = trackDao.cancelTrackDevice(u_no, d_no);
+            info.put("flag", flag);
+            if (flag == 0)
+            {
+                errMsg.add("取消失败");
+            }
+            info.put("errMsg", errMsg);
         }
-        info.put("errMsg", errMsg);
+        else
+        {
+//            info.put("errMsg", errMsg
+        }
 
         return info;
     }

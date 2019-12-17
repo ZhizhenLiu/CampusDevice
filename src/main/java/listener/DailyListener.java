@@ -13,11 +13,11 @@ public class DailyListener implements ServletContextListener
 
     public void contextInitialized(ServletContextEvent sce)
     {
+        System.out.println("listener init");
         new TimerManager();
     }
 
     public void contextDestroyed(ServletContextEvent sce)
     {
-
     }
 }

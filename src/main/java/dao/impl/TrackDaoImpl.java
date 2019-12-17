@@ -92,10 +92,10 @@ public class TrackDaoImpl implements TrackDao
 
     /*
      * @Description: 用户取消跟踪设备
-     * @Param t_no
+     * @Param u_no  d_no
      * @Return: int
      */
-    public int cancelTrackDevice(int t_no)
+    public int cancelTrackDevice(String u_no, String d_no)
     {
         //初始化
         con = null;
@@ -106,9 +106,10 @@ public class TrackDaoImpl implements TrackDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "DELETE FROM track WHERE t_no = ?";
+            sql = "DELETE FROM track WHERE u_no = ? AND d_no = ?";
             pStmt = con.prepareStatement(sql);
-            pStmt.setInt(1, t_no);
+            pStmt.setString(1, u_no);
+            pStmt.setString(2, d_no);
 
             flag = pStmt.executeUpdate();
         }

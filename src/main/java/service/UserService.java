@@ -128,10 +128,10 @@ public interface UserService
 
     /*
      * @Description: 用户取消跟踪设备
-     * @Param t_no
+     * @Param wechatID  d_no
      * @Return: com.alibaba.fastjson.JSONObject
      */
-    JSONObject cancelTrack(int t_no);
+    JSONObject cancelTrack(String wechatID, String d_no);
 
     /*
      * @Description: 用户反馈意见给管理员
