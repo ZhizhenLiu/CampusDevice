@@ -53,7 +53,7 @@ public class UploadServlet extends HttpServlet
         factory.setSizeThreshold(1024 * 1024);
         String d_no = null;
         String destPath = null;
-        String deviceUrl = "http://www.tozsy.com/img/device";
+        String deviceUrl = "http://www.tozsy.com/CampusDevice/img/device";
         ServletFileUpload upload = new ServletFileUpload(factory);
         try
         {

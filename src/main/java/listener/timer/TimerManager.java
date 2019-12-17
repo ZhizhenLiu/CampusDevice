@@ -21,7 +21,7 @@ public class TimerManager
         Calendar calendar = Calendar.getInstance();
         /*** 定制每日23:10执行方法 ***/
 
-        calendar.set(Calendar.HOUR_OF_DAY, 13);
+        calendar.set(Calendar.HOUR_OF_DAY, 17);
         calendar.set(Calendar.MINUTE, 25);
         calendar.set(Calendar.SECOND, 0);
         Date date = calendar.getTime();
