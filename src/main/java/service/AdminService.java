@@ -22,6 +22,14 @@ public interface AdminService
     JSONObject getAllDeviceOfAdmin(String wechatID, int page, int count);
 
     /*
+     * @Description: 管理员通过关键字检索查找管辖范围内设备
+     * @Param wechatID  keyword  page  count
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject getDeviceByPageWithKeyword(String wechatID, String keyword, int page, int count);
+
+
+    /*
      * @Description: 通过标识获取管理员管辖范围内的有人预约的设备
      * @Param wechatID
      * @Return: com.alibaba.fastjson.JSONObject

@@ -113,7 +113,7 @@ public class MessageDaoImpl implements MessageDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT * FROM message WHERE u_no = ? AND m_state = 0";
+            sql = "SELECT * FROM message WHERE u_no = ? AND m_state = 0 ORDER BY m_no DESC ";
             pStmt = con.prepareStatement(sql);
 
             //执行操作

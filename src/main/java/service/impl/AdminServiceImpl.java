@@ -69,6 +69,33 @@ public class AdminServiceImpl implements AdminService
     }
 
     /*
+     * @Description: 管理员通过关键字检索查找管辖范围内设备
+     * @Param wechatID  keyword  page  count
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject getDeviceByPageWithKeyword(String wechatID, String keyword, int page, int count)
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        //通过微信openid获取主键，通过主键查询
+        String a_no = adminDao.getAdminByWechatID(wechatID).getA_no();
+        keyword = "%" + keyword + "%";
+        List<Device> deviceList = deviceDao.getDeviceOfAdminByPageWithKeyword(a_no, keyword, page, count);
+        if (deviceList.isEmpty())
+        {
+            info.put("flag", 0);
+            errMsg.add("当前页数没有设备");
+        }
+        else
+        {
+            info.put("flag", 1);
+            info.put("device", JSONArray.parseArray(JSON.toJSONString(deviceList)));
+        }
+        info.put("errMsg", errMsg);
+        return info;
+    }
+    /*
      * @Description: 通过标识获取管理员管辖范围内的有人预约的设备
      * @Param wechatID  page  count
      * @Return: com.alibaba.fastjson.JSONObject

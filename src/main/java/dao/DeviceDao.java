@@ -71,6 +71,13 @@ public interface DeviceDao
     List<Device> getDeviceByPageWithKeyword(String keyword, int page, int count);
 
     /*
+     * @Description: 管理员通过关键词获取管辖范围内设备信息
+     * @Param a_no  keyword  page  count
+     * @Return: java.util.List<bean.Device>
+     */
+    List<Device> getDeviceOfAdminByPageWithKeyword(String a_no, String keyword, int page, int count);
+
+    /*
      * @Description: 设置设备图片url
      * @Param url
      * @Return: int

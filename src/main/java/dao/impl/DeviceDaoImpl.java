@@ -371,15 +371,69 @@ public class DeviceDaoImpl implements DeviceDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql =   "SELECT * FROM device WHERE d_name LIKE ? OR d_no LIKE ? OR " +
-                    "d_model LIKE ? OR d_save_site LIKE ? " +
+            sql =   "SELECT * FROM device WHERE d_name LIKE ? OR d_no LIKE ? OR d_save_site LIKE ? " +
                     "LIMIT ?, ? ";
             pStmt = con.prepareStatement(sql);
 
             pStmt.setString(1, keyword);
             pStmt.setString(2, keyword);
             pStmt.setString(3, keyword);
-            pStmt.setString(4, keyword);
+            pStmt.setInt(4, (page - 1) * count);
+            pStmt.setInt(5, count);
+
+            //替换参数，从1开始
+            rs = pStmt.executeQuery();
+
+            while (rs.next())
+            {
+                Device device = new Device();
+                device.setD_no(rs.getString("d_no"));
+                device.setD_name(rs.getString("d_name"));
+                device.setD_model(rs.getString("d_model"));
+                device.setD_saveSite(rs.getString("d_save_site"));
+                device.setD_state(rs.getString("d_state"));
+                device.setD_storeDate(rs.getString("d_store_date"));
+                device.setD_borrowedTimes(rs.getInt("d_borrowed_times"));
+                device.setD_photo(rs.getString("d_photo"));
+                deviceList.add(device);
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return deviceList;
+    }
+
+    /*
+     * @Description: 管理员通过关键词获取管辖范围内设备信息
+     * @Param a_no  keyword  page  count
+     * @Return: java.util.List<bean.Device>
+     */
+    public List<Device> getDeviceOfAdminByPageWithKeyword(String a_no, String keyword, int page, int count)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+        List<Device> deviceList = new ArrayList<>();
+
+        try
+        {
+            con = JDBCUtils.getConnection();
+            sql =   "SELECT * FROM device WHERE (d_name LIKE ? OR d_no LIKE ? OR d_save_site LIKE ?) " +
+                    "AND a_no = ? " +
+                    "LIMIT ?, ? ";
+            pStmt = con.prepareStatement(sql);
+
+            pStmt.setString(1, keyword);
+            pStmt.setString(2, keyword);
+            pStmt.setString(3, keyword);
+            pStmt.setString(4, a_no);
             pStmt.setInt(5, (page - 1) * count);
             pStmt.setInt(6, count);
 
