@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "CancelTrackServlet")
+@WebServlet(name = "CancelTrackServlet", urlPatterns = "/user/cancelTrack")
 public class CancelTrackServlet extends HttpServlet
 {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -23,6 +23,8 @@ public class CancelTrackServlet extends HttpServlet
         response.setCharacterEncoding("UTF-8");
 
         String code = request.getParameter("code");
+        String d_no = request.getParameter("d_no");
+
         //向微信服务器接口发送code，获取用户唯一标识openid, 返回参数
         JSONObject result = JSONObject.parseObject(HttpUtils.sendGet(code));
         JSONObject info = new JSONObject();
@@ -34,17 +36,18 @@ public class CancelTrackServlet extends HttpServlet
         if (result.containsKey("openid"))
         {
             wechatID = (String) result.get("openid");
-//            info = userService.getReservationByPage(wechatID, page, 10, true);
-            printWriter.write(info.toJSONString());
+            info = userService.cancelTrack(wechatID, d_no);
         }
         //请求失败，返回错误信息
         else
         {
-            info.put("errMsg", result.get("errMsg"));
+            info.put("errMsg", result.get("errmsg"));
             info.put("flag", "0");
-            printWriter.write(info.toJSONString());
         }
 
+        printWriter.write(info.toJSONString());
+        printWriter.flush();
+        printWriter.close();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
