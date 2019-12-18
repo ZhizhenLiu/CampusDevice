@@ -199,7 +199,7 @@ public class AdminServiceImpl implements AdminService
         JSONArray errMsg = new JSONArray();
         Reservation reservation = reservationDao.getReservation(r_no);
         String u_no = reservation.getU_no();
-        String u_name = reservation.getU_name() + reservation.getU_type();
+        String u_name = reservation.getU_name() + (reservation.getU_type().equals("学生") ? "同学" : "老师");
         String d_no = reservation.getD_no();
         String d_name = reservation.getD_name();
         String d_saveSite = reservation.getD_saveSite();

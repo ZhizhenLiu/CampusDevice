@@ -28,7 +28,7 @@ public class UploadServlet extends HttpServlet
 
         //获取文件需要上传到的路径
         String path = getServletContext().getRealPath("/") + "img/device";
-        ;
+
         System.out.println(path);
         File dir = new File(path);
         if (!dir.exists())
@@ -53,7 +53,7 @@ public class UploadServlet extends HttpServlet
         factory.setSizeThreshold(1024 * 1024);
         String d_no = null;
         String destPath = null;
-        String deviceUrl = "http://www.tozsy.com/CampusDevice/img/device";
+        String deviceUrl = "https://www.tozsy.com/CampusDevice/img/device";
         ServletFileUpload upload = new ServletFileUpload(factory);
         try
         {
@@ -61,9 +61,7 @@ public class UploadServlet extends HttpServlet
             FileItem picture = null;
             for (FileItem item : list)
             {
-                //获取表单的属性名字
-                String name = item.getFieldName();
-                //如果获取的表单信息是普通的文本信息 而且为d_no
+                //如果获取的表单信息是普通的文本信息 而且表单的属性名字为d_no
                 if (item.isFormField() && item.getFieldName().equals("d_no"))
                 {
                     //获取具体输入的字符串

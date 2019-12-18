@@ -224,6 +224,7 @@ public class CreditRecordDaoImpl implements CreditRecordDao
             BorrowDao borrowDao = new BorrowDaoImpl();
             CreditRule creditRule = creditRuleDao.getCreditRule(breakRuleNo);
             Borrow borrow = borrowDao.getBorrowByNo(b_no);
+            System.out.println(borrow.getB_no());
             User user = userDao.getUserByNo(borrow.getU_no());
 
             pStmt.setString(1,borrow.getU_no());
