@@ -80,8 +80,7 @@ public class Test {
 //       System.out.println(userService.getDeviceDetails("o0ug242ge55sufbQW0xHk7KTmq60", "1713715S"));
 
 //        .out.println(userService.reserveDevice("1713715S","o0ug242ge55sufbQW0xHk7KTmq60", "2019-12-18", "2019-12-19"));
-       System.out.println(adminService.getDeviceByPageWithKeyword("o0ug242ge55sufbQW0xHk7KTmq60", "侠", 1, 10));
-       System.out.println(deviceDao.getDeviceOfAdminByPageWithKeyword("201726010313", "键盘", 1,10));
 
+       System.out.println(adminService.getBorrowedDevice("o0ug242ge55sufbQW0xHk7KTmq60"));
    }
 }

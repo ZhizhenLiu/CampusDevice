@@ -146,7 +146,7 @@ public class BorrowDaoImpl implements BorrowDao
             con = JDBCUtils.getConnection();
             sql = "SELECT b_no, b.b_state,b.b_no, d.d_name, d.d_no, u.u_no, u.u_name, u.u_phone, u.u_mentor_name, u.u_mentor_phone, u_credit_grade, b_borrow_date, b_return_date " +
                     "FROM borrow b, administrator a, user u ,device d  " +
-                    "WHERE a.a_no = ? " +
+                    "WHERE a.a_no = ? AND d.a_no = ? " +
                     "AND b.u_no = u.u_no " +
                     "AND b.d_no = d.d_no AND b_state IN (-1, 0) " +
                     "ORDER BY b_return_date ";
@@ -154,6 +154,7 @@ public class BorrowDaoImpl implements BorrowDao
 
             //执行操作
             pStmt.setString(1, a_no);
+            pStmt.setString(2, a_no);
 
             rs = pStmt.executeQuery();
             while (rs.next())
