@@ -371,14 +371,17 @@ public class DeviceDaoImpl implements DeviceDao
         try
         {
             con = JDBCUtils.getConnection();
-            //参数不太好用setString替换，直接字符串代替也没错
-            sql = "SELECT * FROM device WHERE d_name LIKE '%" + keyword + "%' OR " +
-                    "d_model like '%" + keyword + "%' OR " +
-                    "d_save_site LIKE '%" + keyword + "%' " +
-                    "LIMIT ?, ?";
+            sql =   "SELECT * FROM device WHERE d_name LIKE ? OR d_no LIKE ? OR " +
+                    "d_model LIKE ? OR d_save_site LIKE ? " +
+                    "LIMIT ?, ? ";
             pStmt = con.prepareStatement(sql);
-            pStmt.setInt(1, (page - 1) * count);
-            pStmt.setInt(2, count);
+
+            pStmt.setString(1, keyword);
+            pStmt.setString(2, keyword);
+            pStmt.setString(3, keyword);
+            pStmt.setString(4, keyword);
+            pStmt.setInt(5, (page - 1) * count);
+            pStmt.setInt(6, count);
 
             //替换参数，从1开始
             rs = pStmt.executeQuery();

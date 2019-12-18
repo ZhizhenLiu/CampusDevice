@@ -78,25 +78,7 @@ public class SystemServiceImpl implements SystemService
         {
             flag = 0;
         }
-        else
-        {
-
-            //用户不存在，获取注册所需信息：学院、专业
-            List<Academy> academyList = academyDao.getAllAcademy();
-            System.out.println(academyList);
-            for (Academy academy : academyList)
-            {
-                List<Specialty> specialtyList = specialtyDao.getSpecialtyByAcademyNo(academy.getAm_no());
-                if (!specialtyList.isEmpty())
-                {
-                    for (Specialty specialty: specialtyList)
-                    {
-                        academy.getSpecialtyList().add(specialty);
-                    }
-                }
-            }
-            info.put("academyList", JSONArray.parseArray(JSON.toJSONString(academyList)));
-        }
+        else flag = -1;
         info.put("flag", "1");
         info.put("identity", flag);
 

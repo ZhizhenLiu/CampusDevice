@@ -21,7 +21,7 @@ public class BorrowDaoImpl implements BorrowDao
     private String sql;
 
     /*
-     * @Description: 用户查询借用完成的记录(逾期归还:-2 归还未评价:1 归还评价:2)
+     * @Description: 用户查询借用完成的记录(逾期归还评价:-3 逾期归还未评价:-2  逾期借用: -1  借用中:0  归还未评价:1 归还评价:2)
      * @Param u_no  page  count
      * @Return: java.util.List<bean.Borrow>
      */
@@ -36,10 +36,10 @@ public class BorrowDaoImpl implements BorrowDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT b_no, b_borrow_date, b_return_date, d_save_site, device.d_no, d_name, b_state " +
+            sql =   "SELECT b_no, b_borrow_date, b_return_date, d_save_site, device.d_no, d_name, b_state " +
                     "FROM borrow, device " +
                     "WHERE u_no = ?" +
-                    "AND borrow.d_no = device.d_no AND b_state IN(-2, 1, 2) " +
+                    "AND borrow.d_no = device.d_no AND b_state IN(-3, -2, 1, 2) " +
                     "ORDER BY b_borrow_date DESC  " +
                     "LIMIT ?, ?";
             pStmt = con.prepareStatement(sql);
@@ -75,7 +75,7 @@ public class BorrowDaoImpl implements BorrowDao
     }
 
     /*
-     * @Description: 用户查询借用中的记录( 逾期借用: -1 借用中：0 )
+     * @Description: 用户查询借用中的记录( 逾期归还评价:-3 逾期归还未评价:-2  逾期借用: -1  借用中:0  归还未评价:1 归还评价:2 )
      * @Param u_no  page  count
      * @Return: java.util.List<bean.Borrow>
      */
@@ -273,7 +273,7 @@ public class BorrowDaoImpl implements BorrowDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql =   "SELECT u.u_name, u.u_no, u.u_type, u.u_credit_grade,u.u_phone, u.u_email, d.d_no, d.d_name, b.b_borrow_date, b.b_return_date FROM borrow b, device d, `user` u " +
+            sql =   "SELECT u.u_name, u.u_no, u.u_type, u.u_credit_grade,u.u_phone, d.d_no, d.d_name, b.b_borrow_date, b.b_return_date FROM borrow b, device d, `user` u " +
                     "WHERE b.d_no = d.d_no " +
                     "AND u.u_no = b.u_no " +
                     "AND d.a_no = ? " +
@@ -291,6 +291,7 @@ public class BorrowDaoImpl implements BorrowDao
                 borrow.setU_name(rs.getString("u_name"));
                 borrow.setU_no(rs.getString("u_no"));
                 borrow.setU_type(rs.getString("u_type"));
+                borrow.setU_phone(rs.getString("u_phone"));
                 borrow.setU_creditGrade(rs.getInt("u_credit_grade"));
                 borrow.setB_borrowDate(rs.getString("b_borrow_date"));
                 borrow.setB_returnDate(rs.getString("b_return_date"));
@@ -326,7 +327,7 @@ public class BorrowDaoImpl implements BorrowDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "UPDATE borrow SET b_state = 1 " +
+            sql =   "UPDATE borrow SET b_state = 1 " +
                     "WHERE b_no = ? " +
                     "AND b_state <> 1 ";
             pStmt = con.prepareStatement(sql);
@@ -348,7 +349,7 @@ public class BorrowDaoImpl implements BorrowDao
     }
 
     /*
-     * @Description: 借用中设备逾期归还 （0:借用中，1:按时归还 -1:逾期未还 -2:逾期归还）
+     * @Description: 借用中设备逾期归还 （逾期归还评价:-3 逾期归还未评价:-2  逾期借用: -1  借用中:0  归还未评价:1 归还评价:2）
      * @Param b_no
      * @Return: int
      */
@@ -363,7 +364,7 @@ public class BorrowDaoImpl implements BorrowDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "UPDATE borrow SET b_state = -2 " +
+            sql =   "UPDATE borrow SET b_state = -2 " +
                     "WHERE b_no = ? " +
                     "AND b_state <> -2";
             pStmt = con.prepareStatement(sql);
@@ -385,7 +386,7 @@ public class BorrowDaoImpl implements BorrowDao
     }
 
     /*
-     * @Description: 修改借用表 借用状态 （逾期归还:-2  逾期借用: -1  借用中:0  归还:1 归还评价:2）
+     * @Description: 修改借用表 借用状态 （逾期归还评价:-3 逾期归还未评价:-2  逾期借用: -1  借用中:0  归还未评价:1 归还评价:2）
      * @Param b_no
      * @Return: int
      */
@@ -400,15 +401,22 @@ public class BorrowDaoImpl implements BorrowDao
         try
         {
             con = JDBCUtils.getConnection();
+
+            //按时归还
             sql = "UPDATE borrow SET b_state = 2 " +
-                    "WHERE b_no = ? " +
-                    "AND b_state <> 2";
+                  "WHERE b_no = ? " +
+                  "AND b_state = 1";
             pStmt = con.prepareStatement(sql);
-
-            //替换参数，从1开始
             pStmt.setInt(1, b_no);
-
             flag = pStmt.executeUpdate();
+
+            //逾期归还
+            sql = "UPDATE borrow SET b_state = -3 " +
+                  "WHERE b_no = ? " +
+                  "AND b_state = -2";
+            pStmt = con.prepareStatement(sql);
+            pStmt.setInt(1, b_no);
+            flag += pStmt.executeUpdate();
         }
         catch (SQLException e)
         {

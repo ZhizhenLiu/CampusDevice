@@ -115,8 +115,9 @@ public class AdminDaoImpl implements AdminDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "SELECT * FROM administrator WHERE a_type = '院统管' ";
+            sql = "SELECT * FROM administrator WHERE a_type =  ? ";
             pStmt = con.prepareStatement(sql);
+            pStmt.setString(1, "院统管");
             rs = pStmt.executeQuery();
 
             while (rs.next())
@@ -156,13 +157,15 @@ public class AdminDaoImpl implements AdminDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "INSERT INTO administrator(A_NO, A_PASSWORD, A_NAME, A_WECHATID, A_TYPE, A_PHONE, A_EMIAL) VALUES (?, MD5('123456789') , ?, ?, '院统管', ?, ?)";
+            sql = "INSERT INTO administrator(A_NO, A_PASSWORD, A_NAME, A_WECHATID, A_TYPE, A_PHONE, A_EMAIL) VALUES (?, MD5(?) , ?, ?, ?, ?, ?)";
             pStmt = con.prepareStatement(sql);
             pStmt.setString(1, user.getU_no());
-            pStmt.setString(2, user.getU_name());
-            pStmt.setString(3, user.getU_wechatID());
-            pStmt.setString(4, user.getU_phone());
-            pStmt.setString(5, user.getU_email());
+            pStmt.setString(2,"123456789");
+            pStmt.setString(3, user.getU_name());
+            pStmt.setString(4, user.getU_wechatID());
+            pStmt.setString(5, "院统管");
+            pStmt.setString(6, user.getU_phone());
+            pStmt.setString(7, user.getU_email());
 
             flag = pStmt.executeUpdate();
         }

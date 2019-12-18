@@ -375,14 +375,12 @@ public class AdminServiceImpl implements AdminService
             //及时归还
             if (now.getTime() <= returnDate.getTime())
             {
-                System.out.println(1);
                 flag = borrowDao.returnOnTime(b_no);
                 if (flag == 0) errMsg.add("修改借用记录状态为按时归还失败");
             }
             //逾期归还
             else
             {
-                System.out.println(2);
                 flag = borrowDao.returnOutOfTime(b_no);
                 if (flag == 0) errMsg.add("修改借用表记录状态为逾期归还失败");
             }
@@ -393,10 +391,7 @@ public class AdminServiceImpl implements AdminService
 
             //发送成功归还提示信息
             flag = messageDao.sendMessage(u_no, u_name + "，管理员已确认你归还设备：" + d_name + "，感谢你的合作");
-            if (flag == 0)
-            {
-                errMsg.add("发送提示信息失败");
-            }
+            if (flag == 0) errMsg.add("发送提示信息失败");
 
             //修改设备状态
             CreditRule creditRule = new CreditRule();

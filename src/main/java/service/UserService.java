@@ -1,6 +1,7 @@
 package service;
 
 import bean.User;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 public interface UserService
@@ -160,4 +161,11 @@ public interface UserService
      * @Return: com.alibaba.fastjson.JSONObject
      */
     JSONObject getAllCreditRules();
+
+    /*
+     * @Description: 注册前获取院系专业信息
+     * @Param
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    JSONObject getAcademyList();
 }

@@ -22,6 +22,8 @@ public class UserServiceImpl implements UserService
     private CommentDao commentDao = new CommentDaoImpl();
     private TrackDao trackDao = new TrackDaoImpl();
     private CreditRuleDao creditRuleDao = new CreditRuleDaoImpl();
+    private AcademyDao academyDao = new AcademyDaoImpl();
+    private SpecialtyDao specialtyDao = new SpecialtyDaoImpl();
 
     /*
      * @Description: 登陆校验，判断用户是否存在
@@ -457,6 +459,7 @@ public class UserServiceImpl implements UserService
         JSONObject info = new JSONObject();
         JSONArray errMsg = new JSONArray();
 
+        keyword = "%"+keyword+"%";
         List<Device> deviceList = deviceDao.getDeviceByPageWithKeyword(keyword, page, count);
         if (deviceList.isEmpty())
         {
@@ -713,4 +716,45 @@ public class UserServiceImpl implements UserService
         info.put("errMsg", errMsg);
         return info;
     }
+
+    /*
+     * @Description: 注册前获取院系专业信息
+     * @Param
+     * @Return: com.alibaba.fastjson.JSONObject
+     */
+    public JSONObject getAcademyList()
+    {
+        JSONObject info = new JSONObject();
+        JSONArray errMsg = new JSONArray();
+
+        //用户不存在，获取注册所需信息：学院、专业
+        int flag = 1;
+        List<Academy> academyList = academyDao.getAllAcademy();
+        if (!academyList.isEmpty())
+        {
+            for (Academy academy : academyList)
+            {
+                List<Specialty> specialtyList = specialtyDao.getSpecialtyByAcademyNo(academy.getAm_no());
+                if (!specialtyList.isEmpty())
+                {
+                    for (Specialty specialty: specialtyList)
+                    {
+                        academy.getSpecialtyList().add(specialty);
+                    }
+                }
+            }
+            info.put("academyList", JSONArray.parseArray(JSON.toJSONString(academyList)));
+        }
+        else
+        {
+            flag = 0;
+            errMsg.add("获取学院信息失败");
+        }
+
+        info.put("flag", flag);
+        info.put("errMsg",errMsg);
+        return info;
+    }
+
+
 }
