@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "RemindOverDueServlet")
+@WebServlet(name = "RemindOverDueServlet",urlPatterns = "/admin/remindOverDue")
 public class RemindOverDueServlet extends HttpServlet
 {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -27,6 +27,8 @@ public class RemindOverDueServlet extends HttpServlet
         AdminService adminService = new AdminServiceImpl();
         PrintWriter printWriter = response.getWriter();
         printWriter.write(adminService.remindOverDue(b_no).toJSONString());
+        printWriter.flush();
+        printWriter.close();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

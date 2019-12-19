@@ -49,6 +49,7 @@ public class Test {
        AdminService adminService = new AdminServiceImpl();
        SystemService systemService = new SystemServiceImpl();
        UserDao userDao = new UserDaoImpl();
+       AdminDao adminDao = new AdminDaoImpl();
        DeviceDao deviceDao = new DeviceDaoImpl();
        BorrowDao borrowDao = new BorrowDaoImpl();
        CommentDao  commentDao = new CommentDaoImpl();
@@ -81,6 +82,6 @@ public class Test {
 
 //        .out.println(userService.reserveDevice("1713715S","o0ug242ge55sufbQW0xHk7KTmq60", "2019-12-18", "2019-12-19"));
 
-       System.out.println(adminService.getBorrowedDevice("o0ug242ge55sufbQW0xHk7KTmq60"));
+       System.out.println(adminService.getAllDeviceOfAdmin("o0ug242ge55sufbQW0xHk7KTmq60",1,10));
    }
 }

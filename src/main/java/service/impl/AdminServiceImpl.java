@@ -188,7 +188,7 @@ public class AdminServiceImpl implements AdminService
 
         Reservation reservation = reservationDao.getReservation(r_no);
         String u_no = reservation.getU_no();
-        String u_name = reservation.getU_name() + reservation.getU_type();
+        String u_name = reservation.getU_name() + (reservation.getU_type().equals("学生")?"同学":"老师");
         String d_name = reservation.getD_name();
 
         int flag = 1;
@@ -234,51 +234,59 @@ public class AdminServiceImpl implements AdminService
 
         info.put("flag", 1);
 
-        //判断是否已经确认借用给用户: 防止web端小程序端同时借用
-        if (reservationDao.getReservation(r_no).getR_state() != 1)
+        //判断请求是否已经处理
+        //预约取消:-2  预约拒绝:-1  预约中:0   预约成功:1 协商预约:2  协商成功:3
+        int r_state = reservationDao.getReservation(r_no).getR_state();
+        int flag = 1;
+        switch (r_state)
         {
-            if (state.equals("在库"))
+            //预约被取消
+            case -2 :
             {
-                String borrowDate = reservation.getR_startDate();
-                String returnDate = reservation.getR_returnDate();
+                flag = 0;
+                errMsg.add("该预约请求已被取消");
+                break;
+            }
+            //预约已经拒绝、已经同意、已经修改协商中
+            case -1 :
+            case 1 :
+            case 2 :
+            {
+                flag = 0;
+                errMsg.add("该预约请求已被处理");
+                break;
+            }
+            case 3 :
+            case 0 :
+            {
 
-                // 预约状态置为1（成功）-> 设备状态修改外借 -> 借用表中插入记录
-                int flag = reservationDao.confirmReserve(r_no);
-                if (flag == 0)
+                if (state.equals("在库"))
                 {
-                    info.put("flag", 0);
-                    errMsg.add("修改预约状态失败");
+                    String borrowDate = reservation.getR_startDate();
+                    String returnDate = reservation.getR_returnDate();
+
+                    // 预约状态置为1（成功）-> 设备状态修改外借 -> 借用表中插入记录
+                    flag = reservationDao.confirmReserve(r_no);
+                    if (flag == 0) errMsg.add("修改预约状态失败");
+
+                    flag = deviceDao.setDeviceState(d_no, "外借");
+                    if (flag == 0) errMsg.add("设备状态修改外借失败");
+
+                    flag = borrowDao.confirmBorrow(u_no, d_no, borrowDate, returnDate);
+                    if (flag == 0) errMsg.add("借用表中插入记录失败");
+
+                    flag = messageDao.sendMessage(u_no, u_name + "，管理员已批准你的预约，设备：" + d_name + "。请在今日内到" + d_saveSite + "领取设备");
+                    if (flag == 0) errMsg.add("发送成功借用提示失败");
+
                 }
-                flag = deviceDao.setDeviceState(d_no, "外借");
-                if (flag == 0)
+                else
                 {
-                    info.put("flag", 0);
-                    errMsg.add("设备状态修改外借失败");
-                }
-                flag = borrowDao.confirmBorrow(u_no, d_no, borrowDate, returnDate);
-                if (flag == 0)
-                {
-                    info.put("flag", 0);
-                    errMsg.add("借用表中插入记录失败");
-                }
-                flag = messageDao.sendMessage(u_no, u_name + "，管理员已批准你的预约，设备：" + d_name + "。请在今日内到" + d_saveSite + "领取设备");
-                if (flag == 0)
-                {
-                    info.put("flag", 0);
-                    errMsg.add("发送成功借用提示失败");
+                    flag = 0;
+                    errMsg.add("设备当前状态为" + state + ", 暂不可借用");
                 }
             }
-            else
-            {
-                info.put("flag", 0);
-                errMsg.add("设备当前状态为" + state + ", 暂不可借用");
-            }
         }
-        else
-        {
-            info.put("flag", 0);
-            errMsg.add("该预约请求已被处理");
-        }
+        info.put("flag", flag);
         info.put("errMsg", errMsg);
         return info;
     }
@@ -297,34 +305,52 @@ public class AdminServiceImpl implements AdminService
         String u_no = reservation.getU_no();
         String u_name = reservation.getU_name() + (reservation.getU_type().equals("学生") ? "同学" : "老师");
         String d_name = reservation.getD_name();
-        info.put("flag", 1);
 
-        //判断是否已经确认拒绝租借给用户: 防止web端小程序端同时拒绝
-        if (reservation.getR_state() != -1)
+        //判断请求是否已经处理
+        //预约取消:-2  预约拒绝:-1  预约中:0   预约成功:1 协商预约:2  协商成功:3
+        int r_state = reservationDao.getReservation(r_no).getR_state();
+        int flag = 1;
+        switch (r_state)
         {
-            int flag = reservationDao.refuseReserve(r_no, r_feedBack);
-            info.put("flag", flag);
-            if (flag == 0)
+            //预约被取消
+            case -2 :
             {
-                errMsg.add("拒绝预约失败");
+                flag = 0;
+                errMsg.add("该预约请求已被取消");
+                break;
             }
-
-            //反馈不为空
-            if (r_feedBack != null)
+            //预约已经拒绝、已经同意、已经修改协商中
+            case -1 :
+            case 1 :
+            case 2 :
             {
-                flag = messageDao.sendMessage(u_no, u_name + "，你的预约：" + d_name + "被拒绝。请在我的预约中查看详情");
+                flag = 0;
+                errMsg.add("该预约请求已被处理");
+                break;
+            }
+            case 3 :
+            case 0 :
+            {
+                flag = reservationDao.refuseReserve(r_no, r_feedBack);
                 info.put("flag", flag);
                 if (flag == 0)
                 {
-                    errMsg.add("发送消息给用户失败");
+                    errMsg.add("拒绝预约失败");
+                }
+
+                //反馈不为空
+                if (r_feedBack != null)
+                {
+                    flag = messageDao.sendMessage(u_no, u_name + "，你的预约：" + d_name + "被拒绝。请在我的预约中查看详情");
+                    info.put("flag", flag);
+                    if (flag == 0)
+                    {
+                        errMsg.add("发送消息给用户失败");
+                    }
                 }
             }
         }
-        else
-        {
-            info.put("flag", 0);
-            errMsg.add("该预约请求已被处理");
-        }
+        info.put("flag", flag);
         info.put("errMsg", errMsg);
         return info;
     }
