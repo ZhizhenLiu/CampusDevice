@@ -160,7 +160,7 @@ public class AdminDaoImpl implements AdminDao
             sql = "INSERT INTO administrator(A_NO, A_PASSWORD, A_NAME, A_WECHATID, A_TYPE, A_PHONE, A_EMAIL) VALUES (?, MD5(?) , ?, ?, ?, ?, ?)";
             pStmt = con.prepareStatement(sql);
             pStmt.setString(1, user.getU_no());
-            pStmt.setString(2,"123456789");
+            pStmt.setString(2, user.getU_no());
             pStmt.setString(3, user.getU_name());
             pStmt.setString(4, user.getU_wechatID());
             pStmt.setString(5, "院统管");

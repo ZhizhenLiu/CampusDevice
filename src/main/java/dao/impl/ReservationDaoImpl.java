@@ -431,7 +431,7 @@ public class ReservationDaoImpl implements ReservationDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "UPDATE reservation SET r_state = 1  " +
+            sql =   "UPDATE reservation SET r_state = 1  " +
                     "WHERE r_no = ? " +
                     "AND r_state IN (0, 3)";
             pStmt = con.prepareStatement(sql);
@@ -453,7 +453,7 @@ public class ReservationDaoImpl implements ReservationDao
     }
 
     /*
-     * @Description: 预约中设备预约被拒绝：（0:预约中 -1：预约被拒绝 1：预约成功）
+     * @Description: 预约中设备预约被拒绝：（预约取消:-2  预约拒绝:-1  预约中:0   预约成功:1 协商预约:2  协商成功:3）
      * @Param u_no  d_no  r_feedBack
      * @Return: int
      */
@@ -470,7 +470,7 @@ public class ReservationDaoImpl implements ReservationDao
             con = JDBCUtils.getConnection();
             sql = "UPDATE reservation SET r_state = -1, r_feedback = ?  " +
                     "WHERE r_no = ? " +
-                    "AND r_state = 0";
+                    "AND r_state IN(0, 3)";
             pStmt = con.prepareStatement(sql);
 
             //替换参数，从1开始
