@@ -1,4 +1,3 @@
-import bean.Borrow;
 import bean.Device;
 import bean.User;
 import com.alibaba.fastjson.JSON;
@@ -11,11 +10,9 @@ import service.UserService;
 import service.impl.AdminServiceImpl;
 import service.impl.SystemServiceImpl;
 import service.impl.UserServiceImpl;
-import utils.MessageUtils;
-import utils.PhoneFormatCheckUtils;
+import utils.FormatCheckUtils;
+import utils.TransformUtils;
 
-import java.awt.*;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -83,9 +80,11 @@ public class Test {
 
 //        .out.println(userService.reserveDevice("1713715S","o0ug242ge55sufbQW0xHk7KTmq60", "2019-12-18", "2019-12-19"));
 
-       System.out.println(userService.registerUser(user));
+       Date now = TransformUtils.StringTransSQLDate("2019-12-21");
+       Date tom = TransformUtils.StringTransSQLDate("2019-12-23");
 
-       System.out.println(userDao.getUserByNo("2017260103"));
+       System.out.println(now+" "+new Date()+" "+(new Date()).after(now));
+       System.out.println(now.before(tom));
 
    }
 }

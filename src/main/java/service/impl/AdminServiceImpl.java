@@ -8,6 +8,7 @@ import dao.*;
 import dao.impl.*;
 import service.AdminService;
 import utils.MessageUtils;
+import utils.TransformUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -195,13 +196,25 @@ public class AdminServiceImpl implements AdminService
         //判断是否已经确认借用给用户: 防止web端小程序端同时借用
         if (reservation.getR_state() != 2)
         {
-            //编辑预约，修改预约状态
-            flag = reservationDao.editReservation(r_no, startDate, endDate, feedBack);
-            if (flag == 0)  errMsg.add("编辑修改预约失败");
+            //判断借用日期是否小于归还日期
+            Date now = new Date();
+            Date start = TransformUtils.StringTransSQLDate(startDate);
+            Date end = TransformUtils.StringTransSQLDate(endDate);
+            if (start.after(now) && start.before(end))
+            {
+                //编辑预约，修改预约状态
+                flag = reservationDao.editReservation(r_no, startDate, endDate, feedBack);
+                if (flag == 0)  errMsg.add("编辑修改预约失败");
 
-            //向用户发送提示消息
-            flag = messageDao.sendMessage(u_no, u_name + "，你有一条来自管理员的预约协商：" + d_name + "，请在我的预约中查看详情");
-            if (flag == 0) errMsg.add("发送提示消息失败");
+                //向用户发送提示消息
+                flag = messageDao.sendMessage(u_no, u_name + "，你有一条来自管理员的预约协商：" + d_name + "，请在我的预约中查看详情");
+                if (flag == 0) errMsg.add("发送提示消息失败");
+            }
+            else
+            {
+                flag = 0;
+                errMsg.add("起始日期应小于归还日期");
+            }
         }
         else
         {

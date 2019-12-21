@@ -4,12 +4,14 @@ import bean.*;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.sun.org.apache.bcel.internal.generic.DADD;
 import dao.*;
 import dao.impl.*;
 import service.UserService;
-import utils.PhoneFormatCheckUtils;
+import utils.FormatCheckUtils;
+import utils.TransformUtils;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class UserServiceImpl implements UserService
@@ -91,19 +93,21 @@ public class UserServiceImpl implements UserService
             flag = 0;
         }
         //判断手机号码格式是否正确
-        else if (!PhoneFormatCheckUtils.isChinaPhoneLegal(user.getU_phone()))
+        else if (!FormatCheckUtils.isChinaPhoneLegal(user.getU_phone()))
         {
             errMsg.add("手机号码格式错误");
             flag = 0;
         }
-        //判断导师手机号码格式是否正确
-        else if (user.getU_mentorPhone() != null)
+        else if (user.getU_email() != null && !FormatCheckUtils.isEmail(user.getU_email()))
         {
-            if (!PhoneFormatCheckUtils.isChinaPhoneLegal(user.getU_mentorPhone()))
-            {
-                errMsg.add("导师手机号码格式错误");
-                flag = 0;
-            }
+            errMsg.add("邮箱格式错误");
+            flag = 0;
+        }
+        //判断导师手机号码格式是否正确
+        else if (user.getU_mentorPhone() != null && !FormatCheckUtils.isChinaPhoneLegal(user.getU_mentorPhone()))
+        {
+            errMsg.add("导师手机号码格式错误");
+            flag = 0;
         }
         else
         {
@@ -217,8 +221,8 @@ public class UserServiceImpl implements UserService
         String u_no = userDao.getUserByWechatID(wechatId).getU_no();
         JSONObject info = new JSONObject();
         JSONArray errMsg = new JSONArray();
-        info.put("flag", 1);
 
+        int flag = 1;
         //获取设备但前状态
         String state = deviceDao.getDeviceState(d_no);
         if (state.equals("在库"))
@@ -226,25 +230,34 @@ public class UserServiceImpl implements UserService
             //判断是否已经正在预约,如果没有正在预约该设备
             if (!reservationDao.isReserving(u_no, d_no))
             {
-                int flag = reservationDao.reserveDevice(d_no, u_no, startDate, returnDate);
-                info.put("flag", flag);
-                if (flag == 0)
+                //判断借用日期是否小于归还日期
+                Date now = new Date();
+                Date start = TransformUtils.StringTransSQLDate(startDate);
+                Date end = TransformUtils.StringTransSQLDate(returnDate);
+                if (start.after(now) && start.before(end))
                 {
-                    errMsg.add("用户预约设备失败");
+                    flag = reservationDao.reserveDevice(d_no, u_no, startDate, returnDate);
+                    if (flag == 0) errMsg.add("用户预约设备失败");
+                }
+                else
+                {
+                    flag = 0;
+                    errMsg.add("起始日期应小于归还日期");
                 }
             }
             else
             {
-                info.put("flag", 0);
-                errMsg.add("用户已正在预约该设备！");
+                flag = 0;
+                errMsg.add("已正在预约该设备！");
             }
         }
         else
         {
             //设备当前不在库，返回错误信息
-            info.put("flag", 0);
+            flag = 0;
             errMsg.add("设备当前不可借用");
         }
+        info.put("flag", flag);
         info.put("errMsg", errMsg);
         return info;
     }
@@ -684,7 +697,7 @@ public class UserServiceImpl implements UserService
         }
         if (user.getU_phone() != null)
         {
-            if (PhoneFormatCheckUtils.isChinaPhoneLegal(user.getU_phone()))
+            if (FormatCheckUtils.isChinaPhoneLegal(user.getU_phone()))
             {
                 flag = userDao.setUserPhone(u_no, user.getU_phone());
                 if (flag == 0) errMsg.add("修改用户手机号码失败");
@@ -697,8 +710,16 @@ public class UserServiceImpl implements UserService
         }
         if (user.getU_email() != null)
         {
-            flag = userDao.setUserEmail(u_no, user.getU_email());
-            if (flag == 0) errMsg.add("修改用户邮箱失败失败");
+            if (FormatCheckUtils.isEmail(user.getU_email()))
+            {
+                flag = userDao.setUserEmail(u_no, user.getU_email());
+                if (flag == 0) errMsg.add("修改用户邮箱失败失败");
+            }
+            else
+            {
+                flag = 0;
+                errMsg.add("邮箱格式错误");
+            }
         }
         if (user.getU_mentorName() != null)
         {
@@ -707,8 +728,16 @@ public class UserServiceImpl implements UserService
         }
         if (user.getU_mentorPhone() != null)
         {
-            flag = userDao.setUserMentorPhone(u_no, user.getU_mentorPhone());
-            if (flag == 0) errMsg.add("修改用户导师手机号码失败");
+            if (FormatCheckUtils.isChinaPhoneLegal(user.getU_mentorPhone()))
+            {
+                flag = userDao.setUserMentorPhone(u_no, user.getU_mentorPhone());
+                if (flag == 0) errMsg.add("修改用户导师手机号码失败");
+            }
+            else
+            {
+                flag = 0;
+                errMsg.add("导师手机号码格式错误");
+            }
         }
 
         info.put("flag", flag);

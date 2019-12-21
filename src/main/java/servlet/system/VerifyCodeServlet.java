@@ -2,9 +2,8 @@ package servlet.system;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import dao.TextRecordDao;
-import dao.impl.TextRecordDaoImpl;
 import utils.MessageUtils;
+import utils.FormatCheckUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,18 +28,25 @@ public class VerifyCodeServlet extends HttpServlet
         JSONObject info = new JSONObject();
         JSONArray errMsg = new JSONArray();
 
-        String verifyCode = MessageUtils.sendVerifyCode(phone);
-        if (verifyCode == null)
+        int flag = 1;
+        if (FormatCheckUtils.isChinaPhoneLegal(phone))
         {
-            info.put("flag", 0);
-            errMsg.add("发送验证码失败");
+            String verifyCode = MessageUtils.sendVerifyCode(phone);
+            if (verifyCode == null)
+            {
+                flag = 0;
+                errMsg.add("发送验证码失败");
+            }
+            else info.put("verifyCode", verifyCode);
         }
         else
         {
-            info.put("flag", 1);
-            info.put("verifyCode", verifyCode);
+            flag = 0;
+            errMsg.add("手机号码格式错误");
         }
 
+        info.put("flag", flag);
+        info.put("errMsg", errMsg);
         PrintWriter printWriter = response.getWriter();
         printWriter.write(info.toJSONString());
         printWriter.flush();
