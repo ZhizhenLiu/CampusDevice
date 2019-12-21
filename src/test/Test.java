@@ -10,6 +10,7 @@ import service.UserService;
 import service.impl.AdminServiceImpl;
 import service.impl.SystemServiceImpl;
 import service.impl.UserServiceImpl;
+import utils.FormatCheckUtils;
 import utils.TransformUtils;
 
 import java.text.SimpleDateFormat;
@@ -65,9 +66,9 @@ public class Test {
 //       System.out.println(userService.getAllCreditRules());
 
        Device device = new Device();
-       device.setD_no("d_no");
-       device.setD_name("d_name");
-       device.setD_model("d_model");
+       device.setD_no("666");
+       device.setD_name("11");
+       device.setD_model("3132");
        device.setD_saveSite("d_saveSite");
        device.setA_no("3");
        device.setD_factoryNo("d_factoryNo");
@@ -79,16 +80,19 @@ public class Test {
 
 //        .out.println(userService.reserveDevice("1713715S","o0ug242ge55sufbQW0xHk7KTmq60", "2019-12-18", "2019-12-19"));
 
-       Date now = new Date();
-       SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-       Date nowTime = TransformUtils.StringTransSQLDate(simpleDateFormat.format(now));
-       Date beg = TransformUtils.StringTransSQLDate("2019-12-20");
-       Date end = TransformUtils.StringTransSQLDate("2019-12-23");
-       System.out.println(beg + " " +nowTime);
-       //起始时间 >= 现在时间
-       System.out.println(!beg.before(nowTime)); //beg <now
-       System.out.println(beg.before(end));
-       System.out.println(!beg.before(nowTime) && beg.before(end));
+//       Date now = new Date();
+//       SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//       Date nowTime = TransformUtils.StringTransSQLDate(simpleDateFormat.format(now));
+//       Date beg = TransformUtils.StringTransSQLDate("2019-12-20");
+//       Date end = TransformUtils.StringTransSQLDate("2019-12-23");
+//       System.out.println(beg + " " +nowTime);
+//       //起始时间 >= 现在时间
+//       System.out.println(!beg.before(nowTime)); //beg <now
+//       System.out.println(beg.before(end));
+//       System.out.println(!beg.before(nowTime) && beg.before(end));
 
+
+
+       System.out.println(adminService.editDevice(device));
    }
 }

@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import dao.*;
 import dao.impl.*;
 import service.AdminService;
+import utils.FormatCheckUtils;
 import utils.MessageUtils;
 import utils.TransformUtils;
 
@@ -642,28 +643,51 @@ public class AdminServiceImpl implements AdminService
         //不存在相同设备编号
         if (deviceDao.getDeviceByNo(device.getD_no()) == null)
         {
-            String d_state = device.getD_state();
-            switch (d_state)
+            if (device.getD_name().length() >= 20)
             {
-                case "inStore":
-                {
-                    d_state = "在库";
-                    break;
-                }
-                case "damaged":
-                {
-                    d_state = "损坏";
-                    break;
-                }
-                case "scrapped":
-                {
-                    d_state = "报废";
-                    break;
-                }
+                flag = 0;
+                errMsg.add("设备名字长度不得大于20位");
             }
-            device.setD_state(d_state);
-            flag = deviceDao.addDevice(device);
-            if (flag == 0) errMsg.add("添加设备失败");
+            else if (FormatCheckUtils.isContainChinese(device.getD_no()) || device.getD_no().length() >= 20)
+            {
+                flag = 0;
+                errMsg.add("设备编号必须是英文字母、数字、特殊字符且长度不得大于20位");
+            }
+            else if (FormatCheckUtils.isContainChinese(device.getD_model()) || device.getD_model().length() >= 20)
+            {
+                flag = 0;
+                errMsg.add("设备型号必须是英文字母、数字、特殊字符且长度不得大于20位" );
+            }
+            else if (FormatCheckUtils.isContainChinese(device.getD_factoryNo()) || device.getD_factoryNo().length() >= 20)
+            {
+                flag = 0;
+                errMsg.add("工厂编号必须是英文字母、数字、特殊字符且长度不得大于20位");
+            }
+            else
+            {
+                String d_state = device.getD_state();
+                switch (d_state)
+                {
+                    case "inStore":
+                    {
+                        d_state = "在库";
+                        break;
+                    }
+                    case "damaged":
+                    {
+                        d_state = "损坏";
+                        break;
+                    }
+                    case "scrapped":
+                    {
+                        d_state = "报废";
+                        break;
+                    }
+                }
+                device.setD_state(d_state);
+                flag = deviceDao.addDevice(device);
+                if (flag == 0) errMsg.add("添加设备失败");
+            }
         }
         else
         {
@@ -687,13 +711,22 @@ public class AdminServiceImpl implements AdminService
         JSONArray errMsg = new JSONArray();
         String d_no = device.getD_no();
         String d_name = device.getD_name();
+        String d_model = device.getD_model();
         String d_state = device.getD_state();
 
         int flag = 1;
         if (d_name != null)
         {
-            flag = deviceDao.setDeviceName(d_no, d_name);
-            if (flag == 0) errMsg.add("修改设备名称失败");
+            if (d_name.length() >= 20)
+            {
+                flag = 0;
+                errMsg.add("设备名字长度不得大于20位");
+            }
+            else
+            {
+                flag = deviceDao.setDeviceName(d_no, d_name);
+                if (flag == 0) errMsg.add("修改设备名称失败");
+            }
         }
         if (d_state != null)
         {
@@ -717,6 +750,19 @@ public class AdminServiceImpl implements AdminService
             }
             flag = deviceDao.setDeviceState(d_no, d_state);
             if (flag == 0) errMsg.add("修改设备状态失败");
+        }
+        if (d_model != null)
+        {
+           if (FormatCheckUtils.isContainChinese(d_model) || d_model.length() >= 20)
+           {
+               flag = 0;
+               errMsg.add("设备型号必须是英文字母、数字、特殊字符且长度不得大于20位");
+           }
+           else
+           {
+               flag = deviceDao.setDeviceModel(d_no, d_model);
+               if (flag == 0) errMsg.add("修改设备编号失败");
+           }
         }
 
         info.put("flag", flag);

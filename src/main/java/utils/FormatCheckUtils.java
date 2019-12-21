@@ -60,4 +60,18 @@ public class FormatCheckUtils
         return tag;
     }
 
+    /*
+     * @Description: 是否包含中文检验
+     * @Param str
+     * @Return: boolean
+     */
+    public static boolean isContainChinese(String str) {
+        Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
+        Matcher m = p.matcher(str);
+        if (m.find()) {
+            return true;
+        }
+        return false;
+    }
+
 }

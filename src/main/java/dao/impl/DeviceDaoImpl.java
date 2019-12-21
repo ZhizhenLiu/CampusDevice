@@ -537,6 +537,42 @@ public class DeviceDaoImpl implements DeviceDao
         return flag;
     }
 
+    /*
+     * @Description: 修改设备型号
+     * @Param d_no  d_model
+     * @Return: int
+     */
+    public int setDeviceModel(String d_no, String d_model)
+    {
+        //初始化
+        con = null;
+        pStmt = null;
+        rs = null;
+
+        int flag = 0;
+        try
+        {
+            con = JDBCUtils.getConnection();
+            String sql = "UPDATE device SET d_model = ? WHERE d_no = ?";
+            pStmt = con.prepareStatement(sql);
+            pStmt.setString(1, d_model);
+            pStmt.setString(2, d_no);
+
+            //更新状态
+            flag = pStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JDBCUtils.closeAll(rs, pStmt, con);
+        }
+        return flag;
+
+    }
+
 
     /*
      * @Description: 添加设备

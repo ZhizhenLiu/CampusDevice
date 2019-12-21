@@ -92,6 +92,13 @@ public interface DeviceDao
     int setDeviceName(String d_no, String d_name);
 
     /*
+     * @Description: 修改设备型号
+     * @Param d_no  d_model
+     * @Return: int
+     */
+    int setDeviceModel(String d_no, String d_model);
+
+    /*
      * @Description: 添加设备
      * @Param device
      * @Return: int
