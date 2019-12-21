@@ -250,7 +250,7 @@ public class UserDaoImpl implements UserDao
         pStmt = null;
         rs = null;
 
-        User user = new User();
+        User user = null;
         try
         {
             con = JDBCUtils.getConnection();
@@ -263,6 +263,7 @@ public class UserDaoImpl implements UserDao
 
             if (rs.next())
             {
+                user = new User();
                 user.setU_no(rs.getString("u_no"));
                 user.setU_name(rs.getString("u_name"));
                 user.setU_wechatID(rs.getString("u_wechatid"));

@@ -57,7 +57,7 @@ public class Test {
        ReservationDao reservationDao = new ReservationDaoImpl();
        SpecialtyDao specialtyDao = new SpecialtyDaoImpl();
 
-         User user = new User("u_no", "u_name", "wechatID", "u_email", "u_phone", "teacher".equals("student")?100:200, "teacher".equals("student")?"学生":"老师", "u_mentorName", "u_mentorPhone", -1, "sname",-1, "amname");
+         User user = new User("2017260103", "u_name", "wechatID", "u_email", "13549511517", "teacher".equals("student")?100:200, "teacher".equals("student")?"学生":"老师", "u_mentorName", "u_mentorPhone", -1, "sname",-1, "amname");
 //        String wechatID = "wechatID";
 //        String d_no = "1905399S";
 //
@@ -83,7 +83,9 @@ public class Test {
 
 //        .out.println(userService.reserveDevice("1713715S","o0ug242ge55sufbQW0xHk7KTmq60", "2019-12-18", "2019-12-19"));
 
+       System.out.println(userService.registerUser(user));
 
+       System.out.println(userDao.getUserByNo("2017260103"));
 
    }
 }
