@@ -92,7 +92,6 @@ public class Test {
 //       System.out.println(!beg.before(nowTime) && beg.before(end));
 
 
-
-       System.out.println(adminService.editDevice(device));
+       System.out.println("你好");
    }
 }

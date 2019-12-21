@@ -25,10 +25,12 @@ public class EditDeviceServlet extends HttpServlet
         String d_no = request.getParameter("d_no");
         String d_name = request.getParameter("d_name");
         String d_state = request.getParameter("d_state");
+        String d_model = request.getParameter("d_model");
         Device device = new Device();
         device.setD_no(d_no);
         device.setD_name(d_name);
         device.setD_state(d_state);
+        device.setD_model(d_model);
 
         //返回结果
         PrintWriter printWriter = response.getWriter();

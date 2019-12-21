@@ -92,6 +92,11 @@ public class UserServiceImpl implements UserService
             errMsg.add("该学工号已经注册");
             flag = 0;
         }
+        else if (user.getU_name().length() >= 20)
+        {
+            flag = 0;
+            errMsg.add("用户名长度超过限制");
+        }
         //判断手机号码格式是否正确
         else if (!FormatCheckUtils.isChinaPhoneLegal(user.getU_phone()))
         {
@@ -695,8 +700,16 @@ public class UserServiceImpl implements UserService
         String u_no = user.getU_no();
         if (user.getU_name() != null)
         {
-            flag = userDao.setUserName(u_no, user.getU_name());
-            if (flag == 0) errMsg.add("修改用户姓名失败");
+            if (user.getU_name().length() >= 20)
+            {
+                flag = 0;
+                errMsg.add("用户名长度超过限制");
+            }
+            else
+            {
+                flag = userDao.setUserName(u_no, user.getU_name());
+                if (flag == 0) errMsg.add("修改用户姓名失败");
+            }
         }
         if (user.getU_phone() != null)
         {
@@ -713,7 +726,7 @@ public class UserServiceImpl implements UserService
         }
         if (user.getU_email() != null)
         {
-            if (FormatCheckUtils.isEmail(user.getU_email()))
+            if (FormatCheckUtils.isEmail(user.getU_email()) || user.getU_email().length() >= 40)
             {
                 flag = userDao.setUserEmail(u_no, user.getU_email());
                 if (flag == 0) errMsg.add("修改用户邮箱失败失败");
@@ -721,13 +734,21 @@ public class UserServiceImpl implements UserService
             else
             {
                 flag = 0;
-                errMsg.add("邮箱格式错误");
+                errMsg.add("邮箱格式错误或长度超过限制");
             }
         }
         if (user.getU_mentorName() != null)
         {
-            flag = userDao.setUserMentorName(u_no, user.getU_mentorName());
-            if (flag == 0) errMsg.add("修改用户导师姓名失败");
+            if (user.getU_mentorName().length() >= 20)
+            {
+                flag = 0;
+                errMsg.add("用户名长度超过限制");
+            }
+            else
+            {
+                flag = userDao.setUserMentorName(u_no, user.getU_mentorName());
+                if (flag == 0) errMsg.add("修改用户导师姓名失败");
+            }
         }
         if (user.getU_mentorPhone() != null)
         {
