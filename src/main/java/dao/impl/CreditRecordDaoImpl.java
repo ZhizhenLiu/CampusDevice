@@ -192,7 +192,7 @@ public class CreditRecordDaoImpl implements CreditRecordDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "insert into credit_record(u_no, cr_change_score, cr_change_reason, cr_date, cr_after_grade) values(?,?,?,CURRENT_DATE ,?)";
+            sql = "INSERT INTO credit_record(u_no, cr_change_score, cr_change_reason, cr_date, cr_after_grade) VALUES (?,?,?,CURRENT_DATE ,?)";
             pStmt = con.prepareStatement(sql);
             int breakRuleNo = 0;
             if(days == 1)
@@ -227,12 +227,6 @@ public class CreditRecordDaoImpl implements CreditRecordDao
             System.out.println(borrow.getB_no());
             User user = userDao.getUserByNo(borrow.getU_no());
 
-            pStmt.setString(1,borrow.getU_no());
-            pStmt.setInt(2,creditRule.getCr_score());
-            pStmt.setString(3,creditRule.getCr_content());
-            pStmt.setInt(4,creditRule.getCr_score()+user.getU_creditGrade());
-
-            pStmt.executeUpdate();
             if(days == 0)
             {
                 //发短信
@@ -251,6 +245,13 @@ public class CreditRecordDaoImpl implements CreditRecordDao
                 //因为只有触发了才会惩罚，所以不需要提醒，也不会有更改信用分发短信提醒操作
                 return 0;
             }
+
+            pStmt.setString(1,borrow.getU_no());
+            pStmt.setInt(2,creditRule.getCr_score());
+            pStmt.setString(3,creditRule.getCr_content());
+            pStmt.setInt(4,creditRule.getCr_score()+user.getU_creditGrade());
+
+            pStmt.executeUpdate();
 
             //立即更改当前学生的信用分
             int flag = userDao.updateCreditGrade(borrow.getU_no(),creditRule.getCr_score());

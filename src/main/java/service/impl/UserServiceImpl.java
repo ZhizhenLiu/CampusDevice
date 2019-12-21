@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService
         System.out.println(user);
 
         //判断用户是否已经注册过该学工号
-        if (userDao.getUserByNo(user.getU_no()) == null)
+        if (userDao.getUserByNo(user.getU_no()) != null)
         {
             errMsg.add("该学工号已经注册");
             flag = 0;

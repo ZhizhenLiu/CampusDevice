@@ -240,8 +240,8 @@ public class BorrowDaoImpl implements BorrowDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql = "UPDATE borrow SET b_state = -1 " +
-                    "WHERE b_return_date <= CURRENT_DATE " +
+            sql =   "UPDATE borrow SET b_state = -1 " +
+                    "WHERE b_return_date < CURRENT_DATE " +
                     "AND b_state = 0";
             pStmt = con.prepareStatement(sql);
 

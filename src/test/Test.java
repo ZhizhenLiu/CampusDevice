@@ -82,6 +82,7 @@ public class Test {
 
 //        .out.println(userService.reserveDevice("1713715S","o0ug242ge55sufbQW0xHk7KTmq60", "2019-12-18", "2019-12-19"));
 
-       System.out.println(adminService.refuseBorrow(114,""));
+       System.out.println(borrowDao.getOverDueBorrowAndDays());
+       System.out.println(systemService.deductCreditFromUser());
    }
 }
