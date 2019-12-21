@@ -193,14 +193,16 @@ public class AdminServiceImpl implements AdminService
         String d_name = reservation.getD_name();
 
         int flag = 1;
-        //判断是否已经确认借用给用户: 防止web端小程序端同时借用
-        if (reservation.getR_state() != 2)
+        //判断预约请求是否处理,或者取消
+        if (reservation.getR_state() == 0)
         {
             //判断借用日期是否小于归还日期
-            Date now = new Date();
+            Date nowTime = new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date now = TransformUtils.StringTransSQLDate(simpleDateFormat.format(nowTime));
             Date start = TransformUtils.StringTransSQLDate(startDate);
             Date end = TransformUtils.StringTransSQLDate(endDate);
-            if (start.after(now) && start.before(end))
+            if (!start.before(now) && start.before(end))
             {
                 //编辑预约，修改预约状态
                 flag = reservationDao.editReservation(r_no, startDate, endDate, feedBack);
@@ -213,7 +215,7 @@ public class AdminServiceImpl implements AdminService
             else
             {
                 flag = 0;
-                errMsg.add("起始日期应小于归还日期");
+                errMsg.add("起始日期应小于归还日期，大于等于当前日期");
             }
         }
         else

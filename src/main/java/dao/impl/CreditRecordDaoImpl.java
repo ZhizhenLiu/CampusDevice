@@ -227,7 +227,7 @@ public class CreditRecordDaoImpl implements CreditRecordDao
             System.out.println(borrow.getB_no());
             User user = userDao.getUserByNo(borrow.getU_no());
 
-            if(days == 0)
+            if(days == 1)
             {
                 //发短信
                 MessageUtils.sendRemindMessage(borrow);
@@ -235,7 +235,7 @@ public class CreditRecordDaoImpl implements CreditRecordDao
 
                 return 0;
             }
-            else if(days == 1 || days == 8 || (days-1)%30 == 0)
+            if(days == 1 || days == 8 || (days-1)%30 == 0)
             {
                 System.out.println("手机号为"+user.getU_phone()+"的用户因为未归还达到"+days+"天，信用积分"+creditRule.getCr_score()+"，已经向其发送系统信息提醒。");
             }

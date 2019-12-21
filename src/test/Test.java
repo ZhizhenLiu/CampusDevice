@@ -10,7 +10,6 @@ import service.UserService;
 import service.impl.AdminServiceImpl;
 import service.impl.SystemServiceImpl;
 import service.impl.UserServiceImpl;
-import utils.FormatCheckUtils;
 import utils.TransformUtils;
 
 import java.text.SimpleDateFormat;
@@ -80,11 +79,16 @@ public class Test {
 
 //        .out.println(userService.reserveDevice("1713715S","o0ug242ge55sufbQW0xHk7KTmq60", "2019-12-18", "2019-12-19"));
 
-       Date now = TransformUtils.StringTransSQLDate("2019-12-21");
-       Date tom = TransformUtils.StringTransSQLDate("2019-12-23");
-
-       System.out.println(now+" "+new Date()+" "+(new Date()).after(now));
-       System.out.println(now.before(tom));
+       Date now = new Date();
+       SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+       Date nowTime = TransformUtils.StringTransSQLDate(simpleDateFormat.format(now));
+       Date beg = TransformUtils.StringTransSQLDate("2019-12-20");
+       Date end = TransformUtils.StringTransSQLDate("2019-12-23");
+       System.out.println(beg + " " +nowTime);
+       //起始时间 >= 现在时间
+       System.out.println(!beg.before(nowTime)); //beg <now
+       System.out.println(beg.before(end));
+       System.out.println(!beg.before(nowTime) && beg.before(end));
 
    }
 }

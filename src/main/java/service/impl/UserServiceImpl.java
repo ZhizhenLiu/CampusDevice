@@ -4,13 +4,13 @@ import bean.*;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.sun.org.apache.bcel.internal.generic.DADD;
 import dao.*;
 import dao.impl.*;
 import service.UserService;
 import utils.FormatCheckUtils;
 import utils.TransformUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -231,10 +231,12 @@ public class UserServiceImpl implements UserService
             if (!reservationDao.isReserving(u_no, d_no))
             {
                 //判断借用日期是否小于归还日期
-                Date now = new Date();
+                Date nowTime = new Date();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date now = TransformUtils.StringTransSQLDate(simpleDateFormat.format(nowTime));
                 Date start = TransformUtils.StringTransSQLDate(startDate);
                 Date end = TransformUtils.StringTransSQLDate(returnDate);
-                if (start.after(now) && start.before(end))
+                if (!start.before(now) && start.before(end))
                 {
                     flag = reservationDao.reserveDevice(d_no, u_no, startDate, returnDate);
                     if (flag == 0) errMsg.add("用户预约设备失败");
@@ -242,7 +244,7 @@ public class UserServiceImpl implements UserService
                 else
                 {
                     flag = 0;
-                    errMsg.add("起始日期应小于归还日期");
+                    errMsg.add("起始日期应小于归还日期，大于等于当前日期");
                 }
             }
             else
@@ -337,6 +339,7 @@ public class UserServiceImpl implements UserService
         JSONArray errMsg = new JSONArray();
 
         String u_no = userDao.getUserByWechatID(wechatID).getU_no();
+        borrowDao.setAllOverDueState();
         List<Borrow> borrowList;
         if (isFinished)
         {

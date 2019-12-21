@@ -15,6 +15,7 @@ public class SetOverDueTask extends TimerTask
 
     public void run()
     {
+        System.out.println("定时任务运行");
         BorrowDao borrowDao = new BorrowDaoImpl();
         int flag = borrowDao.setAllOverDueState();
         if (flag != 0)
