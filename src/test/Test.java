@@ -12,6 +12,7 @@ import service.impl.AdminServiceImpl;
 import service.impl.SystemServiceImpl;
 import service.impl.UserServiceImpl;
 import utils.MessageUtils;
+import utils.PhoneFormatCheckUtils;
 
 import java.awt.*;
 import java.text.ParseException;
@@ -82,7 +83,7 @@ public class Test {
 
 //        .out.println(userService.reserveDevice("1713715S","o0ug242ge55sufbQW0xHk7KTmq60", "2019-12-18", "2019-12-19"));
 
-       System.out.println(borrowDao.getOverDueBorrowAndDays());
-       System.out.println(systemService.deductCreditFromUser());
+
+
    }
 }

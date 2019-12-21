@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import dao.*;
 import dao.impl.*;
 import service.UserService;
+import utils.PhoneFormatCheckUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +89,21 @@ public class UserServiceImpl implements UserService
         {
             errMsg.add("该学工号已经注册");
             flag = 0;
+        }
+        //判断手机号码格式是否正确
+        else if (!PhoneFormatCheckUtils.isChinaPhoneLegal(user.getU_phone()))
+        {
+            errMsg.add("手机号码格式错误");
+            flag = 0;
+        }
+        //判断导师手机号码格式是否正确
+        else if (user.getU_mentorPhone() != null)
+        {
+            if (!PhoneFormatCheckUtils.isChinaPhoneLegal(user.getU_mentorPhone()))
+            {
+                errMsg.add("导师手机号码格式错误");
+                flag = 0;
+            }
         }
         else
         {
@@ -668,8 +684,16 @@ public class UserServiceImpl implements UserService
         }
         if (user.getU_phone() != null)
         {
-            flag = userDao.setUserPhone(u_no, user.getU_phone());
-            if (flag == 0) errMsg.add("修改用户手机号码失败");
+            if (PhoneFormatCheckUtils.isChinaPhoneLegal(user.getU_phone()))
+            {
+                flag = userDao.setUserPhone(u_no, user.getU_phone());
+                if (flag == 0) errMsg.add("修改用户手机号码失败");
+            }
+            else
+            {
+                flag = 0;
+                errMsg.add("手机号码格式错误");
+            }
         }
         if (user.getU_email() != null)
         {
