@@ -280,20 +280,24 @@ public class UserServiceImpl implements UserService
         JSONArray errMsg = new JSONArray();
 
         info.put("flag", 1);
-        int flag = reservationDao.cancelReservation(r_no);
-        if (flag == 0)
+        int flag = 1;
+        //预约取消:-2  预约拒绝:-1  预约中:0   预约成功:1 协商预约:2  协商成功:3
+        int r_state = reservationDao.getReservation(r_no).getR_state();
+        if (r_state == 0 || r_state == 2 || r_state == 3)
         {
-            info.put("flag", 0);
-            errMsg.add("用户取消预约失败");
+            flag = reservationDao.cancelReservation(r_no);
+            if (flag == 0) errMsg.add("用户取消预约失败");
+            String u_no = reservationDao.getReservation(r_no).getU_no();
+            String d_name = reservationDao.getReservation(r_no).getD_name();
+            flag = messageDao.sendMessage(u_no, "你已经成功取消预约设备：" + d_name);
+            if (flag == 0) errMsg.add("发送提示消息失败");
         }
-        String u_no = reservationDao.getReservation(r_no).getU_no();
-        String d_name = reservationDao.getReservation(r_no).getD_name();
-        flag = messageDao.sendMessage(u_no, "你已经成功取消预约设备：" + d_name);
-        if (flag == 0)
+        else
         {
-            info.put("flag", 0);
-            errMsg.add("发送提示消息失败");
+            flag = 0;
+           errMsg.add("预约已取消、通过或者被拒绝");
         }
+        info.put("flag", flag);
         info.put("errMsg", errMsg);
         return info;
     }
