@@ -274,7 +274,7 @@ public class BorrowDaoImpl implements BorrowDao
         try
         {
             con = JDBCUtils.getConnection();
-            sql =   "SELECT u.u_name, u.u_no, u.u_type, u.u_credit_grade,u.u_phone, d.d_no, d.d_name, b.b_borrow_date, b.b_return_date FROM borrow b, device d, `user` u " +
+            sql =   "SELECT b_no, u.u_name, u.u_no, u.u_type, u.u_credit_grade,u.u_phone, d.d_no, d.d_name, b.b_borrow_date, b.b_return_date FROM borrow b, device d, `user` u " +
                     "WHERE b.d_no = d.d_no " +
                     "AND u.u_no = b.u_no " +
                     "AND d.a_no = ? " +
@@ -289,6 +289,7 @@ public class BorrowDaoImpl implements BorrowDao
             while (rs.next())
             {
                 Borrow borrow = new Borrow();
+                borrow.setB_no(rs.getInt("b_no"));
                 borrow.setU_name(rs.getString("u_name"));
                 borrow.setU_no(rs.getString("u_no"));
                 borrow.setU_type(rs.getString("u_type"));

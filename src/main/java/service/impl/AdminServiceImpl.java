@@ -194,10 +194,10 @@ public class AdminServiceImpl implements AdminService
         String d_name = reservation.getD_name();
 
         int flag = 1;
-        //判断预约请求是否处理,或者取消
-        if (reservation.getR_state() == 0)
+        //判断预约请求是否可以处理: 预约中、协商成功
+        if (reservation.getR_state() == 0 || reservation.getR_state() == 3)
         {
-            //判断借用日期是否小于归还日期
+            //判断：归还时间 > 起始时间 >= 当前时间
             Date nowTime = new Date();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date now = TransformUtils.StringTransSQLDate(simpleDateFormat.format(nowTime));
@@ -218,6 +218,11 @@ public class AdminServiceImpl implements AdminService
                 flag = 0;
                 errMsg.add("起始日期应小于归还日期，大于等于当前日期");
             }
+        }
+        else if (reservation.getR_state() == -2)
+        {
+            flag = 0;
+            errMsg.add("该预约请求已被取消");
         }
         else
         {
@@ -247,8 +252,6 @@ public class AdminServiceImpl implements AdminService
         String d_name = reservation.getD_name();
         String d_saveSite = reservation.getD_saveSite();
         String state = deviceDao.getDeviceState(d_no);
-
-        info.put("flag", 1);
 
         //判断请求是否已经处理
         //预约取消:-2  预约拒绝:-1  预约中:0   预约成功:1 协商预约:2  协商成功:3
